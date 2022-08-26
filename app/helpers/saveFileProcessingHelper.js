@@ -1,4 +1,4 @@
-import { PAWN_CONSTANT, PLAYER_COLONY } from "~/constants/constants";
+import { HUMAN_CONSTANT, PAWN_CONSTANT, PLAYER_COLONY } from "~/constants/constants";
 import { getFactionKey } from "./utils";
 
 export const processSaveFile = ({ savegame }) => {
@@ -13,10 +13,11 @@ export const processSaveFile = ({ savegame }) => {
     ...world.worldPawns.pawnsForcefullyKeptAsWorldPawns.li,
   ];
   const playerPawns = savegame.game.maps.li.things.thing.filter(
-    ({ $, faction }) =>
+    ({ $, faction, def }) =>
       $ &&
       $.Class === PAWN_CONSTANT &&
       faction &&
+      def === HUMAN_CONSTANT &&
       playerFactions.some((playerFaction) => faction === getFactionKey(playerFaction))
   );
 
