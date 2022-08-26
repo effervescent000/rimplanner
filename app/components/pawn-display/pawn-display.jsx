@@ -1,7 +1,18 @@
-import { findPlayerPawns } from "./helpers/pawnDisplayHelpers";
+import { useOutletContext } from "@remix-run/react";
+import PawnCard from "./pawn-card";
 
 const PawnRow = () => {
-  return <div></div>;
+  const {
+    saveData: { playerPawns },
+  } = useOutletContext();
+
+  return (
+    <div>
+      {playerPawns.map((pawn) => (
+        <PawnCard key={pawn.id} pawn={pawn} />
+      ))}
+    </div>
+  );
 };
 
 export default PawnRow;

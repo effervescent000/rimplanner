@@ -8,7 +8,12 @@ export const meta = () => ({
 });
 
 export default function App() {
-  const [saveData, setSaveData] = useState({});
+  const [saveData, setSaveData] = useState({
+    factions: [],
+    playerFactions: [],
+    worldPawns: [],
+    playerPawns: [],
+  });
 
   useEffect(() => {
     console.log(saveData);
