@@ -9,6 +9,10 @@ export const meta = () => ({
 
 export default function App() {
   const [saveData, setSaveData] = useState({});
+
+  useEffect(() => {
+    console.log(saveData);
+  }, [saveData]);
   return (
     <html lang="en">
       <head>

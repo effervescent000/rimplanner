@@ -1,5 +1,11 @@
+import PawnRow from "~/components/pawn-display/pawn-display";
 import SaveFileDropzone from "~/components/save-file-dropzone";
 
 export default function Index() {
-  return <SaveFileDropzone />;
+  return (
+    <div>
+      <SaveFileDropzone />
+      <PawnRow />
+    </div>
+  );
 }

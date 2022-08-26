@@ -1,19 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import { useOutletContext } from "@remix-run/react";
-
 import { parseString } from "xml2js";
 
+import { processSaveFile } from "~/helpers/saveFileProcessingHelper";
+
 const SaveFileDropzone = () => {
-  const [rawSave, setRawSave] = useState({});
   const [processing, setProcessing] = useState(false);
   const { setSaveData } = useOutletContext();
-
-  useEffect(() => {
-    parseString(rawSave, (err, result) => setSaveData(result));
-    setProcessing(false);
-  }, [rawSave]);
 
   const onDrop = useCallback((acceptedFiles) => {
     acceptedFiles.forEach((file) => {
@@ -22,7 +17,11 @@ const SaveFileDropzone = () => {
       reader.onabort = () => console.log("file reading was aborted");
       reader.onerror = () => console.log("file reading has failed");
       reader.onload = () => {
-        setRawSave(reader.result);
+        parseString(reader.result, { explicitArray: false }, (err, result) => {
+          console.log(result);
+          setSaveData(processSaveFile(result));
+        });
+        setProcessing(false);
       };
       reader.readAsText(file);
     });
