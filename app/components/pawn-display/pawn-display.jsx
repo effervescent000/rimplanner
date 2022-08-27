@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { useOutletContext } from "@remix-run/react";
+
 import { buildRosterHighlights } from "~/helpers/rosterHelpers";
+
 import PawnCard from "./pawn-card";
 
 const PawnRow = () => {
@@ -14,10 +16,12 @@ const PawnRow = () => {
   }, [playerPawns]);
 
   return (
-    <div>
-      {playerPawns.map((pawn) => (
-        <PawnCard key={pawn.id} pawn={pawn} stats={colonyStats[pawn.name.nick]} />
-      ))}
+    <div className="flex">
+      {playerPawns.length &&
+        Object.keys(colonyStats).length &&
+        playerPawns.map((pawn) => (
+          <PawnCard key={pawn.id} pawn={pawn} stats={colonyStats[pawn.name.nick]} />
+        ))}
     </div>
   );
 };
