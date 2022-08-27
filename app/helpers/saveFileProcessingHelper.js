@@ -20,11 +20,13 @@ export const processSaveFile = ({ savegame }) => {
       def === HUMAN_CONSTANT &&
       playerFactions.some((playerFaction) => faction === getFactionKey(playerFaction))
   );
+  const modList = savegame.meta.modIds.li;
 
   return {
     factions,
     playerFactions,
     worldPawns,
     playerPawns,
+    modList,
   };
 };

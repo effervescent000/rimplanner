@@ -21,6 +21,7 @@ export default function App() {
     playerFactions: [],
     worldPawns: [],
     playerPawns: [],
+    modList: [],
   });
 
   useEffect(() => {
