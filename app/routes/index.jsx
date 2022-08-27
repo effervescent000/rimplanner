@@ -21,10 +21,12 @@ export default function Index() {
   }, [playerPawns]);
 
   return (
-    <div>
-      <SaveFileDropzone />
-      <PawnRow />
-      <PrioritiesWrapper priorities={priorities} />
+    <div className="container mx-auto">
+      <div className="relative">
+        <SaveFileDropzone />
+        <PawnRow />
+        <PrioritiesWrapper priorities={priorities} />
+      </div>
     </div>
   );
 }
