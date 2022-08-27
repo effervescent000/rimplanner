@@ -35,9 +35,11 @@ const SaveFileDropzone = () => {
   };
 
   return (
-    <div {...getRootProps()}>
-      <input {...getInputProps()} />
-      <span>{getDropLabel()}</span>
+    <div className="absolute -left-40">
+      <div {...getRootProps()}>
+        <input {...getInputProps()} />
+        <span>{getDropLabel()}</span>
+      </div>
     </div>
   );
 };
