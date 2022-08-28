@@ -1,12 +1,22 @@
-import WorkRow from "./work-row";
+import PriorityRow from "./priority-row";
 
-const PrioritiesWrapper = ({ priorities }) => {
+const PrioritiesWrapper = ({ priorities, labels }) => {
   return (
-    <div className="priorities">
-      {priorities.map(({ name, priorities: rawPriorities }, idx) => (
-        <WorkRow key={`${name}-${idx}`} name={name} priorities={rawPriorities} />
-      ))}
-    </div>
+    <table>
+      <thead>
+        <tr>
+          <th />
+          {labels.map(({ name }) => (
+            <th key={name}>{name}</th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {priorities.map(({ name, priorities: rawPriorities }, idx) => (
+          <PriorityRow key={`${name}-${idx}`} name={name} priorities={rawPriorities} />
+        ))}
+      </tbody>
+    </table>
   );
 };
 

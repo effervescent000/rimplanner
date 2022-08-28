@@ -1,5 +1,5 @@
 const PriorityCell = ({ priority }) => {
-  return <div className="cell">{priority}</div>;
+  return <span>{priority}</span>;
 };
 
 export default PriorityCell;

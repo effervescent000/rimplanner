@@ -4,10 +4,11 @@ import { useState, useEffect } from "react";
 import SaveFileDropzone from "~/components/save-file-dropzone";
 import PawnRow from "~/components/pawn-display/pawn-display";
 import PrioritiesWrapper from "~/components/work-priorities/priorities-wrapper";
+import { buildWorkPriorityLabels } from "~/helpers/rosterHelpers";
 
 export default function Index() {
   const {
-    saveData: { playerPawns },
+    saveData: { playerPawns, modList },
   } = useOutletContext();
   const [priorities, setPriorities] = useState([]);
 
@@ -25,7 +26,9 @@ export default function Index() {
       <div className="relative">
         <SaveFileDropzone />
         <PawnRow />
-        <PrioritiesWrapper priorities={priorities} />
+        {modList.length && (
+          <PrioritiesWrapper priorities={priorities} labels={buildWorkPriorityLabels(modList)} />
+        )}
       </div>
     </div>
   );

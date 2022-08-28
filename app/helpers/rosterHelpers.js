@@ -1,6 +1,6 @@
 import { mean, quantile } from "simple-statistics";
 
-import { MAJOR_PASSION, MINOR_PASSION, SKILLS } from "~/constants/constants";
+import { LABORS, MAJOR_PASSION, MINOR_PASSION, SKILLS } from "~/constants/constants";
 
 const buildColonyStats = (pawns) => {
   let allSkills = {};
@@ -59,3 +59,6 @@ export const buildRosterHighlights = (playerPawns) => {
   );
   return stats;
 };
+
+export const buildWorkPriorityLabels = (modList) =>
+  LABORS.filter(({ source }) => !source || modList.includes(source));
