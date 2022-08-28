@@ -1,6 +1,6 @@
 import PriorityRow from "./priority-row";
 
-const PrioritiesWrapper = ({ priorities, labels }) => {
+const PrioritiesWrapper = ({ priorities, labels, suggested }) => {
   return (
     <table>
       <thead>
@@ -13,7 +13,12 @@ const PrioritiesWrapper = ({ priorities, labels }) => {
       </thead>
       <tbody>
         {priorities.map(({ name, priorities: rawPriorities }, idx) => (
-          <PriorityRow key={`${name}-${idx}`} name={name} priorities={rawPriorities} />
+          <PriorityRow
+            key={`${name}-${idx}`}
+            name={name}
+            priorities={rawPriorities}
+            suggested={suggested[name]}
+          />
         ))}
       </tbody>
     </table>

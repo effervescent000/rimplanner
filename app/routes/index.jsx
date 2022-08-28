@@ -18,7 +18,7 @@ export default function Index() {
     setPriorities(
       playerPawns.map(({ name, workSettings }) => ({
         name: name.nick,
-        priorities: workSettings.priorities.vals.li,
+        priorities: workSettings.priorities.vals.li.slice(0, -1),
       }))
     );
   }, [playerPawns]);
@@ -26,6 +26,7 @@ export default function Index() {
   if (modList.length) {
     labors = buildLaborsList(modList);
     suggestedLabors = buildPrioritySuggestions({ labors, playerPawns });
+    console.log(suggestedLabors);
   }
 
   return (

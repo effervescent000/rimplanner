@@ -91,23 +91,23 @@ export const buildPrioritySuggestions = ({ labors, playerPawns }) => {
       if (labor.skill) {
         pawnSkills.sort(
           (a, b) =>
-            a.skills.find(({ def }) => def === labor.skill) -
-            b.skills.find(({ def }) => def === labor.skill)
+            a.skills.find(({ def }) => def === labor.skill).level -
+            b.skills.find(({ def }) => def === labor.skill).level
         );
-        for (let i = 0; i < third; i++) {
-          // take the pawn from pawnSkills at index i, find them in the prio obj, and add an object with a prio to their array
-          const targetPawn = pawnSkills[i];
-          prios[targetPawn.name] = [
-            ...prios[targetPawn.name],
-            { skill: labor.skill, level: DEFAULT_LABOR_PRIO },
-          ];
-        }
-        for (let i = third; i < numPawns; i++) {
-          const targetPawn = pawnSkills[i];
-          prios[targetPawn.name] = [...prios[targetPawn.name], { skill: labor.skill }];
-        }
+      }
+      for (let i = 0; i < third; i++) {
+        // take the pawn from pawnSkills at index i, find them in the prio obj, and add an object with a prio to their array
+        const targetPawn = pawnSkills[i];
+        prios[targetPawn.name] = [
+          ...prios[targetPawn.name],
+          { name: labor.name, level: DEFAULT_LABOR_PRIO },
+        ];
+      }
+      for (let i = third; i < numPawns; i++) {
+        const targetPawn = pawnSkills[i];
+        prios[targetPawn.name] = [...prios[targetPawn.name], { name: labor.name }];
       }
     }
-    return prios;
   });
+  return prios;
 };
