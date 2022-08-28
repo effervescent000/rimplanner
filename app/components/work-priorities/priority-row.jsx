@@ -1,14 +1,14 @@
 import PriorityCell from "./priority-cell";
 
-const WorkRow = ({ name, priorities }) => {
+const PriorityRow = ({ name, priorities }) => {
   return (
-    <div className="flex row">
-      <div>{name}</div>
+    <tr>
+      <th>{name}</th>
       {priorities.map((prio, idx) => (
         <PriorityCell key={`${name}-${idx}`} priority={prio} />
       ))}
-    </div>
+    </tr>
   );
 };
 
-export default WorkRow;
+export default PriorityRow;
