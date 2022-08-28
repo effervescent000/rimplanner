@@ -4,22 +4,30 @@ import { useState, useEffect } from "react";
 import SaveFileDropzone from "~/components/save-file-dropzone";
 import PawnRow from "~/components/pawn-display/pawn-display";
 import PrioritiesWrapper from "~/components/work-priorities/priorities-wrapper";
-import { buildWorkPriorityLabels } from "~/helpers/rosterHelpers";
+import { buildLaborsList, buildPrioritySuggestions } from "~/helpers/rosterHelpers";
 
 export default function Index() {
   const {
     saveData: { playerPawns, modList },
   } = useOutletContext();
   const [priorities, setPriorities] = useState([]);
+  let labors;
+  let suggestedLabors;
 
   useEffect(() => {
     setPriorities(
       playerPawns.map(({ name, workSettings }) => ({
         name: name.nick,
-        priorities: workSettings.priorities.vals.li,
+        priorities: workSettings.priorities.vals.li.slice(0, -1),
       }))
     );
   }, [playerPawns]);
+
+  if (modList.length) {
+    labors = buildLaborsList(modList);
+    suggestedLabors = buildPrioritySuggestions({ labors, playerPawns });
+    console.log(suggestedLabors);
+  }
 
   return (
     <div className="container mx-auto">
@@ -27,7 +35,7 @@ export default function Index() {
         <SaveFileDropzone />
         <PawnRow />
         {modList.length && (
-          <PrioritiesWrapper priorities={priorities} labels={buildWorkPriorityLabels(modList)} />
+          <PrioritiesWrapper priorities={priorities} labels={labors} suggested={suggestedLabors} />
         )}
       </div>
     </div>

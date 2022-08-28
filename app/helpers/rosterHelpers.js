@@ -1,6 +1,12 @@
 import { mean, quantile } from "simple-statistics";
 
-import { LABORS, MAJOR_PASSION, MINOR_PASSION, SKILLS } from "~/constants/constants";
+import {
+  DEFAULT_LABOR_PRIO,
+  LABORS,
+  MAJOR_PASSION,
+  MINOR_PASSION,
+  SKILLS,
+} from "~/constants/constants";
 
 const buildColonyStats = (pawns) => {
   let allSkills = {};
@@ -60,5 +66,48 @@ export const buildRosterHighlights = (playerPawns) => {
   return stats;
 };
 
-export const buildWorkPriorityLabels = (modList) =>
+export const buildLaborsList = (modList) =>
   LABORS.filter(({ source }) => !source || modList.includes(source));
+
+export const buildPrioritySuggestions = ({ labors, playerPawns }) => {
+  const numPawns = playerPawns.length;
+  const third = Math.ceil(numPawns * (1 / 3));
+  const prios = {};
+  playerPawns.forEach(({ name: { nick: name } }) => (prios[name] = []));
+  const pawnSkills = playerPawns.map(
+    ({
+      name: { nick: name },
+      skills: {
+        skills: { li: skills },
+      },
+    }) => ({ name, skills })
+  );
+  labors.forEach((labor) => {
+    if (labor.allDo) {
+      Object.keys(prios).forEach(
+        (name) => (prios[name] = [...prios[name], { name: labor.name, level: DEFAULT_LABOR_PRIO }])
+      );
+    } else {
+      if (labor.skill) {
+        pawnSkills.sort(
+          (a, b) =>
+            a.skills.find(({ def }) => def === labor.skill).level -
+            b.skills.find(({ def }) => def === labor.skill).level
+        );
+      }
+      for (let i = 0; i < third; i++) {
+        // take the pawn from pawnSkills at index i, find them in the prio obj, and add an object with a prio to their array
+        const targetPawn = pawnSkills[i];
+        prios[targetPawn.name] = [
+          ...prios[targetPawn.name],
+          { name: labor.name, level: DEFAULT_LABOR_PRIO },
+        ];
+      }
+      for (let i = third; i < numPawns; i++) {
+        const targetPawn = pawnSkills[i];
+        prios[targetPawn.name] = [...prios[targetPawn.name], { name: labor.name }];
+      }
+    }
+  });
+  return prios;
+};
