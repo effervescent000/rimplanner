@@ -91,8 +91,8 @@ export const buildPrioritySuggestions = ({ labors, playerPawns }) => {
       if (labor.skill) {
         pawnSkills.sort(
           (a, b) =>
-            a.skills.find(({ def }) => def === labor.skill).level -
-            b.skills.find(({ def }) => def === labor.skill).level
+            b.skills.find(({ def }) => def === labor.skill).level -
+            a.skills.find(({ def }) => def === labor.skill).level
         );
       }
       for (let i = 0; i < third; i++) {
