@@ -1,10 +1,12 @@
 import { useOutletContext } from "@remix-run/react";
 import { useState, useEffect } from "react";
 
+import { buildLaborsList } from "~/helpers/rosterHelpers";
+
 import SaveFileDropzone from "~/components/save-file-dropzone";
 import PawnRow from "~/components/pawn-display/pawn-display";
 import PrioritiesWrapper from "~/components/work-priorities/priorities-wrapper";
-import { buildLaborsList, buildPrioritySuggestions } from "~/helpers/rosterHelpers";
+import PriorityBuilder from "~/helpers/priorityBuilder";
 
 export default function Index() {
   const {
@@ -12,7 +14,9 @@ export default function Index() {
   } = useOutletContext();
   const [priorities, setPriorities] = useState([]);
   let labors;
-  let suggestedLabors;
+  // let suggestedLabors;
+
+  let priorityBuilder;
 
   useEffect(() => {
     setPriorities(
@@ -23,10 +27,18 @@ export default function Index() {
     );
   }, [playerPawns]);
 
-  if (modList.length) {
+  if (modList.length && priorities.length) {
     labors = buildLaborsList(modList);
-    suggestedLabors = buildPrioritySuggestions({ labors, playerPawns });
-    console.log(suggestedLabors);
+    // suggestedLabors = buildPrioritySuggestions({ labors, playerPawns });
+
+    priorityBuilder = new PriorityBuilder({
+      pawns: playerPawns,
+      modList,
+      rawPriorities: priorities,
+    });
+    priorityBuilder.buildLaborsArray();
+    priorityBuilder.buildSuggestions();
+    console.log(priorityBuilder.priorities);
   }
 
   return (
@@ -34,8 +46,8 @@ export default function Index() {
       <div className="relative">
         <SaveFileDropzone />
         <PawnRow />
-        {modList.length && (
-          <PrioritiesWrapper priorities={priorities} labels={labors} suggested={suggestedLabors} />
+        {modList.length && priorities.length && (
+          <PrioritiesWrapper priorities={priorityBuilder.getOrderedPriorities()} labels={labors} />
         )}
       </div>
     </div>
