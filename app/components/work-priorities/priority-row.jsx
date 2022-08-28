@@ -5,7 +5,9 @@ const PriorityRow = ({ name, priorities }) => {
     <tr>
       <th>{name}</th>
       {priorities.map((prio, idx) => (
-        <PriorityCell key={`${name}-${idx}`} priority={prio} />
+        <td key={`${name}-${idx}`}>
+          <PriorityCell priority={prio} />
+        </td>
       ))}
     </tr>
   );
