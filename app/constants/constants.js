@@ -13,21 +13,6 @@ export const HUMAN_CONSTANT = "Human";
 export const MINOR_PASSION = "Minor";
 export const MAJOR_PASSION = "Major";
 
-export const SKILLS = [
-  "Shooting",
-  "Melee",
-  "Construction",
-  "Mining",
-  "Cooking",
-  "Plants",
-  "Animals",
-  "Crafting",
-  "Artistic",
-  "Medicine",
-  "Social",
-  "Intellectual",
-];
-
 export const DEFAULT_LABOR_PRIO = 3;
 
 export const LABORS = [

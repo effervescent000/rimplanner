@@ -14,7 +14,6 @@ export default function Index() {
   } = useOutletContext();
   const [priorities, setPriorities] = useState([]);
   let labors;
-  // let suggestedLabors;
 
   let priorityBuilder;
 
@@ -29,7 +28,6 @@ export default function Index() {
 
   if (modList.length && priorities.length) {
     labors = buildLaborsList(modList);
-    // suggestedLabors = buildPrioritySuggestions({ labors, playerPawns });
 
     priorityBuilder = new PriorityBuilder({
       pawns: playerPawns,
@@ -38,7 +36,6 @@ export default function Index() {
     });
     priorityBuilder.buildLaborsArray();
     priorityBuilder.buildSuggestions();
-    console.log(priorityBuilder.priorities);
   }
 
   return (
