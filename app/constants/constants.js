@@ -6,6 +6,7 @@ import {
   VANILLA_BOOKS_EXPANDED,
   VANILLA_GENETICS_EXPANDED,
 } from "./modConstants";
+import { SKILLS } from "./skillsConstants";
 
 export const PLAYER_COLONY = "PlayerColony";
 export const PAWN_CONSTANT = "Pawn";
@@ -55,15 +56,15 @@ export const BASE_GAME_LABORS = [
   { name: "Cook", skill: "Cooking" },
   { name: "Hunt", skill: "Shooting" },
   { name: "Construct", skill: "Construction" },
-  { name: "Grow", skill: "Plants" },
+  { name: "Grow", skill: SKILLS.plants.name },
   { name: "Mine", skill: "Mining" },
-  { name: "Plant cut" },
+  { name: "Plant cut", skill: SKILLS.plants.name },
   { name: "Smith", skill: "Crafting" },
   { name: "Tailor", skill: "Crafting" },
   { name: "Art", skill: "Artistic" },
   { name: "Craft", skill: "Crafting" },
-  { name: "Haul" },
-  { name: "Clean" },
+  { name: "Haul", allDo: true },
+  { name: "Clean", allDo: true },
   { name: "Research", skill: "Intellectual" },
 ];
 
