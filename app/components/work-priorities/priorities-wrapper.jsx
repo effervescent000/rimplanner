@@ -1,6 +1,6 @@
 import PriorityRow from "./priority-row";
 
-const PrioritiesWrapper = ({ priorities, labels, suggested }) => {
+const PrioritiesWrapper = ({ priorities, labels }) => {
   return (
     <table>
       <thead>

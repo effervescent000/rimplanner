@@ -84,6 +84,7 @@ export const BASE_GAME_LABORS = [
 
 export const MOD_LABORS = {
   haulPlus: { name: "Haul+", source: ALLOW_TOOL },
+  hiddenLabor: { name: "Hidden", source: ALLOW_TOOL },
   entertaining: { name: "Entertain", source: HOSPITALITY, skill: "Social" },
   quarrying: { name: "Quarry", source: QUARRY, skill: "Mining" },
   genetics: { name: "Genetics", source: VANILLA_GENETICS_EXPANDED, skill: "Intellectual" },

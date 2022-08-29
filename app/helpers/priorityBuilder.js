@@ -36,6 +36,7 @@ class PriorityBuilder {
       switch (mod) {
         case ALLOW_TOOL:
           this.labors.push(MOD_LABORS.haulPlus);
+          this.labors.push(MOD_LABORS.hiddenLabor);
           break;
         case COLONY_MANAGER:
           this.labors.push(MOD_LABORS.managing);
@@ -56,6 +57,7 @@ class PriorityBuilder {
           break;
       }
     });
+    console.log(this.labors);
   }
 
   // method to build work priorities

@@ -22,7 +22,7 @@ export default function Index() {
     setPriorities(
       playerPawns.map(({ name, workSettings }) => ({
         name: name.nick,
-        priorities: workSettings.priorities.vals.li.slice(0, -1),
+        priorities: workSettings.priorities.vals.li,
       }))
     );
   }, [playerPawns]);
