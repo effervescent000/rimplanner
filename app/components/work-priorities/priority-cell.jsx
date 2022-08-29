@@ -1,9 +1,5 @@
-const PriorityCell = ({ priority, suggested }) => {
-  return (
-    <span className={`${suggested.level !== +priority ? "warning" : ""}`}>
-      {suggested.level || ""}
-    </span>
-  );
+const PriorityCell = ({ priority: { suggested, current } }) => {
+  return <span className={`${suggested !== +current ? "warning" : ""}`}>{suggested}</span>;
 };
 
 export default PriorityCell;
