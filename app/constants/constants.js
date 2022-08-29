@@ -45,16 +45,35 @@ export const LABORS = [
   { name: "Writing", source: VANILLA_BOOKS_EXPANDED, skill: "Intellectual" },
 ];
 
+export const LABOR_CATEGORIES = {
+  violent: "Violent",
+  firefighting: "Firefighting",
+  caring: "Caring",
+  plantWork: "Plant Work",
+  social: "Social",
+  dumb: "Dumb Labor",
+  skilled: "Skilled Labor",
+  intellectual: "Intellectual",
+  animals: "Animals",
+  cooking: "Cooking",
+  hauling: "Hauling",
+  cleaning: "Cleaning",
+};
+
 export const BASE_GAME_LABORS = [
-  { name: "Firefight", allDo: true },
+  { name: "Firefight", allDo: true, categories: [LABOR_CATEGORIES.firefighting] },
   { name: "Patient", allDo: true },
-  { name: "Doctor", skill: "Medicine" },
+  { name: "Doctor", skill: "Medicine", categories: [LABOR_CATEGORIES.caring] },
   { name: "Bed rest", allDo: true },
   { name: "Basic", allDo: true },
-  { name: "Warden", skill: "Social" },
-  { name: "Handle", skill: "Animals" },
-  { name: "Cook", skill: "Cooking" },
-  { name: "Hunt", skill: "Shooting" },
+  { name: "Warden", skill: "Social", categories: [LABOR_CATEGORIES.social] },
+  { name: "Handle", skill: "Animals", categories: [LABOR_CATEGORIES.animals] },
+  {
+    name: "Cook",
+    skill: "Cooking",
+    categories: [LABOR_CATEGORIES.cooking, LABOR_CATEGORIES.skilled],
+  },
+  { name: "Hunt", skill: "Shooting", categories: [LABOR_CATEGORIES.violent] },
   { name: "Construct", skill: "Construction" },
   { name: "Grow", skill: SKILLS.plants.name },
   { name: "Mine", skill: "Mining" },
@@ -63,19 +82,39 @@ export const BASE_GAME_LABORS = [
   { name: "Tailor", skill: "Crafting" },
   { name: "Art", skill: "Artistic" },
   { name: "Craft", skill: "Crafting" },
-  { name: "Haul", allDo: true },
-  { name: "Clean", allDo: true },
-  { name: "Research", skill: "Intellectual" },
+  { name: "Haul", allDo: true, categories: [LABOR_CATEGORIES.dumb, LABOR_CATEGORIES.hauling] },
+  { name: "Clean", allDo: true, categories: [LABOR_CATEGORIES.dumb, LABOR_CATEGORIES.cleaning] },
+  { name: "Research", skill: "Intellectual", categories: [LABOR_CATEGORIES.intellectual] },
 ];
 
 export const MOD_LABORS = {
   haulPlus: { name: "Haul+", source: ALLOW_TOOL },
   hiddenLabor: { name: "Hidden", source: ALLOW_TOOL },
-  entertaining: { name: "Entertain", source: HOSPITALITY, skill: "Social" },
+  entertaining: {
+    name: "Entertain",
+    source: HOSPITALITY,
+    skill: "Social",
+    categories: [LABOR_CATEGORIES.social],
+  },
   quarrying: { name: "Quarry", source: QUARRY, skill: "Mining" },
-  genetics: { name: "Genetics", source: VANILLA_GENETICS_EXPANDED, skill: "Intellectual" },
-  managing: { name: "Managing", source: COLONY_MANAGER, skill: "Intellectual" },
-  writing: { name: "Writing", source: VANILLA_BOOKS_EXPANDED, skill: "Intellectual" },
+  genetics: {
+    name: "Genetics",
+    source: VANILLA_GENETICS_EXPANDED,
+    skill: "Intellectual",
+    categories: [LABOR_CATEGORIES.intellectual],
+  },
+  managing: {
+    name: "Managing",
+    source: COLONY_MANAGER,
+    skill: "Intellectual",
+    categories: [LABOR_CATEGORIES.intellectual],
+  },
+  writing: {
+    name: "Writing",
+    source: VANILLA_BOOKS_EXPANDED,
+    skill: "Intellectual",
+    categories: [LABOR_CATEGORIES.intellectual],
+  },
 };
 
 export const LABORS_OBJ = {
