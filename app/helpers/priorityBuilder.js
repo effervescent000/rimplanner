@@ -80,8 +80,8 @@ class PriorityBuilder {
         if (labor.skill) {
           this.pawnSkills.sort(
             (a, b) =>
-              b.skills.find(({ def }) => def === labor.skill).level -
-              a.skills.find(({ def }) => def === labor.skill).level
+              (+b.skills.find(({ def }) => def === labor.skill).level || 0) -
+              (+a.skills.find(({ def }) => def === labor.skill).level || 0)
           );
         }
       }
