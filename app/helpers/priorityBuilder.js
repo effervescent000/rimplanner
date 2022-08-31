@@ -1,3 +1,4 @@
+import { BACKSTORIES_LOOKUP } from "~/constants/backstoryConstants";
 import { BASE_GAME_LABORS, DEFAULT_LABOR_PRIO, MOD_LABORS } from "~/constants/constants";
 import {
   ALLOW_TOOL,
@@ -15,11 +16,11 @@ class PriorityBuilder {
     this.numPawns = this.pawns.length;
     this.modList = modList;
     this.rawPriorities = rawPriorities;
-    // the shape of the `priorities` obj will be like { pawn_1: [{skill: "Cooking", suggested: 3, actual: 0}, {skill: "Hunting", prio: 3, actual: 3}], pawn_2: [...] }
     this.priorities = {};
     this.numToAssign = Math.ceil(this.numPawns * (1 / 3));
 
     this.labors = [...BASE_GAME_LABORS];
+    this.laborsLookup = {};
     this.pawnSkills = this.pawns.map(
       ({
         name: { nick: name },
@@ -30,7 +31,6 @@ class PriorityBuilder {
     );
   }
 
-  // method to build labors list with modded labors at end
   buildLaborsArray() {
     this.modList.forEach((mod) => {
       switch (mod) {
@@ -57,49 +57,66 @@ class PriorityBuilder {
           break;
       }
     });
-    console.log(this.labors);
+    this.laborsLookup = this.labors.reduce((total, cur) => ({ ...total, [cur.name]: cur }), {});
   }
 
-  // method to build work priorities
   buildSuggestions() {
     this.pawns.forEach(({ name: { nick: name } }) => (this.priorities[name] = []));
     this.labors.forEach((labor, idx) => {
       if (labor.allDo) {
-        Object.keys(this.priorities).forEach(
-          (name) =>
-            (this.priorities[name] = [
+        Object.keys(this.priorities).forEach((name) => {
+          if (this.isPawnCapable(name, labor.name)) {
+            this.priorities[name] = [
               ...this.priorities[name],
               {
                 name: labor.name,
                 suggested: DEFAULT_LABOR_PRIO,
                 current: this.getCurrentPriority(name, idx),
               },
-            ])
-        );
+            ];
+          }
+        });
       } else {
         if (labor.skill) {
           this.pawnSkills.sort(
             (a, b) =>
-              b.skills.find(({ def }) => def === labor.skill).level -
-              a.skills.find(({ def }) => def === labor.skill).level
+              (+b.skills.find(({ def }) => def === labor.skill).level || 0) -
+              (+a.skills.find(({ def }) => def === labor.skill).level || 0)
           );
         }
       }
       let counter = 0;
       while (this.countPawnsAssignedToLabor(labor.name) < this.numToAssign) {
         const pawn = this.pawnSkills[counter].name;
-        // TODO add a capable check here
-        this.priorities[pawn] = [
-          ...this.priorities[pawn],
-          {
-            name: labor.name,
-            suggested: DEFAULT_LABOR_PRIO,
-            current: this.getCurrentPriority(pawn, idx),
-          },
-        ];
+        if (this.isPawnCapable(pawn, labor.name)) {
+          this.priorities[pawn] = [
+            ...this.priorities[pawn],
+            {
+              name: labor.name,
+              suggested: DEFAULT_LABOR_PRIO,
+              current: this.getCurrentPriority(pawn, idx),
+            },
+          ];
+        }
         if (counter === this.numPawns) break;
+        counter++;
       }
     });
+  }
+
+  isPawnCapable(pawn, labor) {
+    const {
+      story: { childhood, adulthood },
+    } = this.pawns.find(({ name: { nick: name } }) => name === pawn);
+    const incapableSkills = [
+      ...(BACKSTORIES_LOOKUP[childhood] || []),
+      ...(BACKSTORIES_LOOKUP[adulthood] || []),
+    ];
+    const pawnCantDo = incapableSkills.filter((skill) =>
+      (this.laborsLookup[labor].categories || []).includes(skill)
+    );
+    if (pawnCantDo.length) console.log(pawnCantDo);
+    return !pawnCantDo.length;
   }
 
   countPawnsAssignedToLabor(labor) {

@@ -1,12 +1,8 @@
 import { mean, quantile } from "simple-statistics";
 
-import {
-  DEFAULT_LABOR_PRIO,
-  LABORS,
-  MAJOR_PASSION,
-  MINOR_PASSION,
-  SKILLS,
-} from "~/constants/constants";
+import { DEFAULT_LABOR_PRIO, LABORS, MAJOR_PASSION, MINOR_PASSION } from "~/constants/constants";
+
+import { SKILLS_ARRAY } from "~/constants/skillsConstants";
 
 const buildColonyStats = (pawns) => {
   let allSkills = {};
@@ -26,7 +22,7 @@ const buildColonyStats = (pawns) => {
       });
     }
   );
-  const stats = SKILLS.map((skill) => ({
+  const stats = SKILLS_ARRAY.map((skill) => ({
     name: skill,
     average: mean(allSkills[skill].map(({ level }) => +level || 0)),
     upperQuantile: quantile(
