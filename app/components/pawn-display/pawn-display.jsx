@@ -20,7 +20,7 @@ const PawnRow = () => {
       {playerPawns.length &&
         Object.keys(colonyStats).length &&
         playerPawns.map((pawn) => (
-          <PawnCard key={pawn.id} pawn={pawn} stats={colonyStats[pawn.name.nick]} />
+          <PawnCard key={pawn.id} pawn={pawn} highlights={colonyStats[pawn.name.nick].highlights} />
         ))}
     </div>
   );
