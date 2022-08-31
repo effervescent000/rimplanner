@@ -7,6 +7,7 @@ import SaveFileDropzone from "~/components/save-file-dropzone";
 import PawnRow from "~/components/pawn-display/pawn-display";
 import PrioritiesWrapper from "~/components/work-priorities/priorities-wrapper";
 import PriorityBuilder from "~/helpers/priorityBuilder";
+import Evaluation from "~/components/evaluation/evaluation";
 
 export default function Index() {
   const {
@@ -40,12 +41,22 @@ export default function Index() {
 
   return (
     <div className="container mx-auto">
-      <div className="relative">
-        <SaveFileDropzone />
-        <PawnRow />
-        {modList.length && priorities.length && (
-          <PrioritiesWrapper priorities={priorityBuilder.getOrderedPriorities()} labels={labors} />
-        )}
+      <div className="relative flex">
+        <div>
+          <SaveFileDropzone />
+        </div>
+        <div className="flex flex-col">
+          <PawnRow />
+          {modList.length && priorities.length && (
+            <PrioritiesWrapper
+              priorities={priorityBuilder.getOrderedPriorities()}
+              labels={labors}
+            />
+          )}
+        </div>
+        <div>
+          <Evaluation />
+        </div>
       </div>
     </div>
   );
