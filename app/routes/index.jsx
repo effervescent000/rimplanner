@@ -54,9 +54,7 @@ export default function Index() {
             />
           )}
         </div>
-        <div>
-          <Evaluation />
-        </div>
+        <Evaluation />
       </div>
     </div>
   );

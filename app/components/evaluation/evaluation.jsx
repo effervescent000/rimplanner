@@ -8,7 +8,11 @@ const Evaluation = () => {
   } = useOutletContext();
   const [search, setSearch] = useState("");
 
-  return <ControlledTextInput value={search} callback={setSearch} />;
+  return (
+    <div>
+      <ControlledTextInput value={search} callback={setSearch} />
+    </div>
+  );
 };
 
 export default Evaluation;

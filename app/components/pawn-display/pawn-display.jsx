@@ -3,7 +3,7 @@ import { useOutletContext } from "@remix-run/react";
 
 import { buildRosterHighlights } from "~/helpers/rosterHelpers";
 
-import PawnCard from "./pawn-card";
+import PawnCard from "../common/pawn-card";
 
 const PawnRow = () => {
   const [colonyStats, setColonyStats] = useState({});
