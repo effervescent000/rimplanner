@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration } from "@remix-run/react";
 
+import "rsuite/dist/rsuite.min.css";
+
 import tailwindStyles from "~/styles/tailwind.css";
 import commonStyles from "~/styles/common.css";
 
