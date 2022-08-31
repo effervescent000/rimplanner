@@ -3,7 +3,7 @@ import { useOutletContext } from "@remix-run/react";
 
 import { buildRosterHighlights } from "~/helpers/rosterHelpers";
 
-import PawnCard from "./pawn-card";
+import PawnCard from "../common/pawn-card";
 
 const PawnRow = () => {
   const [colonyStats, setColonyStats] = useState({});
@@ -20,7 +20,7 @@ const PawnRow = () => {
       {playerPawns.length &&
         Object.keys(colonyStats).length &&
         playerPawns.map((pawn) => (
-          <PawnCard key={pawn.id} pawn={pawn} stats={colonyStats[pawn.name.nick]} />
+          <PawnCard key={pawn.id} pawn={pawn} highlights={colonyStats[pawn.name.nick].highlights} />
         ))}
     </div>
   );
