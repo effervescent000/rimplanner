@@ -610,11 +610,6 @@ video {
   display: table;
 }
 
-.columns-3 {
-  -moz-columns: 3;
-       columns: 3;
-}
-
 .flex-col {
   flex-direction: column;
 }

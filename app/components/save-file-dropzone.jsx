@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import { useOutletContext } from "@remix-run/react";

@@ -1,12 +1,13 @@
-const PawnCard = ({
-  pawn: {
+import PawnImage from "./pawn-image";
+
+const PawnCard = ({ pawn, highlights }) => {
+  const {
     name: { nick: name },
-  },
-  highlights,
-}) => {
+  } = pawn;
   return (
     <div>
       <div>{name}</div>
+      <PawnImage pawn={pawn} />
       <div>
         {highlights &&
           highlights.map(
