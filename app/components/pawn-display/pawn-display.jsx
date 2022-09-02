@@ -1,15 +1,11 @@
 import { useState, useEffect } from "react";
-import { useOutletContext } from "@remix-run/react";
 
 import { buildRosterHighlights } from "~/helpers/rosterHelpers";
 
 import PawnCard from "../common/pawn-card";
 
-const PawnRow = () => {
+const PawnRow = ({ playerPawns }) => {
   const [colonyStats, setColonyStats] = useState({});
-  const {
-    saveData: { playerPawns },
-  } = useOutletContext();
 
   useEffect(() => {
     playerPawns.length && setColonyStats(buildRosterHighlights(playerPawns));
