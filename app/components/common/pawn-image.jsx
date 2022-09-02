@@ -35,7 +35,7 @@ const PawnImage = ({
     setImageURI(fetcher.data);
   }, [fetcher]);
 
-  return <img src={imageURI} alt="test" />;
+  return imageURI && <img src={imageURI} alt="test" />;
 };
 
 export default PawnImage;
