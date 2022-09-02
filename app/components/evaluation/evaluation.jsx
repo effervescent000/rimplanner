@@ -13,7 +13,7 @@ const Evaluation = () => {
     <div>
       <ControlledTextInput value={search} callback={setSearch} />
       {worldPawns
-        .filter(({ name: { nick } }) => nick.toLowerCase().includes(search.toLowerCase()))
+        .filter(({ name: { nick } }) => nick && nick.toLowerCase().includes(search.toLowerCase()))
         .map((pawn) => (
           <PawnCard key={pawn.id} pawn={pawn} />
         ))}

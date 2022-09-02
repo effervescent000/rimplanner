@@ -8,6 +8,8 @@ import {
 } from "./modConstants";
 import { SKILLS } from "./skillsConstants";
 
+export const BASE_ASSET_URL = "./assets/";
+
 export const PLAYER_COLONY = "PlayerColony";
 export const PAWN_CONSTANT = "Pawn";
 export const HUMAN_CONSTANT = "Human";
