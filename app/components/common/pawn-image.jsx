@@ -10,7 +10,7 @@ const encodeSearchParams = (params) => {
 
 const PawnImage = ({
   pawn: {
-    story: { bodyType, headGraphicPath, hairDef, hairColor },
+    story: { bodyType, headGraphicPath, hairDef, hairColor, melanin },
     gender,
   },
 }) => {
@@ -25,10 +25,11 @@ const PawnImage = ({
         head: headGraphicPath,
         hairDef,
         hairColor,
+        melanin,
       })}`
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [bodyType, gender, headGraphicPath]);
+  }, [bodyType, gender, headGraphicPath, melanin, hairDef, hairColor]);
 
   useEffect(() => {
     setImageURI(fetcher.data);
