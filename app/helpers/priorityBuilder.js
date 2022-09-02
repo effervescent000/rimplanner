@@ -115,7 +115,6 @@ class PriorityBuilder {
     const pawnCantDo = incapableSkills.filter((skill) =>
       (this.laborsLookup[labor].categories || []).includes(skill)
     );
-    if (pawnCantDo.length) console.log(pawnCantDo);
     return !pawnCantDo.length;
   }
 

@@ -1,7 +1,12 @@
 import { LABOR_CATEGORIES } from "./constants";
 
 const CHILDHOOD_BACKSTORIES = [
+  { name: "CultChild3", incapable: [LABOR_CATEGORIES.intellectual] },
   { name: "MedicalAssistant12", incapable: [LABOR_CATEGORIES.firefighting] },
+  {
+    name: "ScienceProdigy65",
+    incapable: [LABOR_CATEGORIES.firefighting, LABOR_CATEGORIES.violent],
+  },
 ];
 
 const ADULT_BACKSTORIES = [
