@@ -53,6 +53,7 @@ export const composeImage = async ({ gender, head, body, hairDef, hairColor, mel
       opacitySource: 1,
     });
     baseImage.blit(hairImage, 0, -25);
+    baseImage.resize(100, 100);
     const url = await baseImage.getBase64Async(jimp.MIME_PNG);
     return url;
   } catch (error) {

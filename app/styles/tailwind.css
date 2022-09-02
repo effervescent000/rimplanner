@@ -610,6 +610,10 @@ video {
   display: table;
 }
 
+.resize {
+  resize: both;
+}
+
 .flex-col {
   flex-direction: column;
 }
