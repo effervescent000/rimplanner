@@ -2,30 +2,36 @@ import { SKILLS_ARRAY, SKILLS } from "../../constants/skillsConstants";
 import { buildLabors } from "../priorityBuilder";
 import { MAJOR_PASSION } from "../../constants/constants";
 
-export const modListFactory = ({ full }) => {
+export const modListFactory = ({ full } = {}) => {
   // full returns a modList with several work-adding mods, otherwise only core game is returned
   const core = ["ludeon.rimworld", "ludeon.rimworld.royalty", "ludeon.rimworld.ideology"];
   if (full) return [...core, "unlimitedhugs.allowtool", "orion.hospitality"];
   return core;
 };
 
-export const getThreePawns = () => [
-  pawnFactory({
-    name: "Buck",
-    skills: {
-      [SKILLS.crafting.name]: { level: 10, passion: MAJOR_PASSION },
-      [SKILLS.social.name]: { level: 9, passion: MAJOR_PASSION },
-    },
-  }),
-  pawnFactory({
-    name: "Belsaas",
-    skills: { [SKILLS.intellectual.name]: { level: 20, passion: MAJOR_PASSION } },
-  }),
-  pawnFactory({
-    name: "Gennady",
-    skills: { [SKILLS.construction.name]: { level: 13, passion: MAJOR_PASSION } },
-  }),
-];
+export const getThreePawns = () => {
+  const modList = modListFactory();
+  return [
+    pawnFactory({
+      name: "Buck",
+      skills: {
+        [SKILLS.crafting.name]: { level: 10, passion: MAJOR_PASSION },
+        [SKILLS.social.name]: { level: 9, passion: MAJOR_PASSION },
+      },
+      modList,
+    }),
+    pawnFactory({
+      name: "Belsaas",
+      skills: { [SKILLS.intellectual.name]: { level: 20, passion: MAJOR_PASSION } },
+      modList,
+    }),
+    pawnFactory({
+      name: "Gennady",
+      skills: { [SKILLS.construction.name]: { level: 13, passion: MAJOR_PASSION } },
+      modList,
+    }),
+  ];
+};
 
 export const pawnFactory = ({ name, skills, modList }) => {
   return {

@@ -4,9 +4,9 @@ import { getThreePawns, modListFactory } from "./test-helpers/priorityBuilderSha
 describe("Testing constructor", () => {
   it("initializes properly", () => {
     const pawns = getThreePawns();
-    const pb = PriorityBuilder({
+    const pb = new PriorityBuilder({
       pawns,
-      modListL: modListFactory(),
+      modList: modListFactory(),
       rawPriorities: pawns.map(({ name, workSettings }) => ({
         name: name.nick,
         priorities: workSettings.priorities.vals.li,

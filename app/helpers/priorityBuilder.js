@@ -17,26 +17,27 @@ import { buildLaborsList } from "./rosterHelpers";
 
 export const buildLabors = (modList) => {
   const labors = [...BASE_GAME_LABORS];
+  const modLabors = MOD_LABORS();
   modList.forEach((mod) => {
     switch (mod) {
       case ALLOW_TOOL:
-        labors.push(MOD_LABORS.haulPlus);
-        labors.push(MOD_LABORS.hiddenLabor);
+        labors.push(modLabors.haulPlus);
+        labors.push(modLabors.hiddenLabor);
         break;
       case COLONY_MANAGER:
-        labors.push(MOD_LABORS.managing);
+        labors.push(modLabors.managing);
         break;
       case HOSPITALITY:
-        labors.push(MOD_LABORS.entertaining);
+        labors.push(modLabors.entertaining);
         break;
       case QUARRY:
-        labors.push(MOD_LABORS.quarrying);
+        labors.push(modLabors.quarrying);
         break;
       case VANILLA_BOOKS_EXPANDED:
-        labors.push(MOD_LABORS.writing);
+        labors.push(modLabors.writing);
         break;
       case VANILLA_GENETICS_EXPANDED:
-        labors.push(MOD_LABORS.genetics);
+        labors.push(modLabors.genetics);
         break;
       default:
         break;
