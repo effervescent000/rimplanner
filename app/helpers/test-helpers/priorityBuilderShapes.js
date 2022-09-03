@@ -17,6 +17,7 @@ export const getThreePawns = () => {
       skills: {
         [SKILLS.crafting.name]: { level: 10, passion: MAJOR_PASSION },
         [SKILLS.social.name]: { level: 9, passion: MAJOR_PASSION },
+        [SKILLS.intellectual.name]: { level: 4 },
       },
       modList,
     }),
@@ -27,7 +28,10 @@ export const getThreePawns = () => {
     }),
     pawnFactory({
       name: "Gennady",
-      skills: { [SKILLS.construction.name]: { level: 13, passion: MAJOR_PASSION } },
+      skills: {
+        [SKILLS.construction.name]: { level: 13, passion: MAJOR_PASSION },
+        [SKILLS.intellectual.name]: { level: 4 },
+      },
       modList,
     }),
   ];

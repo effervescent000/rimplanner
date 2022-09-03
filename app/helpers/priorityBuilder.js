@@ -75,7 +75,7 @@ class PriorityBuilder {
 
   sortBySkill(skill) {
     this.pawnSkills.sort(
-      (a, b) => this.getSkillValue(a.skills[skill]) - this.getSkillValue(b.skills[skill])
+      (a, b) => this.getSkillValue(b.skills[skill]) - this.getSkillValue(a.skills[skill])
     );
   }
 
