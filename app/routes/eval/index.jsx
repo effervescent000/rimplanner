@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { useOutletContext } from "@remix-run/react";
-import ControlledTextInput from "../common/controlled-text-input";
-import PawnCard from "../common/pawn-card";
 
-const Evaluation = () => {
+import ControlledTextInput from "~/components/common/controlled-text-input";
+import PawnCard from "~/components/common/pawn-card";
+
+const EvaluationIndex = () => {
   const {
     saveData: { worldPawns },
   } = useOutletContext();
@@ -21,4 +22,4 @@ const Evaluation = () => {
   );
 };
 
-export default Evaluation;
+export default EvaluationIndex;
