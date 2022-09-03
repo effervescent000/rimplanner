@@ -32,7 +32,6 @@ const WorkPriorityIndex = () => {
       modList,
       rawPriorities: priorities,
     });
-    priorityBuilder.buildLaborsArray();
     priorityBuilder.buildSuggestions();
   }
   return (

@@ -1,5 +1,10 @@
-import { BACKSTORIES_LOOKUP } from "~/constants/backstoryConstants";
-import { BASE_GAME_LABORS, DEFAULT_LABOR_PRIO, MOD_LABORS } from "~/constants/constants";
+import { BACKSTORIES_LOOKUP } from "../constants/backstoryConstants";
+import {
+  BASE_GAME_LABORS,
+  DEFAULT_LABOR_PRIO,
+  MAJOR_PASSION,
+  MOD_LABORS,
+} from "../constants/constants";
 import {
   ALLOW_TOOL,
   COLONY_MANAGER,
@@ -7,8 +12,38 @@ import {
   QUARRY,
   VANILLA_BOOKS_EXPANDED,
   VANILLA_GENETICS_EXPANDED,
-} from "~/constants/modConstants";
+} from "../constants/modConstants";
 import { buildLaborsList } from "./rosterHelpers";
+
+export const buildLabors = (modList) => {
+  const labors = [...BASE_GAME_LABORS];
+  modList.forEach((mod) => {
+    switch (mod) {
+      case ALLOW_TOOL:
+        labors.push(MOD_LABORS.haulPlus);
+        labors.push(MOD_LABORS.hiddenLabor);
+        break;
+      case COLONY_MANAGER:
+        labors.push(MOD_LABORS.managing);
+        break;
+      case HOSPITALITY:
+        labors.push(MOD_LABORS.entertaining);
+        break;
+      case QUARRY:
+        labors.push(MOD_LABORS.quarrying);
+        break;
+      case VANILLA_BOOKS_EXPANDED:
+        labors.push(MOD_LABORS.writing);
+        break;
+      case VANILLA_GENETICS_EXPANDED:
+        labors.push(MOD_LABORS.genetics);
+        break;
+      default:
+        break;
+    }
+  });
+  return [labors, labors.reduce((total, cur) => ({ ...total, [cur.name]: cur }), {})];
+};
 
 class PriorityBuilder {
   constructor({ pawns, modList, rawPriorities }) {
@@ -18,46 +53,29 @@ class PriorityBuilder {
     this.rawPriorities = rawPriorities;
     this.priorities = {};
     this.numToAssign = Math.ceil(this.numPawns * (1 / 3));
-
-    this.labors = [...BASE_GAME_LABORS];
-    this.laborsLookup = {};
+    [this.labors, this.laborsLookup] = buildLabors(this.modList);
     this.pawnSkills = this.pawns.map(
       ({
         name: { nick: name },
         skills: {
           skills: { li: skills },
         },
-      }) => ({ name, skills })
+      }) => ({ name, skills: skills.reduce((total, cur) => ({ ...total, [cur.def]: cur }), {}) })
     );
   }
 
-  buildLaborsArray() {
-    this.modList.forEach((mod) => {
-      switch (mod) {
-        case ALLOW_TOOL:
-          this.labors.push(MOD_LABORS.haulPlus);
-          this.labors.push(MOD_LABORS.hiddenLabor);
-          break;
-        case COLONY_MANAGER:
-          this.labors.push(MOD_LABORS.managing);
-          break;
-        case HOSPITALITY:
-          this.labors.push(MOD_LABORS.entertaining);
-          break;
-        case QUARRY:
-          this.labors.push(MOD_LABORS.quarrying);
-          break;
-        case VANILLA_BOOKS_EXPANDED:
-          this.labors.push(MOD_LABORS.writing);
-          break;
-        case VANILLA_GENETICS_EXPANDED:
-          this.labors.push(MOD_LABORS.genetics);
-          break;
-        default:
-          break;
-      }
-    });
-    this.laborsLookup = this.labors.reduce((total, cur) => ({ ...total, [cur.name]: cur }), {});
+  getSkillValue(skillObj) {
+    if (skillObj) {
+      const passionValue = skillObj.passion ? (skillObj.passion === MAJOR_PASSION ? 5 : 2) : 0;
+      return Math.min(+skillObj.level + passionValue, 20);
+    }
+    return 0;
+  }
+
+  sortBySkill(skill) {
+    this.pawnSkills.sort(
+      (a, b) => this.getSkillValue(a.skills[skill]) - this.getSkillValue(b.skills[skill])
+    );
   }
 
   buildSuggestions() {
@@ -78,11 +96,7 @@ class PriorityBuilder {
         });
       } else {
         if (labor.skill) {
-          this.pawnSkills.sort(
-            (a, b) =>
-              (+b.skills.find(({ def }) => def === labor.skill).level || 0) -
-              (+a.skills.find(({ def }) => def === labor.skill).level || 0)
-          );
+          this.sortBySkill(labor.skill);
         }
       }
       let counter = 0;

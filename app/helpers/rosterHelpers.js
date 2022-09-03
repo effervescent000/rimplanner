@@ -1,8 +1,8 @@
 import { mean, quantile } from "simple-statistics";
 
-import { DEFAULT_LABOR_PRIO, LABORS, MAJOR_PASSION, MINOR_PASSION } from "~/constants/constants";
+import { DEFAULT_LABOR_PRIO, LABORS, MAJOR_PASSION, MINOR_PASSION } from "../constants/constants";
 
-import { SKILLS_ARRAY } from "~/constants/skillsConstants";
+import { SKILLS_ARRAY } from "../constants/skillsConstants";
 
 const buildColonyStats = (pawns) => {
   let allSkills = {};
