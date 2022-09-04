@@ -89,7 +89,7 @@ export const BASE_GAME_LABORS = [
   { name: "Research", skill: "Intellectual", categories: [LABOR_CATEGORIES.intellectual] },
 ];
 
-export const MOD_LABORS = {
+export const MOD_LABORS = () => ({
   haulPlus: { name: "Haul+", source: ALLOW_TOOL },
   hiddenLabor: { name: "Hidden", source: ALLOW_TOOL },
   entertaining: {
@@ -117,7 +117,7 @@ export const MOD_LABORS = {
     skill: "Intellectual",
     categories: [LABOR_CATEGORIES.intellectual],
   },
-};
+});
 
 export const LABORS_OBJ = {
   firefighting: { name: "Firefight", allDo: true },
