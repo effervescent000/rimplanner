@@ -1,11 +1,13 @@
+import PropTypes from "prop-types";
+
 import PawnImage from "./pawn-image";
 
-const PawnCard = ({ pawn, highlights }) => {
+const PawnCard = ({ pawn, highlights, callback, selected }) => {
   const {
     name: { nick: name },
   } = pawn;
   return (
-    <div>
+    <div onClick={() => callback(pawn)}>
       <div>{name}</div>
       <PawnImage pawn={pawn} />
       <div>
@@ -23,6 +25,20 @@ const PawnCard = ({ pawn, highlights }) => {
       </div>
     </div>
   );
+};
+
+PawnCard.defaultProps = {
+  highlights: [],
+  callback: () => {},
+  selected: false,
+};
+
+PawnCard.propTypes = {
+  pawn: PropTypes.shape({ name: PropTypes.shape({ nick: PropTypes.string.isRequired }) })
+    .isRequired,
+  highlights: PropTypes.arrayOf(PropTypes.shape({})),
+  callback: PropTypes.func,
+  selected: PropTypes.bool,
 };
 
 export default PawnCard;

@@ -4,7 +4,7 @@ import { DEFAULT_LABOR_PRIO, LABORS, MAJOR_PASSION, MINOR_PASSION } from "../con
 
 import { SKILLS_ARRAY } from "../constants/skillsConstants";
 
-const buildColonyStats = (pawns) => {
+export const buildColonyStats = (pawns) => {
   let allSkills = {};
   pawns.forEach(
     ({

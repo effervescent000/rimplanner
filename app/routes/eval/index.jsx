@@ -9,15 +9,26 @@ const EvaluationIndex = () => {
     saveData: { worldPawns },
   } = useOutletContext();
   const [search, setSearch] = useState("");
+  const [selectedPawn, setSelectedPawn] = useState({});
 
   return (
     <div>
-      <ControlledTextInput value={search} callback={setSearch} />
-      {worldPawns
-        .filter(({ name: { nick } }) => nick && nick.toLowerCase().includes(search.toLowerCase()))
-        .map((pawn) => (
-          <PawnCard key={pawn.id} pawn={pawn} />
-        ))}
+      <div>
+        <ControlledTextInput value={search} callback={setSearch} />
+        {worldPawns
+          .filter(({ name: { nick } }) => nick && nick.toLowerCase().includes(search.toLowerCase()))
+          .map((pawn) => (
+            <PawnCard
+              key={pawn.id}
+              pawn={pawn}
+              callback={setSelectedPawn}
+              selected={pawn.id === selectedPawn.id}
+            />
+          ))}
+      </div>
+      <div>
+        <PawnCard pawn={selectedPawn} />
+      </div>
     </div>
   );
 };

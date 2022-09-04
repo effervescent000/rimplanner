@@ -1,3 +1,6 @@
+export const MAJOR_PASSION_VALUE = 5;
+export const MINOR_PASSION_VALUE = 2;
+
 export const SKILLS = {
   shooting: { name: "Shooting" },
   melee: { name: "Melee" },
