@@ -12,7 +12,7 @@ class EvaluationBuilder {
   constructor({ target, playerPawns }) {
     this.target = target;
     this.targetSkills = target.skills.skills.li.reduce(
-      (total, cur) => ({ ...total, [cur.name]: cur }),
+      (total, cur) => ({ ...total, [cur.def]: cur }),
       {}
     );
     this.playerPawns = playerPawns;

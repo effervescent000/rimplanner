@@ -22,7 +22,7 @@ const EvaluationIndex = () => {
   }, [selectedPawn, playerPawns]);
 
   return (
-    <div>
+    <div className="flex">
       <div>
         <ControlledTextInput value={search} callback={setSearch} />
         {worldPawns
