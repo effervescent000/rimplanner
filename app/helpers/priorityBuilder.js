@@ -66,7 +66,7 @@ class PriorityBuilder {
   }
 
   getSkillValue(skillObj) {
-    if (skillObj) {
+    if (skillObj && skillObj.level) {
       const passionValue = skillObj.passion ? (skillObj.passion === MAJOR_PASSION ? 5 : 2) : 0;
       return Math.min(+skillObj.level + passionValue, 20);
     }

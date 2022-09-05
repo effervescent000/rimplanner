@@ -1,6 +1,6 @@
 import { SKILLS_ARRAY, SKILLS } from "../../constants/skillsConstants";
 import { buildLabors } from "../priorityBuilder";
-import { MAJOR_PASSION } from "../../constants/constants";
+import { MAJOR_PASSION, MINOR_PASSION } from "../../constants/constants";
 
 export const modListFactory = ({ full } = {}) => {
   // full returns a modList with several work-adding mods, otherwise only core game is returned
@@ -9,8 +9,7 @@ export const modListFactory = ({ full } = {}) => {
   return core;
 };
 
-export const getThreePawns = () => {
-  const modList = modListFactory();
+export const getBasicPawns = () => {
   return [
     pawnFactory({
       name: "Buck",
@@ -19,25 +18,44 @@ export const getThreePawns = () => {
         [SKILLS.social.name]: { level: 9, passion: MAJOR_PASSION },
         [SKILLS.intellectual.name]: { level: 4 },
       },
-      modList,
     }),
     pawnFactory({
       name: "Belsaas",
-      skills: { [SKILLS.intellectual.name]: { level: 20, passion: MAJOR_PASSION } },
-      modList,
+      skills: {
+        [SKILLS.crafting.name]: { level: 5 },
+        [SKILLS.intellectual.name]: { level: 20, passion: MAJOR_PASSION },
+      },
+      childhoodBackstory: "ScienceProdigy65",
+      adultBackstory: "ParticlePhysicist44",
     }),
     pawnFactory({
       name: "Gennady",
       skills: {
         [SKILLS.construction.name]: { level: 13, passion: MAJOR_PASSION },
+        [SKILLS.crafting.name]: { level: 4 },
         [SKILLS.intellectual.name]: { level: 4 },
       },
-      modList,
+    }),
+    pawnFactory({
+      name: "Hakuja",
+      skills: {
+        [SKILLS.social.name]: { level: 4 },
+        [SKILLS.medicine.name]: { level: 17, passion: MAJOR_PASSION },
+        [SKILLS.intellectual.name]: { level: 5, passion: MINOR_PASSION },
+      },
+      childhoodBackstory: "Killer41",
+      adultBackstory: "Healer35",
     }),
   ];
 };
 
-export const pawnFactory = ({ name, skills, modList }) => {
+export const pawnFactory = ({
+  name,
+  skills,
+  modList = modListFactory(),
+  childhoodBackstory = "ApocalypseSurvivor23",
+  adultBackstory = "CropFarmer17",
+}) => {
   return {
     id: `Human${Math.round(Math.random() * 1000)}`,
     name: {
@@ -52,6 +70,7 @@ export const pawnFactory = ({ name, skills, modList }) => {
         })),
       },
     },
+    story: { childhood: childhoodBackstory, adulthood: adultBackstory },
     workSettings: {
       priorities: {
         vals: {
