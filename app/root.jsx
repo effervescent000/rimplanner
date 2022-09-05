@@ -47,8 +47,6 @@ export default function App() {
 
   useEffect(() => {
     console.log(saveData);
-    const wb = new WarningsBuilder({ growingZones: saveData.growingZones });
-    wb.calculateNutrition();
   }, [saveData]);
   return (
     <html lang="en">
