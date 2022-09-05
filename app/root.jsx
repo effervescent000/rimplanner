@@ -17,6 +17,7 @@ import commonStyles from "~/styles/common.css";
 
 import SaveFileDropzone from "~/components/save-file-dropzone";
 import PawnRow from "~/components/pawn-display/pawn-display";
+import WarningsBuilder from "./helpers/warningsBuilder";
 
 export const meta = () => ({
   charset: "utf-8",
@@ -46,6 +47,8 @@ export default function App() {
 
   useEffect(() => {
     console.log(saveData);
+    const wb = new WarningsBuilder({ growingZones: saveData.growingZones });
+    wb.calculateNutrition();
   }, [saveData]);
   return (
     <html lang="en">
