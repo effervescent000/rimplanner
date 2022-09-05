@@ -11,7 +11,7 @@ const BASE_VALUE = 1;
 class EvaluationBuilder {
   constructor({ targets, playerPawns }) {
     this.targets = targets;
-    this.targetSkills = this.targets.reduce(
+    this.targetsSkills = this.targets.reduce(
       (total, { id, skills }) => ({
         ...total,
         [id]: skills.skills.li.reduce(
@@ -27,31 +27,47 @@ class EvaluationBuilder {
   }
 
   compareStats() {
-    SKILLS_ARRAY.forEach((skill) => {
-      const targetSkill = this.targetsSkills[skill];
-      if (targetSkill) {
-        if (targetSkill.passion) {
-          if (targetSkill.passion === MAJOR_PASSION) {
-            if (targetSkill.level >= this.colonyStats[skill].upperQuantile - MAJOR_PASSION_VALUE) {
-              this.value += BASE_VALUE * 2;
-            } else if (targetSkill.level >= this.colonyStats[skill].average - MAJOR_PASSION_VALUE) {
-              this.value += BASE_VALUE;
+    this.targets.forEach(({ id }) => {
+      let value = 0;
+      SKILLS_ARRAY.forEach((skill) => {
+        const targetSkill = this.targetsSkills[id][skill];
+        if (targetSkill && targetSkill.level > 0) {
+          if (targetSkill.passion) {
+            if (targetSkill.passion === MAJOR_PASSION) {
+              if (
+                targetSkill.level >=
+                this.colonyStats[skill].upperQuantile - MAJOR_PASSION_VALUE
+              ) {
+                value += BASE_VALUE * 2;
+              } else if (
+                targetSkill.level >=
+                this.colonyStats[skill].average - MAJOR_PASSION_VALUE
+              ) {
+                value += BASE_VALUE;
+              }
+            } else {
+              if (
+                targetSkill.level >=
+                this.colonyStats[skill].upperQuantile - MINOR_PASSION_VALUE
+              ) {
+                value += BASE_VALUE * 1.5;
+              } else if (
+                targetSkill.level >=
+                this.colonyStats[skill].average - MINOR_PASSION_VALUE
+              ) {
+                value += BASE_VALUE * 0.75;
+              }
             }
           } else {
-            if (targetSkill.level >= this.colonyStats[skill].upperQuantile - MINOR_PASSION_VALUE) {
-              this.value += BASE_VALUE * 1.5;
-            } else if (targetSkill.level >= this.colonyStats[skill].average - MINOR_PASSION_VALUE) {
-              this.value += BASE_VALUE * 0.75;
+            if (targetSkill.level >= this.colonyStats[skill].upperQuantile) {
+              value += BASE_VALUE;
+            } else if (targetSkill.level >= this.colonyStats[skill].average) {
+              value += BASE_VALUE * 0.5;
             }
           }
-        } else {
-          if (targetSkill.level >= this.colonyStats[skill].upperQuantile) {
-            this.value += BASE_VALUE;
-          } else if (targetSkill.level >= this.colonyStats[skill].average) {
-            this.value += BASE_VALUE * 0.5;
-          }
         }
-      }
+      });
+      this.values[id] += value;
     });
   }
 }
