@@ -32,7 +32,7 @@ const EvaluationIndex = () => {
             <PawnCard
               key={pawn.id}
               pawn={pawn}
-              callback={setSelectedPawns}
+              callback={(pawn) => setSelectedPawns([pawn])}
               selected={pawn.id === selectedPawns.id}
             />
           ))}
