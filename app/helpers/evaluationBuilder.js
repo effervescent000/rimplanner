@@ -3,26 +3,32 @@ import {
   MAJOR_PASSION_VALUE,
   MINOR_PASSION_VALUE,
   SKILLS_ARRAY,
-} from "~/constants/skillsConstants";
-import { MAJOR_PASSION } from "~/constants/constants";
+} from "../constants/skillsConstants";
+import { MAJOR_PASSION } from "../constants/constants";
 
 const BASE_VALUE = 1;
 
 class EvaluationBuilder {
-  constructor({ target, playerPawns }) {
-    this.target = target;
-    this.targetSkills = target.skills.skills.li.reduce(
-      (total, cur) => ({ ...total, [cur.def]: cur }),
+  constructor({ targets, playerPawns }) {
+    this.targets = targets;
+    this.targetSkills = this.targets.reduce(
+      (total, { id, skills }) => ({
+        ...total,
+        [id]: skills.skills.li.reduce(
+          (totalSkills, cur) => ({ ...totalSkills, [cur.def]: cur }),
+          {}
+        ),
+      }),
       {}
     );
     this.playerPawns = playerPawns;
     this.colonyStats = buildColonyStats(playerPawns);
-    this.value = 0;
+    this.values = this.targets.reduce((total, { id }) => ({ ...total, [id]: 0 }), {});
   }
 
   compareStats() {
     SKILLS_ARRAY.forEach((skill) => {
-      const targetSkill = this.targetSkills[skill];
+      const targetSkill = this.targetsSkills[skill];
       if (targetSkill) {
         if (targetSkill.passion) {
           if (targetSkill.passion === MAJOR_PASSION) {
