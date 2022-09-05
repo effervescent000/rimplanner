@@ -1,7 +1,11 @@
 {
   "extends": ["@remix-run/eslint-config", "@remix-run/eslint-config/node"],
   "plugins": ["jest"],
-    "env": {
+  "env": {
       "jest/globals": true
-    }
+  },
+  "rules": {
+    "react/prop-types": 1,
+    "react/require-default-props": 1
+  }
 }

@@ -13,6 +13,8 @@ export const BASE_ASSET_URL = "./assets/";
 export const PLAYER_COLONY = "PlayerColony";
 export const PAWN_CONSTANT = "Pawn";
 export const HUMAN_CONSTANT = "Human";
+export const COLONIST = "Colonist";
+export const SLAVE = "Slave";
 export const MINOR_PASSION = "Minor";
 export const MAJOR_PASSION = "Major";
 

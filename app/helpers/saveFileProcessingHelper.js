@@ -1,4 +1,10 @@
-import { HUMAN_CONSTANT, PAWN_CONSTANT, PLAYER_COLONY } from "~/constants/constants";
+import {
+  COLONIST,
+  HUMAN_CONSTANT,
+  PAWN_CONSTANT,
+  PLAYER_COLONY,
+  SLAVE,
+} from "~/constants/constants";
 import { getFactionKey } from "./utils";
 
 export const processSaveFile = ({ savegame }) => {
@@ -8,14 +14,23 @@ export const processSaveFile = ({ savegame }) => {
   const world = savegame.game.world;
   const factions = world.factionManager.allFactions.li;
   const playerFactions = factions.filter(({ def }) => def === PLAYER_COLONY);
-  const worldPawns = [...world.worldPawns.pawnsAlive.li];
+  const worldPawns = [
+    ...world.worldPawns.pawnsAlive.li,
+    ...savegame.game.maps.li.things.thing.filter(
+      ({ $, def, kindDef }) =>
+        $ &&
+        $.Class === PAWN_CONSTANT &&
+        def === HUMAN_CONSTANT &&
+        kindDef !== COLONIST &&
+        kindDef !== SLAVE
+    ),
+  ];
   const playerPawns = savegame.game.maps.li.things.thing.filter(
-    ({ $, faction, def }) =>
+    ({ $, def, kindDef }) =>
       $ &&
       $.Class === PAWN_CONSTANT &&
-      faction &&
       def === HUMAN_CONSTANT &&
-      playerFactions.some((playerFaction) => faction === getFactionKey(playerFaction))
+      (kindDef === COLONIST || kindDef === SLAVE)
   );
   const modList = savegame.meta.modIds.li;
 
