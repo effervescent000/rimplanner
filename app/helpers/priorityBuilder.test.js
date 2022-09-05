@@ -1,6 +1,6 @@
 import { SKILLS } from "../constants/skillsConstants";
 import PriorityBuilder from "./priorityBuilder";
-import { getThreePawns, modListFactory } from "./test-helpers/priorityBuilderShapes";
+import { getThreePawns, modListFactory } from "./test-helpers/shapes";
 
 describe("Testing constructor", () => {
   it("initializes properly with a minimal setup", () => {
