@@ -25,7 +25,7 @@ const getSkinColor = (melanin) => {
   if (melanin < MELANIN_BREAKPOINTS[2]) return undefined;
   if (melanin < MELANIN_BREAKPOINTS[3]) return "#f5cd98";
   if (melanin < MELANIN_BREAKPOINTS[4]) return "#e8a465";
-  return undefined;
+  return "#694424";
 };
 
 export const composeImage = async ({ gender, head, body, hairDef, hairColor, melanin }) => {
