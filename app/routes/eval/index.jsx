@@ -10,16 +10,16 @@ const EvaluationIndex = () => {
     saveData: { worldPawns, playerPawns },
   } = useOutletContext();
   const [search, setSearch] = useState("");
-  const [selectedPawn, setSelectedPawn] = useState({});
+  const [selectedPawns, setSelectedPawns] = useState([]);
   const [evalStats, setEvalStats] = useState({});
 
   useEffect(() => {
-    if (selectedPawn.id) {
-      const eb = new EvaluationBuilder({ target: selectedPawn, playerPawns });
+    if (selectedPawns.length) {
+      const eb = new EvaluationBuilder({ target: selectedPawns, playerPawns });
       eb.compareStats();
       setEvalStats({ value: eb.value });
     }
-  }, [selectedPawn, playerPawns]);
+  }, [selectedPawns, playerPawns]);
 
   return (
     <div className="flex">
@@ -31,12 +31,12 @@ const EvaluationIndex = () => {
             <PawnCard
               key={pawn.id}
               pawn={pawn}
-              callback={setSelectedPawn}
-              selected={pawn.id === selectedPawn.id}
+              callback={setSelectedPawns}
+              selected={pawn.id === selectedPawns.id}
             />
           ))}
       </div>
-      <div>{selectedPawn.id ? <PawnCard pawn={selectedPawn} {...evalStats} /> : ""}</div>
+      <div>{selectedPawns.id ? <PawnCard pawn={selectedPawns} {...evalStats} /> : ""}</div>
     </div>
   );
 };
