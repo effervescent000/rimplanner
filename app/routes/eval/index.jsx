@@ -7,17 +7,17 @@ import EvaluationBuilder from "~/helpers/evaluationBuilder";
 
 const EvaluationIndex = () => {
   const {
-    saveData: { worldPawns, playerPawns },
+    saveData: { worldPawns, mapPawns, playerPawns },
   } = useOutletContext();
   const [search, setSearch] = useState("");
   const [selectedPawns, setSelectedPawns] = useState([]);
-  const [evalStats, setEvalStats] = useState({});
+  const [evalStats, setEvalStats] = useState({ values: {} });
 
   useEffect(() => {
     if (selectedPawns.length) {
-      const eb = new EvaluationBuilder({ target: selectedPawns, playerPawns });
+      const eb = new EvaluationBuilder({ targets: selectedPawns, playerPawns });
       eb.compareStats();
-      setEvalStats({ value: eb.value });
+      setEvalStats({ values: eb.values });
     }
   }, [selectedPawns, playerPawns]);
 
@@ -25,7 +25,8 @@ const EvaluationIndex = () => {
     <div className="flex">
       <div>
         <ControlledTextInput value={search} callback={setSearch} />
-        {worldPawns
+        <button onClick={() => setSelectedPawns(mapPawns)}>All on map</button>
+        {[...worldPawns, ...mapPawns]
           .filter(({ name: { nick } }) => nick && nick.toLowerCase().includes(search.toLowerCase()))
           .map((pawn) => (
             <PawnCard
@@ -36,7 +37,11 @@ const EvaluationIndex = () => {
             />
           ))}
       </div>
-      <div>{selectedPawns.id ? <PawnCard pawn={selectedPawns} {...evalStats} /> : ""}</div>
+      <div className="flex">
+        {selectedPawns.map((pawn) => (
+          <PawnCard key={pawn.id} pawn={pawn} value={evalStats.values[pawn.id]} />
+        ))}
+      </div>
     </div>
   );
 };
