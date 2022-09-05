@@ -25,6 +25,8 @@ export const getThreePawns = () => {
       name: "Belsaas",
       skills: { [SKILLS.intellectual.name]: { level: 20, passion: MAJOR_PASSION } },
       modList,
+      childhoodBackstory: "ScienceProdigy65",
+      adultBackstory: "ParticlePhysicist44",
     }),
     pawnFactory({
       name: "Gennady",
@@ -37,7 +39,13 @@ export const getThreePawns = () => {
   ];
 };
 
-export const pawnFactory = ({ name, skills, modList }) => {
+export const pawnFactory = ({
+  name,
+  skills,
+  modList = modListFactory(),
+  childhoodBackstory = "ApocalypseSurvivor23",
+  adultBackstory = "CropFarmer17",
+}) => {
   return {
     id: `Human${Math.round(Math.random() * 1000)}`,
     name: {
@@ -52,6 +60,7 @@ export const pawnFactory = ({ name, skills, modList }) => {
         })),
       },
     },
+    story: { childhood: childhoodBackstory, adulthood: adultBackstory },
     workSettings: {
       priorities: {
         vals: {
