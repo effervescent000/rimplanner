@@ -1,9 +1,9 @@
 import { MAJOR_PASSION } from "../constants/constants";
 import { SKILLS } from "../constants/skillsConstants";
 import EvaluationBuilder from "./evaluationBuilder";
-import { getThreePawns, modListFactory, pawnFactory } from "./test-helpers/shapes";
+import { getBasicPawns, modListFactory, pawnFactory } from "./test-helpers/shapes";
 
-const playerPawns = getThreePawns();
+const playerPawns = getBasicPawns();
 const modList = modListFactory();
 const comparisonPawns = [
   pawnFactory({

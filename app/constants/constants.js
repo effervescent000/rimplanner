@@ -62,6 +62,7 @@ export const LABOR_CATEGORIES = {
   cooking: "Cooking",
   hauling: "Hauling",
   cleaning: "Cleaning",
+  mining: "Mining",
 };
 
 export const BASE_GAME_LABORS = [

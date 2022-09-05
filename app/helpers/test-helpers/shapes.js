@@ -1,6 +1,6 @@
 import { SKILLS_ARRAY, SKILLS } from "../../constants/skillsConstants";
 import { buildLabors } from "../priorityBuilder";
-import { MAJOR_PASSION } from "../../constants/constants";
+import { MAJOR_PASSION, MINOR_PASSION } from "../../constants/constants";
 
 export const modListFactory = ({ full } = {}) => {
   // full returns a modList with several work-adding mods, otherwise only core game is returned
@@ -9,7 +9,7 @@ export const modListFactory = ({ full } = {}) => {
   return core;
 };
 
-export const getThreePawns = () => {
+export const getBasicPawns = () => {
   return [
     pawnFactory({
       name: "Buck",
@@ -21,7 +21,10 @@ export const getThreePawns = () => {
     }),
     pawnFactory({
       name: "Belsaas",
-      skills: { [SKILLS.intellectual.name]: { level: 20, passion: MAJOR_PASSION } },
+      skills: {
+        [SKILLS.crafting.name]: { level: 5 },
+        [SKILLS.intellectual.name]: { level: 20, passion: MAJOR_PASSION },
+      },
       childhoodBackstory: "ScienceProdigy65",
       adultBackstory: "ParticlePhysicist44",
     }),
@@ -29,8 +32,19 @@ export const getThreePawns = () => {
       name: "Gennady",
       skills: {
         [SKILLS.construction.name]: { level: 13, passion: MAJOR_PASSION },
+        [SKILLS.crafting.name]: { level: 4 },
         [SKILLS.intellectual.name]: { level: 4 },
       },
+    }),
+    pawnFactory({
+      name: "Hakuja",
+      skills: {
+        [SKILLS.social.name]: { level: 4 },
+        [SKILLS.medicine.name]: { level: 17, passion: MAJOR_PASSION },
+        [SKILLS.intellectual.name]: { level: 5, passion: MINOR_PASSION },
+      },
+      childhoodBackstory: "Killer41",
+      adultBackstory: "Healer35",
     }),
   ];
 };

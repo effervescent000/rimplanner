@@ -1,13 +1,19 @@
 import { LABORS_OBJ } from "../constants/constants";
 import { SKILLS } from "../constants/skillsConstants";
 import PriorityBuilder from "./priorityBuilder";
-import { getThreePawns, modListFactory } from "./test-helpers/shapes";
+import { getBasicPawns, modListFactory } from "./test-helpers/shapes";
 
-const pawns = getThreePawns();
+const pawns = getBasicPawns();
 const rawPriorities = pawns.map(({ name, workSettings }) => ({
   name: name.nick,
   priorities: workSettings.priorities.vals.li,
 }));
+
+const findPawnPriority = ({ pawnName, pb, labor }) => {
+  const prioObj = pb.priorities[pawnName].find(({ name }) => name === labor);
+  if (!prioObj) return undefined;
+  return prioObj.suggested;
+};
 
 describe("Testing constructor", () => {
   it("initializes properly with a minimal setup", () => {
@@ -46,25 +52,34 @@ describe("Suggestions testing", () => {
   it("Builds appropriate suggestions", () => {
     const pb = new PriorityBuilder({ pawns, modList: modListFactory(), rawPriorities });
     pb.buildSuggestions();
+    expect(findPawnPriority({ pawnName: "Buck", pb, labor: LABORS_OBJ.crafting.name })).toEqual(3);
+    expect(findPawnPriority({ pawnName: "Belsaas", pb, labor: LABORS_OBJ.crafting.name })).toEqual(
+      3
+    );
     expect(
-      pb.priorities[pawns[0].name.nick].find(({ name }) => name === LABORS_OBJ.crafting.name)
-        .suggested
+      findPawnPriority({ pawnName: "Gennady", pb, labor: LABORS_OBJ.crafting.name })
+    ).toBeUndefined();
+    expect(
+      findPawnPriority({ pawnName: "Buck", pb, labor: LABORS_OBJ.researching.name })
+    ).toBeUndefined();
+    expect(
+      findPawnPriority({ pawnName: "Belsaas", pb, labor: LABORS_OBJ.researching.name })
     ).toEqual(3);
     expect(
-      pb.priorities[pawns[1].name.nick].find(({ name }) => name === LABORS_OBJ.crafting.name)
+      findPawnPriority({ pawnName: "Gennady", pb, labor: LABORS_OBJ.researching.name })
     ).toBeUndefined();
+  });
+  it("Ignores incapable pawns", () => {
+    const pb = new PriorityBuilder({ pawns, modList: modListFactory(), rawPriorities });
+    pb.buildSuggestions();
     expect(
-      pb.priorities[pawns[2].name.nick].find(({ name }) => name === LABORS_OBJ.crafting.name)
+      findPawnPriority({ pawnName: "Belsaas", pb, labor: LABORS_OBJ.firefighting.name })
     ).toBeUndefined();
+    expect(findPawnPriority({ pawnName: "Buck", pb, labor: LABORS_OBJ.firefighting.name })).toEqual(
+      3
+    );
     expect(
-      pb.priorities[pawns[0].name.nick].find(({ name }) => name === LABORS_OBJ.researching.name)
-    ).toBeUndefined();
-    expect(
-      pb.priorities[pawns[1].name.nick].find(({ name }) => name === LABORS_OBJ.researching.name)
-        .suggested
-    ).toEqual(3);
-    expect(
-      pb.priorities[pawns[2].name.nick].find(({ name }) => name === LABORS_OBJ.researching.name)
+      findPawnPriority({ pawnName: "Hakuja", pb, labor: LABORS_OBJ.wardening.name })
     ).toBeUndefined();
   });
 });
