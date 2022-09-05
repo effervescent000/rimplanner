@@ -53,5 +53,18 @@ describe("Suggestions testing", () => {
     expect(
       pb.priorities[pawns[1].name.nick].find(({ name }) => name === LABORS_OBJ.crafting.name)
     ).toBeUndefined();
+    expect(
+      pb.priorities[pawns[2].name.nick].find(({ name }) => name === LABORS_OBJ.crafting.name)
+    ).toBeUndefined();
+    expect(
+      pb.priorities[pawns[0].name.nick].find(({ name }) => name === LABORS_OBJ.researching.name)
+    ).toBeUndefined();
+    expect(
+      pb.priorities[pawns[1].name.nick].find(({ name }) => name === LABORS_OBJ.researching.name)
+        .suggested
+    ).toEqual(3);
+    expect(
+      pb.priorities[pawns[2].name.nick].find(({ name }) => name === LABORS_OBJ.researching.name)
+    ).toBeUndefined();
   });
 });

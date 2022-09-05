@@ -10,7 +10,6 @@ export const modListFactory = ({ full } = {}) => {
 };
 
 export const getThreePawns = () => {
-  const modList = modListFactory();
   return [
     pawnFactory({
       name: "Buck",
@@ -19,12 +18,10 @@ export const getThreePawns = () => {
         [SKILLS.social.name]: { level: 9, passion: MAJOR_PASSION },
         [SKILLS.intellectual.name]: { level: 4 },
       },
-      modList,
     }),
     pawnFactory({
       name: "Belsaas",
       skills: { [SKILLS.intellectual.name]: { level: 20, passion: MAJOR_PASSION } },
-      modList,
       childhoodBackstory: "ScienceProdigy65",
       adultBackstory: "ParticlePhysicist44",
     }),
@@ -34,7 +31,6 @@ export const getThreePawns = () => {
         [SKILLS.construction.name]: { level: 13, passion: MAJOR_PASSION },
         [SKILLS.intellectual.name]: { level: 4 },
       },
-      modList,
     }),
   ];
 };
