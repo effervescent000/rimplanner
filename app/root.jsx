@@ -41,6 +41,7 @@ export default function App() {
     mapPawns: [],
     playerPawns: [],
     modList: [],
+    growingZones: [],
   });
 
   useEffect(() => {

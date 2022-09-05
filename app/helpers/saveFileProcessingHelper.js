@@ -1,11 +1,11 @@
 import {
   COLONIST,
+  GROWING_ZONE,
   HUMAN_CONSTANT,
   PAWN_CONSTANT,
   PLAYER_COLONY,
   SLAVE,
 } from "~/constants/constants";
-import { getFactionKey } from "./utils";
 
 export const processSaveFile = ({ savegame }) => {
   // to avoid repeatedly looping through the entire object,
@@ -31,6 +31,9 @@ export const processSaveFile = ({ savegame }) => {
       (kindDef === COLONIST || kindDef === SLAVE)
   );
   const modList = savegame.meta.modIds.li;
+  const growingZones = savegame.game.maps.li.zoneManager.allZones.li.filter(
+    ({ $ }) => $ && $.Class === GROWING_ZONE
+  );
 
   return {
     factions,
@@ -39,5 +42,6 @@ export const processSaveFile = ({ savegame }) => {
     mapPawns,
     playerPawns,
     modList,
+    growingZones,
   };
 };
