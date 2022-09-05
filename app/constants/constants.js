@@ -23,7 +23,7 @@ export const DEFAULT_LABOR_PRIO = 3;
 export const LABORS = [
   { name: "Firefight", allDo: true },
   { name: "Patient", allDo: true },
-  { name: "Doctor", skill: "Medicine" },
+  { name: "Doctor", skill: SKILLS.medicine.name },
   { name: "Bed rest", allDo: true },
   { name: "Haul+", source: ALLOW_TOOL },
   { name: "Basic", allDo: true },
@@ -68,7 +68,7 @@ export const LABOR_CATEGORIES = {
 export const BASE_GAME_LABORS = [
   { name: "Firefight", allDo: true, categories: [LABOR_CATEGORIES.firefighting] },
   { name: "Patient", allDo: true },
-  { name: "Doctor", skill: "Medicine", categories: [LABOR_CATEGORIES.caring] },
+  { name: "Doctor", skill: SKILLS.medicine.name, categories: [LABOR_CATEGORIES.caring] },
   { name: "Bed rest", allDo: true },
   { name: "Basic", allDo: true },
   { name: "Warden", skill: "Social", categories: [LABOR_CATEGORIES.social] },
@@ -125,7 +125,7 @@ export const MOD_LABORS = () => ({
 export const LABORS_OBJ = {
   firefighting: { name: "Firefight", allDo: true },
   patient: { name: "Patient", allDo: true },
-  medical: { name: "Doctor", skill: "Medicine" },
+  medicine: { name: "Doctor", skill: SKILLS.medicine.name },
   bedRest: { name: "Bed rest", allDo: true },
   haulPlus: { name: "Haul+", source: ALLOW_TOOL },
   basic: { name: "Basic", allDo: true },

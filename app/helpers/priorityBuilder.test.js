@@ -45,6 +45,8 @@ describe("Test sorting", () => {
     expect(pb.pawnSkills[0].name).toBe("Belsaas");
     pb.sortBySkill(SKILLS.crafting.name);
     expect(pb.pawnSkills[0].name).toBe("Buck");
+    pb.sortBySkill(SKILLS.medicine.name);
+    expect(pb.pawnSkills[0].name).toBe("Hakuja");
   });
 });
 
