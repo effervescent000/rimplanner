@@ -29,6 +29,7 @@ export const TRAITS = {
     },
   },
   Jealous: { name: "Jealous", value: () => VALUES.very_bad },
+  NightOwl: { name: "Night owl", value: () => VALUES.neutral },
   Psychopath: { name: "Psycopath", value: () => VALUES.excellent },
   ShootingAccuracy: {
     name: "Shooting Accuracy",
@@ -49,6 +50,16 @@ export const TRAITS = {
       const social = skills.find(({ def }) => def === SKILLS.social.name);
       return getTieredValueForSkill(social);
     },
+    source: INDIVIDUALITY,
+  },
+  SYR_HandEyeCoordination: {
+    name: "Hand-eye coordination",
+    value: () => VALUES.very_good,
+    source: INDIVIDUALITY,
+  },
+  SYR_MechanoidExpert: {
+    name: "Mechanoid expert",
+    value: () => VALUES.good,
     source: INDIVIDUALITY,
   },
   SYR_SteadyHands: {
@@ -117,6 +128,11 @@ export const TRAITS = {
       if (cooking && cooking.passion) return VALUES.excellent;
       return VALUES.good;
     },
+  },
+  VTE_HeavySleeper: {
+    name: "Heavy sleeper",
+    value: () => VALUES.very_bad,
+    source: VANILLA_TRAITS_EXPANDED,
   },
   VTE_Slob: {
     name: "Slob",

@@ -7,6 +7,7 @@ import {
 import { LABOR_CATEGORIES, MAJOR_PASSION } from "../constants/constants";
 import { TRAITS } from "../constants/traitConstants";
 import { buildLabors, getIncapableSkills } from "./utils";
+import { HEALTH_CONDITIONS } from "~/constants/healthConstants";
 
 const BASE_VALUE = 1;
 
@@ -33,6 +34,37 @@ class EvaluationBuilder {
     this.compareStats();
     this.checkIncapables();
     this.addTraitValues();
+    this.addHealthValues();
+  }
+
+  addHealthValues() {
+    this.targets.forEach((pawn) => {
+      const {
+        id,
+        healthTracker: {
+          hediffSet: {
+            hediffs: { li: hediffs },
+          },
+        },
+      } = pawn;
+      let value = 0;
+      if (hediffs) {
+        if (hediffs.length) {
+          hediffs.forEach(({ def: hediff }) => {
+            const hediffValue = HEALTH_CONDITIONS[hediff];
+            if (hediffValue) {
+              value += hediffValue.value;
+            }
+          });
+        } else {
+          const hediffValue = HEALTH_CONDITIONS[hediffs];
+          if (hediffValue) {
+            value += hediffValue.value;
+          }
+        }
+        this.values[id] += value;
+      }
+    });
   }
 
   addTraitValues() {
