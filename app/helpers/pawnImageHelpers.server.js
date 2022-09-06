@@ -43,21 +43,25 @@ export const composeImage = async ({ gender, head, body, hairDef, hairColor, mel
       opacityDest: 0.5,
       opacitySource: 1,
     });
-    const hairImage = await jimp.read(BASE_ASSET_URL + `Hairs/${hairDef}_south.png`);
-    const hairToColor = hairImage.clone();
-    const [red, green, blue] = hairColor.match(/0\.\d+/g);
-    hairToColor.color([{ apply: "mix", params: [rgbToHex({ red, green, blue }), 100] }]);
-    hairImage.composite(hairToColor, 0, 0, {
-      mode: jimp.BLEND_MULTIPLY,
-      opacityDest: 0.5,
-      opacitySource: 1,
-    });
-    baseImage.blit(hairImage, 0, -25);
+    try {
+      const hairImage = await jimp.read(BASE_ASSET_URL + `Hairs/${hairDef}_south.png`);
+      const hairToColor = hairImage.clone();
+      const [red, green, blue] = hairColor.match(/0\.\d+/g);
+      hairToColor.color([{ apply: "mix", params: [rgbToHex({ red, green, blue }), 100] }]);
+      hairImage.composite(hairToColor, 0, 0, {
+        mode: jimp.BLEND_MULTIPLY,
+        opacityDest: 0.5,
+        opacitySource: 1,
+      });
+      baseImage.blit(hairImage, 0, -25);
+    } catch (hairError) {
+      console.log("error rendering hair", hairError);
+    }
     baseImage.resize(100, 100);
     const url = await baseImage.getBase64Async(jimp.MIME_PNG);
     return url;
-  } catch (error) {
-    console.log(error);
+  } catch (baseError) {
+    console.log(baseError);
     return "";
   }
 };
