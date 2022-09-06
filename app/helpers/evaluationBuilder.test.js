@@ -16,7 +16,7 @@ const comparisonPawns = [
 
 describe("Test constructor", () => {
   it("Builds necessary variables correctly", () => {
-    const eb = new EvaluationBuilder({ targets: comparisonPawns, playerPawns });
+    const eb = new EvaluationBuilder({ targets: comparisonPawns, playerPawns, modList });
     expect(Object.keys(eb.values)).toHaveLength(2);
     expect(eb.values[comparisonPawns[0].id]).toBeDefined();
   });
@@ -24,7 +24,7 @@ describe("Test constructor", () => {
 
 describe("Test compareStats method", () => {
   it("Adds values correctly", () => {
-    const eb = new EvaluationBuilder({ targets: comparisonPawns, playerPawns });
+    const eb = new EvaluationBuilder({ targets: comparisonPawns, playerPawns, modList });
     eb.compareStats();
     expect(eb.values[comparisonPawns[0].id]).toEqual(2);
   });
