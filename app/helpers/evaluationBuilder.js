@@ -4,7 +4,7 @@ import {
   MINOR_PASSION_VALUE,
   SKILLS_ARRAY,
 } from "../constants/skillsConstants";
-import { MAJOR_PASSION } from "../constants/constants";
+import { LABOR_CATEGORIES, MAJOR_PASSION } from "../constants/constants";
 import { TRAITS } from "../constants/traitConstants";
 import { buildLabors, getIncapableSkills } from "./utils";
 
@@ -31,6 +31,7 @@ class EvaluationBuilder {
 
   fullEval() {
     this.compareStats();
+    this.checkIncapables();
     this.addTraitValues();
   }
 
@@ -54,6 +55,26 @@ class EvaluationBuilder {
         }
       });
       this.values[id] += value;
+    });
+  }
+
+  checkIncapables() {
+    this.targets.forEach((pawn) => {
+      const incapableSkills = getIncapableSkills(pawn);
+      let value = 0;
+      if (incapableSkills.includes(LABOR_CATEGORIES.firefighting)) {
+        value += -1;
+      }
+      if (incapableSkills.includes(LABOR_CATEGORIES.violent)) {
+        value += -2;
+      }
+      if (incapableSkills.includes(LABOR_CATEGORIES.skilled)) {
+        value += -2;
+      }
+      if (incapableSkills.includes(LABOR_CATEGORIES.dumb)) {
+        value += -2;
+      }
+      this.values[pawn.id] += value;
     });
   }
 
