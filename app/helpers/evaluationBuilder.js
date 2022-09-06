@@ -46,12 +46,13 @@ class EvaluationBuilder {
         },
       } = pawn;
       let value = 0;
-      traits.forEach(({ def: trait }) => {
-        const foundTrait = TRAITS[trait];
+      traits.forEach((trait) => {
+        const traitName = trait.def;
+        const foundTrait = TRAITS[traitName];
         if (!foundTrait) {
-          console.log("Trait not found, " + trait);
+          console.log("Trait not found, " + traitName);
         } else {
-          value += foundTrait.value(pawn);
+          value += foundTrait.value(pawn, trait);
         }
       });
       this.values[id] += value;

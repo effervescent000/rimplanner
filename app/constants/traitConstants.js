@@ -12,6 +12,14 @@ const VALUES = {
 };
 
 export const TRAITS = {
+  Industriousness: {
+    name: "Industriousness",
+    value: (pawn, trait) => {
+      const degrees = { 1: VALUES.very_good };
+      return degrees[trait.degree];
+    },
+  },
+  Jealous: { name: "Jealous", value: () => VALUES.very_bad },
   Psychopath: { name: "Psycopath", value: () => VALUES.excellent },
   Undergrounder: { name: "Undergrounder", value: () => VALUES.good },
   // mod added traits below here
@@ -30,6 +38,21 @@ export const TRAITS = {
       }
     },
     source: INDIVIDUALITY,
+  },
+  SYR_SteadyHands: {
+    name: "Steady hands",
+    value: ({
+      skills: {
+        skills: { li: skills },
+      },
+    }) => {
+      const medicine = skills.find(({ def }) => def === SKILLS.medicine.name);
+      if (medicine) {
+        if (medicine.level > 4 && medicine.passion) return VALUES.excellent;
+        if (medicine.passion) return VALUES.very_good;
+        return VALUES.good;
+      }
+    },
   },
   SYR_StrongBack: {
     name: "Strong back",
@@ -53,6 +76,11 @@ export const TRAITS = {
     name: "Ocean lover",
     // TODO maybe inlcude map data, if there's a way to figure out features?
     value: () => VALUES.neutral,
+    source: VANILLA_TRAITS_EXPANDED,
+  },
+  VTE_Coward: {
+    name: "Coward",
+    value: () => VALUES.very_bad,
     source: VANILLA_TRAITS_EXPANDED,
   },
   VTE_Ecologist: {
