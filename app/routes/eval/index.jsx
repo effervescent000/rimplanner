@@ -16,7 +16,7 @@ const EvaluationIndex = () => {
   useEffect(() => {
     if (selectedPawns.length) {
       const eb = new EvaluationBuilder({ targets: selectedPawns, playerPawns });
-      eb.compareStats();
+      eb.fullEval();
       setEvalStats({ values: eb.values });
     }
   }, [selectedPawns, playerPawns]);

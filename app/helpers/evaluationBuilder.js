@@ -5,6 +5,7 @@ import {
   SKILLS_ARRAY,
 } from "../constants/skillsConstants";
 import { MAJOR_PASSION } from "../constants/constants";
+import { TRAITS } from "~/constants/traitConstants";
 
 const BASE_VALUE = 1;
 
@@ -24,6 +25,34 @@ class EvaluationBuilder {
     this.playerPawns = playerPawns;
     this.colonyStats = buildColonyStats(playerPawns);
     this.values = this.targets.reduce((total, { id }) => ({ ...total, [id]: 0 }), {});
+  }
+
+  fullEval() {
+    this.compareStats();
+    this.addTraitValues();
+  }
+
+  addTraitValues() {
+    this.targets.forEach((pawn) => {
+      const {
+        id,
+        story: {
+          traits: {
+            allTraits: { li: traits },
+          },
+        },
+      } = pawn;
+      let value = 0;
+      traits.forEach(({ def: trait }) => {
+        const foundTrait = TRAITS[trait];
+        if (!foundTrait) {
+          console.log("Trait not found, " + trait);
+        } else {
+          value += foundTrait.value(pawn);
+        }
+      });
+      this.values[id] += value;
+    });
   }
 
   compareStats() {
