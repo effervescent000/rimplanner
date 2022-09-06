@@ -1,5 +1,5 @@
 import { SKILLS_ARRAY, SKILLS } from "../../constants/skillsConstants";
-import { buildLabors } from "../priorityBuilder";
+import { buildLabors } from "../utils";
 import { MAJOR_PASSION, MINOR_PASSION } from "../../constants/constants";
 
 export const modListFactory = ({ full } = {}) => {

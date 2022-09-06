@@ -11,8 +11,32 @@ const VALUES = {
   terrible: -3,
 };
 
+const getTieredValueForSkill = (skill) => {
+  if (skill) {
+    if (skill.level > 4 && skill.passion) return VALUES.excellent;
+    if (skill.passion || skill.level > 4) return VALUES.very_good;
+    return VALUES.good;
+  }
+  return VALUES.neutral;
+};
+
 export const TRAITS = {
+  Industriousness: {
+    name: "Industriousness",
+    value: (pawn, trait) => {
+      const degrees = { 1: VALUES.very_good };
+      return degrees[trait.degree];
+    },
+  },
+  Jealous: { name: "Jealous", value: () => VALUES.very_bad },
   Psychopath: { name: "Psycopath", value: () => VALUES.excellent },
+  ShootingAccuracy: {
+    name: "Shooting Accuracy",
+    value: (pawn, trait) => {
+      const degrees = { 2: VALUES.good };
+      return degrees[trait.degree];
+    },
+  },
   Undergrounder: { name: "Undergrounder", value: () => VALUES.good },
   // mod added traits below here
   SYR_Haggler: {
@@ -23,13 +47,20 @@ export const TRAITS = {
       },
     }) => {
       const social = skills.find(({ def }) => def === SKILLS.social.name);
-      if (social) {
-        if (social.level > 4 && social.passion) return VALUES.excellent;
-        if (social.passion) return VALUES.very_good;
-        return VALUES.good;
-      }
+      return getTieredValueForSkill(social);
     },
     source: INDIVIDUALITY,
+  },
+  SYR_SteadyHands: {
+    name: "Steady hands",
+    value: ({
+      skills: {
+        skills: { li: skills },
+      },
+    }) => {
+      const medicine = skills.find(({ def }) => def === SKILLS.medicine.name);
+      return getTieredValueForSkill(medicine);
+    },
   },
   SYR_StrongBack: {
     name: "Strong back",
@@ -53,6 +84,11 @@ export const TRAITS = {
     name: "Ocean lover",
     // TODO maybe inlcude map data, if there's a way to figure out features?
     value: () => VALUES.neutral,
+    source: VANILLA_TRAITS_EXPANDED,
+  },
+  VTE_Coward: {
+    name: "Coward",
+    value: () => VALUES.very_bad,
     source: VANILLA_TRAITS_EXPANDED,
   },
   VTE_Ecologist: {
