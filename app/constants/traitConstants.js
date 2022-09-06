@@ -12,8 +12,25 @@ const VALUES = {
 };
 
 export const TRAITS = {
-  Undergrounder: { key: "Undergrounder", value: () => VALUES.good },
+  Psychopath: { name: "Psycopath", value: () => VALUES.excellent },
+  Undergrounder: { name: "Undergrounder", value: () => VALUES.good },
   // mod added traits below here
+  SYR_Haggler: {
+    name: "Silver tongue",
+    value: ({
+      skills: {
+        skills: { li: skills },
+      },
+    }) => {
+      const social = skills.find(({ def }) => def === SKILLS.social.name);
+      if (social) {
+        if (social.level > 4 && social.passion) return VALUES.excellent;
+        if (social.passion) return VALUES.very_good;
+        return VALUES.good;
+      }
+    },
+    source: INDIVIDUALITY,
+  },
   SYR_StrongBack: {
     name: "Strong back",
     value: () => VALUES.good,
