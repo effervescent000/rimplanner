@@ -11,6 +11,15 @@ const VALUES = {
   terrible: -3,
 };
 
+const getTieredValueForSkill = (skill) => {
+  if (skill) {
+    if (skill.level > 4 && skill.passion) return VALUES.excellent;
+    if (skill.passion || skill.level > 4) return VALUES.very_good;
+    return VALUES.good;
+  }
+  return VALUES.neutral;
+};
+
 export const TRAITS = {
   Industriousness: {
     name: "Industriousness",
@@ -21,6 +30,13 @@ export const TRAITS = {
   },
   Jealous: { name: "Jealous", value: () => VALUES.very_bad },
   Psychopath: { name: "Psycopath", value: () => VALUES.excellent },
+  ShootingAccuracy: {
+    name: "Shooting Accuracy",
+    value: (pawn, trait) => {
+      const degrees = { 2: VALUES.good };
+      return degrees[trait.degree];
+    },
+  },
   Undergrounder: { name: "Undergrounder", value: () => VALUES.good },
   // mod added traits below here
   SYR_Haggler: {
@@ -31,11 +47,7 @@ export const TRAITS = {
       },
     }) => {
       const social = skills.find(({ def }) => def === SKILLS.social.name);
-      if (social) {
-        if (social.level > 4 && social.passion) return VALUES.excellent;
-        if (social.passion) return VALUES.very_good;
-        return VALUES.good;
-      }
+      return getTieredValueForSkill(social);
     },
     source: INDIVIDUALITY,
   },
@@ -47,11 +59,7 @@ export const TRAITS = {
       },
     }) => {
       const medicine = skills.find(({ def }) => def === SKILLS.medicine.name);
-      if (medicine) {
-        if (medicine.level > 4 && medicine.passion) return VALUES.excellent;
-        if (medicine.passion) return VALUES.very_good;
-        return VALUES.good;
-      }
+      return getTieredValueForSkill(medicine);
     },
   },
   SYR_StrongBack: {
