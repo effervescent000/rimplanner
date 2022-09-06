@@ -18,6 +18,7 @@ import commonStyles from "~/styles/common.css";
 import SaveFileDropzone from "~/components/save-file-dropzone";
 import PawnRow from "~/components/pawn-display/pawn-display";
 import WarningsBuilder from "./helpers/warningsBuilder";
+import WarningsWrapper from "./components/warnings/warnings-wrapper";
 
 export const meta = () => ({
   charset: "utf-8",
@@ -44,9 +45,17 @@ export default function App() {
     modList: [],
     growingZones: [],
   });
+  const [warnings, setWarnings] = useState([]);
 
   useEffect(() => {
     console.log(saveData);
+    // eventually take these config values from state
+    const wb = new WarningsBuilder({
+      saveData,
+      config: { pctNutritionFromPlants: 0.5, growingSeason: 30 },
+    });
+    wb.calculateNutrition();
+    setWarnings(wb.warnings);
   }, [saveData]);
   return (
     <html lang="en">
@@ -60,6 +69,7 @@ export default function App() {
           <div className="flex gap-10">
             <SaveFileDropzone setSaveData={setSaveData} />
             <PawnRow playerPawns={saveData.playerPawns} />
+            <WarningsWrapper warnings={warnings} />
           </div>
 
           <Nav
