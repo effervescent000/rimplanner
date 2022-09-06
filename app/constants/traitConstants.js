@@ -21,6 +21,13 @@ const getTieredValueForSkill = (skill) => {
 };
 
 export const TRAITS = {
+  DrugDesire: {
+    name: "Drug Desire",
+    value: (pawn, trait) => {
+      const degrees = { 1: VALUES.bad, 2: VALUES.very_bad };
+      return degrees[trait.degree];
+    },
+  },
   Industriousness: {
     name: "Industriousness",
     value: (pawn, trait) => {
@@ -31,10 +38,21 @@ export const TRAITS = {
   Jealous: { name: "Jealous", value: () => VALUES.very_bad },
   NightOwl: { name: "Night owl", value: () => VALUES.neutral },
   Psychopath: { name: "Psycopath", value: () => VALUES.excellent },
+  Pyromaniac: { name: "Pyromaniac", value: () => VALUES.very_bad },
+  QuickSleeper: { name: "Quick sleeper", value: () => VALUES.very_good },
   ShootingAccuracy: {
     name: "Shooting Accuracy",
     value: (pawn, trait) => {
       const degrees = { 2: VALUES.good };
+      return degrees[trait.degree];
+    },
+  },
+  SpeedOffset: {
+    name: "Speed Offset",
+    value: (pawn, trait) => {
+      const degrees = {
+        1: VALUES.very_good,
+      };
       return degrees[trait.degree];
     },
   },
@@ -132,6 +150,11 @@ export const TRAITS = {
   VTE_HeavySleeper: {
     name: "Heavy sleeper",
     value: () => VALUES.very_bad,
+    source: VANILLA_TRAITS_EXPANDED,
+  },
+  VTE_Prude: {
+    name: "Prude",
+    value: () => VALUES.bad,
     source: VANILLA_TRAITS_EXPANDED,
   },
   VTE_Slob: {
