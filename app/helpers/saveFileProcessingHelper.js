@@ -16,19 +16,19 @@ export const processSaveFile = ({ savegame }) => {
   const playerFactions = factions.filter(({ def }) => def === PLAYER_COLONY);
   const worldPawns = world.worldPawns.pawnsAlive.li;
   const mapPawns = savegame.game.maps.li.things.thing.filter(
-    ({ $, def, kindDef }) =>
+    ({ $, def, guest, kindDef }) =>
       $ &&
       $.Class === PAWN_CONSTANT &&
       def === HUMAN_CONSTANT &&
-      kindDef !== COLONIST &&
-      kindDef !== SLAVE
+      ((kindDef !== COLONIST && kindDef !== SLAVE) || guest.hostFaction !== "null")
   );
   const playerPawns = savegame.game.maps.li.things.thing.filter(
-    ({ $, def, kindDef }) =>
+    ({ $, def, guest, kindDef }) =>
       $ &&
       $.Class === PAWN_CONSTANT &&
       def === HUMAN_CONSTANT &&
-      (kindDef === COLONIST || kindDef === SLAVE)
+      (kindDef === COLONIST || kindDef === SLAVE) &&
+      guest.hostFaction === "null"
   );
   const modList = savegame.meta.modIds.li;
   const growingZones = savegame.game.maps.li.zoneManager.allZones.li.filter(
