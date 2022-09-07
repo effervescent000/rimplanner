@@ -22,7 +22,7 @@ const getSkinColor = (melanin) => {
   const MELANIN_BREAKPOINTS = [0.166666667, 0.333333333, 0.5, 0.666666667, 0.833333333];
   if (melanin < MELANIN_BREAKPOINTS[0]) return "#f2e1d8";
   if (melanin < MELANIN_BREAKPOINTS[1]) return "#ffe6c8";
-  if (melanin < MELANIN_BREAKPOINTS[2]) return undefined;
+  if (melanin < MELANIN_BREAKPOINTS[2]) return "#fce3bc";
   if (melanin < MELANIN_BREAKPOINTS[3]) return "#f5cd98";
   if (melanin < MELANIN_BREAKPOINTS[4]) return "#e8a465";
   return "#694424";
