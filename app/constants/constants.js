@@ -18,6 +18,8 @@ export const GROWING_ZONE = "Zone_Growing";
 export const NUTRITION_VALUE = 0.05;
 export const NUTRITION_REQUIRED_PER_DAY = 1.6;
 
+export const FILL_BAR = "bar";
+
 export const LABORS = [
   { name: "Firefight", allDo: true },
   { name: "Patient", allDo: true },

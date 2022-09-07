@@ -1,4 +1,4 @@
-import { NUTRITION_REQUIRED_PER_DAY, NUTRITION_VALUE } from "~/constants/constants";
+import { FILL_BAR, NUTRITION_REQUIRED_PER_DAY, NUTRITION_VALUE } from "~/constants/constants";
 import { PLANTS, FOOD_PLANTS_ARRAY, GROW_DAY_DIVISOR } from "~/constants/plantsConstants";
 
 const roundToTwoDecimals = (num) => Math.round(num * 100) / 100;
@@ -40,6 +40,11 @@ class WarningsBuilder {
         text: `Growing ${roundToTwoDecimals(sumNutrition)}, need ${roundToTwoDecimals(
           requiredNutrition
         )}`,
+        type: FILL_BAR,
+        props: {
+          target: requiredNutrition,
+          currentValue: sumNutrition,
+        },
       });
     }
   }
