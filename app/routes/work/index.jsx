@@ -10,34 +10,28 @@ const WorkPriorityIndex = () => {
   const {
     saveData: { colonists, slaves, modList },
   } = useOutletContext();
-  const [priorities, setPriorities] = useState([]);
-  let labors;
-
-  let priorityBuilder;
+  const [finalPrios, setFinalPrios] = useState({});
 
   useEffect(() => {
-    setPriorities(
-      [...colonists, ...slaves].map(({ name, workSettings }) => ({
-        name: name.nick,
-        priorities: workSettings.priorities.vals.li,
-      }))
-    );
-  }, [colonists, slaves]);
+    const priorities = [...colonists, ...slaves].map(({ name, workSettings }) => ({
+      name: name.nick,
+      priorities: workSettings.priorities.vals.li,
+    }));
+    if (modList.length && priorities.length) {
+      const priorityBuilder = new PriorityBuilder({
+        pawns: [...colonists, ...slaves],
+        modList,
+        rawPriorities: priorities,
+      });
+      priorityBuilder.buildSuggestions();
+      setFinalPrios(priorityBuilder.getOrderedPriorities());
+    }
+  }, [colonists, slaves, modList]);
 
-  if (modList.length && priorities.length) {
-    labors = buildLaborsList(modList);
-
-    priorityBuilder = new PriorityBuilder({
-      pawns: [...colonists, ...slaves],
-      modList,
-      rawPriorities: priorities,
-    });
-    priorityBuilder.buildSuggestions();
-  }
   return (
     <div>
-      {modList.length && priorities.length && (
-        <PrioritiesWrapper priorities={priorityBuilder.getOrderedPriorities()} labels={labors} />
+      {modList.length && Object.keys(finalPrios).length && (
+        <PrioritiesWrapper priorities={finalPrios} labels={buildLaborsList(modList)} />
       )}
     </div>
   );

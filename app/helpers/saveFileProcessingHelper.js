@@ -8,9 +8,6 @@ import {
 } from "~/constants/constants";
 
 export const processSaveFile = ({ savegame }) => {
-  // to avoid repeatedly looping through the entire object,
-  // for now I'm just going to target sections I know I'll need to work with
-
   const world = savegame.game.world;
   const factions = world.factionManager.allFactions.li;
   const playerFactions = factions.filter(({ def }) => def === PLAYER_COLONY);
@@ -39,7 +36,7 @@ export const processSaveFile = ({ savegame }) => {
       guest.hostFaction === "null"
   );
   const prisoners = savegame.game.maps.li.things.thing.filter(
-    ({ $, def, guest, kindDef }) =>
+    ({ $, def, guest }) =>
       $ &&
       $.Class === PAWN_CONSTANT &&
       def === HUMAN_CONSTANT &&
