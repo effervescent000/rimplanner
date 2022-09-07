@@ -61,5 +61,6 @@ export const processSaveFile = ({ savegame }) => {
     slaves,
     modList,
     growingZones,
+    initialized: true,
   };
 };

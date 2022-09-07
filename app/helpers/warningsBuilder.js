@@ -1,4 +1,4 @@
-import { NUTRITION_REQUIRED_PER_DAY, NUTRITION_VALUE } from "~/constants/constants";
+import { FILL_BAR, NUTRITION_REQUIRED_PER_DAY, NUTRITION_VALUE } from "~/constants/constants";
 import { PLANTS, FOOD_PLANTS_ARRAY, GROW_DAY_DIVISOR } from "~/constants/plantsConstants";
 
 const roundToTwoDecimals = (num) => Math.round(num * 100) / 100;
@@ -35,13 +35,16 @@ class WarningsBuilder {
     const requiredNutrition =
       (this.numPawns * NUTRITION_REQUIRED_PER_DAY * this.pctNutritionFromPlants) /
       (this.growingSeason / 60);
-    if (sumNutrition < requiredNutrition) {
-      this.warnings.push({
-        text: `Growing ${roundToTwoDecimals(sumNutrition)}, need ${roundToTwoDecimals(
-          requiredNutrition
-        )}`,
-      });
-    }
+    this.warnings.push({
+      text: `Growing ${roundToTwoDecimals(
+        sumNutrition
+      )} points of nutrition, need ${roundToTwoDecimals(requiredNutrition)}.`,
+      type: FILL_BAR,
+      props: {
+        target: requiredNutrition,
+        currentValue: sumNutrition,
+      },
+    });
   }
 }
 
