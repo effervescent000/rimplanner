@@ -15,9 +15,7 @@ const PawnRow = ({ playerPawns }) => {
     <div className="flex">
       {playerPawns.length &&
         Object.keys(colonyStats).length &&
-        playerPawns.map((pawn) => (
-          <PawnCard key={pawn.id} pawn={pawn} highlights={colonyStats[pawn.name.nick].highlights} />
-        ))}
+        playerPawns.map((pawn) => <PawnCard key={pawn.id} pawn={pawn} />)}
     </div>
   );
 };
