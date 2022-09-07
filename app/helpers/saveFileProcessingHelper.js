@@ -22,13 +22,29 @@ export const processSaveFile = ({ savegame }) => {
       def === HUMAN_CONSTANT &&
       ((kindDef !== COLONIST && kindDef !== SLAVE) || guest.hostFaction !== "null")
   );
-  const playerPawns = savegame.game.maps.li.things.thing.filter(
+  const colonists = savegame.game.maps.li.things.thing.filter(
     ({ $, def, guest, kindDef }) =>
       $ &&
       $.Class === PAWN_CONSTANT &&
       def === HUMAN_CONSTANT &&
-      (kindDef === COLONIST || kindDef === SLAVE) &&
+      kindDef === COLONIST &&
       guest.hostFaction === "null"
+  );
+  const slaves = savegame.game.maps.li.things.thing.filter(
+    ({ $, def, guest, kindDef }) =>
+      $ &&
+      $.Class === PAWN_CONSTANT &&
+      def === HUMAN_CONSTANT &&
+      kindDef === SLAVE &&
+      guest.hostFaction === "null"
+  );
+  const prisoners = savegame.game.maps.li.things.thing.filter(
+    ({ $, def, guest, kindDef }) =>
+      $ &&
+      $.Class === PAWN_CONSTANT &&
+      def === HUMAN_CONSTANT &&
+      guest.guestStatus &&
+      guest.guestStatus === "Prisoner"
   );
   const modList = savegame.meta.modIds.li;
   const growingZones = savegame.game.maps.li.zoneManager.allZones.li.filter(
@@ -40,7 +56,9 @@ export const processSaveFile = ({ savegame }) => {
     playerFactions,
     worldPawns,
     mapPawns,
-    playerPawns,
+    colonists,
+    prisoners,
+    slaves,
     modList,
     growingZones,
   };

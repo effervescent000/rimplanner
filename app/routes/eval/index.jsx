@@ -7,7 +7,7 @@ import EvaluationBuilder from "~/helpers/evaluationBuilder";
 
 const EvaluationIndex = () => {
   const {
-    saveData: { worldPawns, mapPawns, playerPawns, modList },
+    saveData: { worldPawns, mapPawns, colonists, slaves, modList },
   } = useOutletContext();
   const [search, setSearch] = useState("");
   const [selectedPawns, setSelectedPawns] = useState([]);
@@ -15,11 +15,15 @@ const EvaluationIndex = () => {
 
   useEffect(() => {
     if (selectedPawns.length) {
-      const eb = new EvaluationBuilder({ targets: selectedPawns, playerPawns, modList });
+      const eb = new EvaluationBuilder({
+        targets: selectedPawns,
+        playerPawns: [...colonists, ...slaves],
+        modList,
+      });
       eb.fullEval();
       setEvalStats({ values: eb.values });
     }
-  }, [selectedPawns, playerPawns, modList]);
+  }, [selectedPawns, colonists, slaves, modList]);
 
   return (
     <div className="flex">

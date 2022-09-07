@@ -8,7 +8,7 @@ import PriorityBuilder from "~/helpers/priorityBuilder";
 
 const WorkPriorityIndex = () => {
   const {
-    saveData: { playerPawns, modList },
+    saveData: { colonists, slaves, modList },
   } = useOutletContext();
   const [priorities, setPriorities] = useState([]);
   let labors;
@@ -17,18 +17,18 @@ const WorkPriorityIndex = () => {
 
   useEffect(() => {
     setPriorities(
-      playerPawns.map(({ name, workSettings }) => ({
+      [...colonists, ...slaves].map(({ name, workSettings }) => ({
         name: name.nick,
         priorities: workSettings.priorities.vals.li,
       }))
     );
-  }, [playerPawns]);
+  }, [colonists, slaves]);
 
   if (modList.length && priorities.length) {
     labors = buildLaborsList(modList);
 
     priorityBuilder = new PriorityBuilder({
-      pawns: playerPawns,
+      pawns: [...colonists, ...slaves],
       modList,
       rawPriorities: priorities,
     });
