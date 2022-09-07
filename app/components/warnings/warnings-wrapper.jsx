@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import { FILL_BAR } from "~/constants/constants";
 
 import FillBar from "../common/fillBar";
-import Warning from "./warning";
+import GenericWarning from "./warning";
 
 const componentMapping = {
   [FILL_BAR]: FillBar,
@@ -13,7 +13,7 @@ const WarningsWrapper = ({ warnings }) => {
     <>
       {warnings.map((warning, idx) => {
         if (!warning.type) {
-          return <Warning warning={warning} key={idx} />;
+          return <GenericWarning warning={warning} key={idx} />;
         }
         const Component = componentMapping[warning.type];
         return <Component key={idx} text={warning.text} {...warning.props} />;

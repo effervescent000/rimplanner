@@ -1,5 +1,5 @@
-const Warning = ({ warning }) => {
+const GenericWarning = ({ warning }) => {
   return <div>{warning.text}</div>;
 };
 
-export default Warning;
+export default GenericWarning;

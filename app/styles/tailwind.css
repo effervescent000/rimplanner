@@ -628,12 +628,24 @@ video {
   width: 9rem;
 }
 
+.w-48 {
+  width: 12rem;
+}
+
+.w-9\/12 {
+  width: 75%;
+}
+
 .resize {
   resize: both;
 }
 
 .gap-10 {
   gap: 2.5rem;
+}
+
+.gap-1 {
+  gap: 0.25rem;
 }
 
 .rounded-sm {

@@ -9,7 +9,7 @@ const FillBar = ({ target, currentValue, text }) => {
   const targetLine = Math.round((target / max) * BAR_HEIGHT);
 
   return (
-    <div className="flex">
+    <div className="flex gap-1 w-48">
       <div
         className={`relative bg-green-900 p-0.5 rounded-sm`}
         style={{ height: `${BAR_HEIGHT + 4}px`, width: `${BAR_WIDTH + 4}px` }}
@@ -23,7 +23,7 @@ const FillBar = ({ target, currentValue, text }) => {
           style={{ width: `${BAR_WIDTH}px`, bottom: `${targetLine}px` }}
         />
       </div>
-      <span>{text}</span>
+      <span className="w-9/12">{text}</span>
     </div>
   );
 };
