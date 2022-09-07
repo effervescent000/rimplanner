@@ -30,10 +30,6 @@ const EvaluationIndex = () => {
   }, [selectedPawns, colonists, slaves, modList]);
 
   useEffect(() => {
-    console.log(evalStats);
-  }, [evalStats]);
-
-  useEffect(() => {
     if (fetcher.type === "done") {
       setEvalStats({ ...fetcher.data, ready: true });
     }

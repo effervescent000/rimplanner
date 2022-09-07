@@ -1,4 +1,5 @@
 import {
+  AQUATIC_GROWING_ZONE,
   COLONIST,
   GROWING_ZONE,
   HUMAN_CONSTANT,
@@ -45,7 +46,7 @@ export const processSaveFile = ({ savegame }) => {
   );
   const modList = savegame.meta.modIds.li;
   const growingZones = savegame.game.maps.li.zoneManager.allZones.li.filter(
-    ({ $ }) => $ && $.Class === GROWING_ZONE
+    ({ $ }) => $ && [GROWING_ZONE, AQUATIC_GROWING_ZONE].includes($.Class)
   );
 
   return {

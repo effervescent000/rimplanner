@@ -11,11 +11,13 @@ export const PLANTS = {
   VCE_BellPepper: { key: "VCE_BellPepper", growDays: 4.7, harvestYield: 10 },
   VCE_Buckwheat: { key: "VCE_Buckwheat", growDays: 5, harvestYield: 9 },
   VCE_Carrot: { key: "VCE_Carrot", growDays: 6, harvestYield: 8 },
+  VCE_Lotus: { key: "VCE_Lotus", growDays: 18, harvestYield: 34 },
   VCE_Okra: { key: "VCE_Okra", growDays: 7.2, harvestYield: 14 },
   VCE_Onion: { key: "VCE_Onion", growDays: 5.6, harvestYield: 11 },
   VCE_Peanut: { key: "VCE_Peanut", growDays: 6.25, harvestYield: 12 },
   VCE_Pepper: { key: "VCE_Pepper", growDays: 5.2, harvestYield: 10 },
   VCE_SweetPotato: { key: "VCE_SweetPotato", growDays: 5.8, harvestYield: 10 },
+  VCE_Taro: { key: "VCE_Taro", growDays: 5.8, harvestYield: 11 },
   VCE_Tomato: { key: "VCE_Tomato", growDays: 7.2, harvestYield: 10 },
 };
 
