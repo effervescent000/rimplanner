@@ -1,4 +1,4 @@
-import { INDIVIDUALITY, VANILLA_TRAITS_EXPANDED } from "./modConstants";
+import { mods } from "./modConstants";
 import { SKILLS } from "./skillsConstants";
 
 const VALUES = {
@@ -68,17 +68,17 @@ export const TRAITS = {
       const social = skills.find(({ def }) => def === SKILLS.social.name);
       return getTieredValueForSkill(social);
     },
-    source: INDIVIDUALITY,
+    source: mods.individuality,
   },
   SYR_HandEyeCoordination: {
     name: "Hand-eye coordination",
     value: () => VALUES.very_good,
-    source: INDIVIDUALITY,
+    source: mods.individuality,
   },
   SYR_MechanoidExpert: {
     name: "Mechanoid expert",
     value: () => VALUES.good,
-    source: INDIVIDUALITY,
+    source: mods.individuality,
   },
   SYR_Perfectionist: {
     name: "Idealist",
@@ -90,7 +90,7 @@ export const TRAITS = {
       const crafting = skills.find(({ def }) => def === SKILLS.crafting.name);
       return getTieredValueForSkill(crafting);
     },
-    source: INDIVIDUALITY,
+    source: mods.individuality,
   },
   SYR_SteadyHands: {
     name: "Steady hands",
@@ -106,7 +106,7 @@ export const TRAITS = {
   SYR_StrongBack: {
     name: "Strong back",
     value: () => VALUES.good,
-    source: INDIVIDUALITY,
+    source: mods.individuality,
   },
   VTE_AnimalLover: {
     name: "Animal Lover",
@@ -119,18 +119,18 @@ export const TRAITS = {
       if (cooking && cooking.passion) return VALUES.bad;
       return VALUES.neutral;
     },
-    source: VANILLA_TRAITS_EXPANDED,
+    source: mods.vanillaTraitsExpanded,
   },
   VTE_ChildOfSea: {
     name: "Ocean lover",
     // TODO maybe inlcude map data, if there's a way to figure out features?
     value: () => VALUES.neutral,
-    source: VANILLA_TRAITS_EXPANDED,
+    source: mods.vanillaTraitsExpanded,
   },
   VTE_Coward: {
     name: "Coward",
     value: () => VALUES.very_bad,
-    source: VANILLA_TRAITS_EXPANDED,
+    source: mods.vanillaTraitsExpanded,
   },
   VTE_Eccentric: {
     name: "Eccentric",
@@ -142,7 +142,7 @@ export const TRAITS = {
       const intellectual = skills.find(({ def }) => def === SKILLS.intellectual.name);
       return getTieredValueForSkill(intellectual);
     },
-    source: VANILLA_TRAITS_EXPANDED,
+    source: mods.vanillaTraitsExpanded,
   },
   VTE_Ecologist: {
     name: "Ecologist",
@@ -157,7 +157,7 @@ export const TRAITS = {
       if (plantsAndAnimals.some(({ passion }) => passion)) return VALUES.excellent;
       return VALUES.very_good;
     },
-    source: INDIVIDUALITY,
+    source: mods.individuality,
   },
   VTE_Gastronomist: {
     name: "Gastronomist",
@@ -174,25 +174,25 @@ export const TRAITS = {
   VTE_HeavySleeper: {
     name: "Heavy sleeper",
     value: () => VALUES.very_bad,
-    source: VANILLA_TRAITS_EXPANDED,
+    source: mods.vanillaTraitsExpanded,
   },
   VTE_Prude: {
     name: "Prude",
     value: () => VALUES.bad,
-    source: VANILLA_TRAITS_EXPANDED,
+    source: mods.vanillaTraitsExpanded,
   },
-  VTE_Rebel: { name: "Rebel", value: () => VALUES.very_bad, source: VANILLA_TRAITS_EXPANDED },
+  VTE_Rebel: { name: "Rebel", value: () => VALUES.very_bad, source: mods.vanillaTraitsExpanded },
   VTE_Slob: {
     name: "Slob",
     value: () => VALUES.bad,
-    source: VANILLA_TRAITS_EXPANDED,
+    source: mods.vanillaTraitsExpanded,
   },
   VTE_Stoner: {
     name: "Stoner",
     // my logic for Stoner being very bad instead of terrible is that the addiction is already accounted for separately.
     // the trait itself is solely for the fact that the addiction can't be withdrawaled out of
     value: () => VALUES.very_bad,
-    source: VANILLA_TRAITS_EXPANDED,
+    source: mods.vanillaTraitsExpanded,
   },
   VTE_Tycoon: {
     name: "Tycoon",
@@ -205,6 +205,6 @@ export const TRAITS = {
       if (social && social.passion) return VALUES.excellent;
       return VALUES.very_good;
     },
-    source: VANILLA_TRAITS_EXPANDED,
+    source: mods.vanillaTraitsExpanded,
   },
 };

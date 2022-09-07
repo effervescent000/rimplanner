@@ -1,11 +1,4 @@
-import {
-  ALLOW_TOOL,
-  COLONY_MANAGER,
-  HOSPITALITY,
-  QUARRY,
-  VANILLA_BOOKS_EXPANDED,
-  VANILLA_GENETICS_EXPANDED,
-} from "./modConstants";
+import { mods } from "./modConstants";
 import { SKILLS } from "./skillsConstants";
 
 export const BASE_ASSET_URL = "./assets/";
@@ -30,17 +23,17 @@ export const LABORS = [
   { name: "Patient", allDo: true },
   { name: "Doctor", skill: SKILLS.medicine.name },
   { name: "Bed rest", allDo: true },
-  { name: "Haul+", source: ALLOW_TOOL },
+  { name: "Haul+", source: mods.allowTool },
   { name: "Basic", allDo: true },
   { name: "Warden", skill: "Social" },
   { name: "Handle", skill: "Animals" },
-  { name: "Entertain", source: HOSPITALITY, skill: "Social" },
+  { name: "Entertain", source: mods.hospitality, skill: "Social" },
   { name: "Cook", skill: "Cooking" },
   { name: "Hunt", skill: "Shooting" },
   { name: "Construct", skill: "Construction" },
   { name: "Grow", skill: "Plants" },
   { name: "Mine", skill: "Mining" },
-  { name: "Quarry", source: QUARRY, skill: "Mining" },
+  { name: "Quarry", source: mods.quarry, skill: "Mining" },
   { name: "Plant cut" },
   { name: "Smith", skill: "Crafting" },
   { name: "Tailor", skill: "Crafting" },
@@ -48,10 +41,10 @@ export const LABORS = [
   { name: "Craft", skill: "Crafting" },
   { name: "Haul" },
   { name: "Clean" },
-  { name: "Genetics", source: VANILLA_GENETICS_EXPANDED, skill: "Intellectual" },
+  { name: "Genetics", source: mods.vanillaGeneticsExpanded, skill: "Intellectual" },
   { name: "Research", skill: "Intellectual" },
-  { name: "Managing", source: COLONY_MANAGER, skill: "Intellectual" },
-  { name: "Writing", source: VANILLA_BOOKS_EXPANDED, skill: "Intellectual" },
+  { name: "Managing", source: mods.colonyManager, skill: "Intellectual" },
+  { name: "Writing", source: mods.vanillaBooksExpanded, skill: "Intellectual" },
 ];
 
 export const LABOR_CATEGORIES = {
@@ -98,30 +91,30 @@ export const BASE_GAME_LABORS = [
 ];
 
 export const MOD_LABORS = () => ({
-  haulPlus: { name: "Haul+", source: ALLOW_TOOL },
-  hiddenLabor: { name: "Hidden", source: ALLOW_TOOL },
+  haulPlus: { name: "Haul+", source: mods.allowTool },
+  hiddenLabor: { name: "Hidden", source: mods.allowTool },
   entertaining: {
     name: "Entertain",
-    source: HOSPITALITY,
+    source: mods.hospitality,
     skill: "Social",
     categories: [LABOR_CATEGORIES.social],
   },
-  quarrying: { name: "Quarry", source: QUARRY, skill: "Mining" },
+  quarrying: { name: "Quarry", source: mods.quarry, skill: "Mining" },
   genetics: {
     name: "Genetics",
-    source: VANILLA_GENETICS_EXPANDED,
+    source: mods.vanillaGeneticsExpanded,
     skill: "Intellectual",
     categories: [LABOR_CATEGORIES.intellectual],
   },
   managing: {
     name: "Managing",
-    source: COLONY_MANAGER,
+    source: mods.colonyManager,
     skill: "Intellectual",
     categories: [LABOR_CATEGORIES.intellectual],
   },
   writing: {
     name: "Writing",
-    source: VANILLA_BOOKS_EXPANDED,
+    source: mods.vanillaBooksExpanded,
     skill: "Intellectual",
     categories: [LABOR_CATEGORIES.intellectual],
   },
@@ -132,17 +125,17 @@ export const LABORS_OBJ = {
   patient: { name: "Patient", allDo: true },
   medicine: { name: "Doctor", skill: SKILLS.medicine.name },
   bedRest: { name: "Bed rest", allDo: true },
-  haulPlus: { name: "Haul+", source: ALLOW_TOOL },
+  haulPlus: { name: "Haul+", source: mods.allowTool },
   basic: { name: "Basic", allDo: true },
   wardening: { name: "Warden", skill: "Social" },
   handling: { name: "Handle", skill: "Animals" },
-  entertaining: { name: "Entertain", source: HOSPITALITY, skill: "Social" },
+  entertaining: { name: "Entertain", source: mods.hospitality, skill: "Social" },
   cooking: { name: "Cook", skill: "Cooking" },
   hunting: { name: "Hunt", skill: "Shooting" },
   construction: { name: "Construct", skill: "Construction" },
   growing: { name: "Grow", skill: "Plants" },
   mining: { name: "Mine", skill: "Mining" },
-  quarrying: { name: "Quarry", source: QUARRY, skill: "Mining" },
+  quarrying: { name: "Quarry", source: mods.quarry, skill: "Mining" },
   plantCutting: { name: "Plant cut" },
   smithing: { name: "Smith", skill: "Crafting" },
   tailoring: { name: "Tailor", skill: "Crafting" },
@@ -150,8 +143,8 @@ export const LABORS_OBJ = {
   crafting: { name: "Craft", skill: "Crafting" },
   hauling: { name: "Haul" },
   cleaning: { name: "Clean" },
-  genetics: { name: "Genetics", source: VANILLA_GENETICS_EXPANDED, skill: "Intellectual" },
+  genetics: { name: "Genetics", source: mods.vanillaGeneticsExpanded, skill: "Intellectual" },
   researching: { name: "Research", skill: "Intellectual" },
-  managing: { name: "Managing", source: COLONY_MANAGER, skill: "Intellectual" },
-  writing: { name: "Writing", source: VANILLA_BOOKS_EXPANDED, skill: "Intellectual" },
+  managing: { name: "Managing", source: mods.colonyManager, skill: "Intellectual" },
+  writing: { name: "Writing", source: mods.vanillaBooksExpanded, skill: "Intellectual" },
 };
