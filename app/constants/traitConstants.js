@@ -80,6 +80,18 @@ export const TRAITS = {
     value: () => VALUES.good,
     source: INDIVIDUALITY,
   },
+  SYR_Perfectionist: {
+    name: "Idealist",
+    value: ({
+      skills: {
+        skills: { li: skills },
+      },
+    }) => {
+      const crafting = skills.find(({ def }) => def === SKILLS.crafting.name);
+      return getTieredValueForSkill(crafting);
+    },
+    source: INDIVIDUALITY,
+  },
   SYR_SteadyHands: {
     name: "Steady hands",
     value: ({
@@ -120,6 +132,18 @@ export const TRAITS = {
     value: () => VALUES.very_bad,
     source: VANILLA_TRAITS_EXPANDED,
   },
+  VTE_Eccentric: {
+    name: "Eccentric",
+    value: ({
+      skills: {
+        skills: { li: skills },
+      },
+    }) => {
+      const intellectual = skills.find(({ def }) => def === SKILLS.intellectual.name);
+      return getTieredValueForSkill(intellectual);
+    },
+    source: VANILLA_TRAITS_EXPANDED,
+  },
   VTE_Ecologist: {
     name: "Ecologist",
     value: ({
@@ -157,9 +181,17 @@ export const TRAITS = {
     value: () => VALUES.bad,
     source: VANILLA_TRAITS_EXPANDED,
   },
+  VTE_Rebel: { name: "Rebel", value: () => VALUES.very_bad, source: VANILLA_TRAITS_EXPANDED },
   VTE_Slob: {
     name: "Slob",
     value: () => VALUES.bad,
+    source: VANILLA_TRAITS_EXPANDED,
+  },
+  VTE_Stoner: {
+    name: "Stoner",
+    // my logic for Stoner being very bad instead of terrible is that the addiction is already accounted for separately.
+    // the trait itself is solely for the fact that the addiction can't be withdrawaled out of
+    value: () => VALUES.very_bad,
     source: VANILLA_TRAITS_EXPANDED,
   },
   VTE_Tycoon: {
