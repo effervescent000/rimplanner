@@ -35,13 +35,19 @@ const SaveFileDropzone = ({ setSaveData }) => {
     return "Drop a file here";
   };
 
+  const style = {
+    padding: "1rem",
+    backgroundColor: "rgb(226 232 240)",
+    borderRadius: "5px",
+    border: "rgb(203 213 225) 2px solid",
+    width: "100%",
+  };
+
   return (
-    <div className="my-2">
-      <div {...getRootProps()}>
+    <div className="my-2 w-36">
+      <div {...getRootProps({ style })}>
         <input {...getInputProps()} />
-        <span className="px-2 py-4 bg-slate-200 rounded-sm border-slate-300 border-2">
-          {getDropLabel()}
-        </span>
+        <span>{getDropLabel()}</span>
       </div>
     </div>
   );
