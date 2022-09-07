@@ -41,7 +41,9 @@ export default function App() {
     playerFactions: [],
     worldPawns: [],
     mapPawns: [],
-    playerPawns: [],
+    colonists: [],
+    prisoners: [],
+    slaves: [],
     modList: [],
     growingZones: [],
   });
@@ -68,7 +70,7 @@ export default function App() {
         <div className="page-wrapper">
           <div className="flex gap-10">
             <SaveFileDropzone setSaveData={setSaveData} />
-            <PawnRow playerPawns={saveData.playerPawns} />
+            <PawnRow playerPawns={[...saveData.colonists, ...saveData.slaves]} />
             <WarningsWrapper warnings={warnings} />
           </div>
 
