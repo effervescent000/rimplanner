@@ -1,13 +1,6 @@
 import { BACKSTORIES_LOOKUP } from "../constants/backstoryConstants";
 import { BASE_GAME_LABORS, MOD_LABORS } from "../constants/constants";
-import {
-  ALLOW_TOOL,
-  COLONY_MANAGER,
-  HOSPITALITY,
-  QUARRY,
-  VANILLA_BOOKS_EXPANDED,
-  VANILLA_GENETICS_EXPANDED,
-} from "../constants/modConstants";
+import { mods } from "~/constants/modConstants";
 
 export const getFactionKey = (faction) => `Faction_${faction.loadID}`;
 
@@ -38,23 +31,23 @@ export const buildLabors = (modList) => {
   const modLabors = MOD_LABORS();
   modList.forEach((mod) => {
     switch (mod) {
-      case ALLOW_TOOL:
+      case mods.allowTool:
         labors.push(modLabors.haulPlus);
         labors.push(modLabors.hiddenLabor);
         break;
-      case COLONY_MANAGER:
+      case mods.colonyManager:
         labors.push(modLabors.managing);
         break;
-      case HOSPITALITY:
+      case mods.hospitality:
         labors.push(modLabors.entertaining);
         break;
-      case QUARRY:
+      case mods.quarry:
         labors.push(modLabors.quarrying);
         break;
-      case VANILLA_BOOKS_EXPANDED:
+      case mods.vanillaBooksExpanded:
         labors.push(modLabors.writing);
         break;
-      case VANILLA_GENETICS_EXPANDED:
+      case mods.vanillaGeneticsExpanded:
         labors.push(modLabors.genetics);
         break;
       default:
