@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
-import { useOutletContext } from "@remix-run/react";
+import { useFetcher, useOutletContext } from "@remix-run/react";
 
 import ControlledTextInput from "~/components/common/controlled-text-input";
 import PawnCard from "~/components/common/pawn-card";
-import EvaluationBuilder from "~/helpers/evaluationBuilder";
 
 const EvaluationIndex = () => {
   const {
@@ -11,19 +10,35 @@ const EvaluationIndex = () => {
   } = useOutletContext();
   const [search, setSearch] = useState("");
   const [selectedPawns, setSelectedPawns] = useState([]);
-  const [evalStats, setEvalStats] = useState({ values: {} });
+  const [evalStats, setEvalStats] = useState({ values: {}, ready: false });
+  const fetcher = useFetcher();
 
   useEffect(() => {
     if (selectedPawns.length) {
-      const eb = new EvaluationBuilder({
-        targets: selectedPawns,
-        playerPawns: [...colonists, ...slaves],
-        modList,
-      });
-      eb.fullEval();
-      setEvalStats({ values: eb.values });
+      fetcher.submit(
+        {
+          values: JSON.stringify({
+            selectedPawns,
+            playerPawns: [...colonists, ...slaves],
+            modList,
+          }),
+        },
+        { method: "post", action: "/eval/builder" }
+      );
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedPawns, colonists, slaves, modList]);
+
+  useEffect(() => {
+    console.log(evalStats);
+  }, [evalStats]);
+
+  useEffect(() => {
+    if (fetcher.type === "done") {
+      setEvalStats({ ...fetcher.data, ready: true });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fetcher.type]);
 
   return (
     <div className="flex">
@@ -42,9 +57,10 @@ const EvaluationIndex = () => {
           ))}
       </div>
       <div className="flex">
-        {selectedPawns.map((pawn) => (
-          <PawnCard key={pawn.id} pawn={pawn} value={evalStats.values[pawn.id]} />
-        ))}
+        {evalStats.ready &&
+          selectedPawns.map((pawn) => (
+            <PawnCard key={pawn.id} pawn={pawn} value={evalStats.values[pawn.id]} />
+          ))}
       </div>
     </div>
   );
