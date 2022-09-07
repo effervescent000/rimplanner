@@ -1,5 +1,5 @@
 import { NUTRITION_REQUIRED_PER_DAY, NUTRITION_VALUE } from "~/constants/constants";
-import { FOOD_PLANTS_ARRAY, GROW_DAY_DIVISOR, PLANTS_BY_KEY } from "~/constants/plantsConstants";
+import { PLANTS, FOOD_PLANTS_ARRAY, GROW_DAY_DIVISOR } from "~/constants/plantsConstants";
 
 const roundToTwoDecimals = (num) => Math.round(num * 100) / 100;
 
@@ -27,7 +27,7 @@ class WarningsBuilder {
 
   calculateNutrition() {
     Object.entries(this.cropsPlanted).forEach(([key, value]) => {
-      const plant = PLANTS_BY_KEY[key];
+      const plant = PLANTS[key];
       this.nutritionPerDay[key] =
         ((plant.harvestYield * NUTRITION_VALUE) / (plant.growDays / GROW_DAY_DIVISOR)) * value;
     });
