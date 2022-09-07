@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 
-const BAR_HEIGHT = 100;
+const BAR_HEIGHT = 115;
 const BAR_WIDTH = 20;
 
 const FillBar = ({ target, currentValue }) => {
@@ -10,15 +10,15 @@ const FillBar = ({ target, currentValue }) => {
 
   return (
     <div
-      className={`relative bg-black`}
-      style={{ height: `${BAR_HEIGHT}px`, width: `${BAR_WIDTH}px` }}
+      className={`relative bg-green-900 p-0.5 rounded-sm`}
+      style={{ height: `${BAR_HEIGHT + 4}px`, width: `${BAR_WIDTH + 4}px` }}
     >
       <div
-        className={`absolute bg-white bottom-0 z-10`}
+        className={`absolute bg-green-300 bottom-[2px] z-10 rounded-sm`}
         style={{ height: `${fillLevel}px`, width: `${BAR_WIDTH}px` }}
       />
       <div
-        className={`absolute bg-red-700 h-0.5 w-[${BAR_WIDTH}px] z-20`}
+        className={`absolute bg-yellow-500 h-1 z-20 rounded-sm`}
         style={{ width: `${BAR_WIDTH}px`, bottom: `${targetLine}px` }}
       />
     </div>
