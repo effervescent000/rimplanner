@@ -1,6 +1,7 @@
 import { useState, useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import { parseString } from "xml2js";
+import PropTypes from "prop-types";
 
 import { processSaveFile } from "~/helpers/saveFileProcessingHelper";
 
@@ -34,14 +35,26 @@ const SaveFileDropzone = ({ setSaveData }) => {
     return "Drop a file here";
   };
 
+  const style = {
+    padding: "1rem",
+    backgroundColor: "rgb(226 232 240)",
+    borderRadius: "5px",
+    border: "rgb(203 213 225) 2px solid",
+    width: "100%",
+  };
+
   return (
-    <div>
-      <div {...getRootProps()}>
+    <div className="my-2 w-36">
+      <div {...getRootProps({ style })}>
         <input {...getInputProps()} />
         <span>{getDropLabel()}</span>
       </div>
     </div>
   );
+};
+
+SaveFileDropzone.propTypes = {
+  setSaveData: PropTypes.func.isRequired,
 };
 
 export default SaveFileDropzone;
