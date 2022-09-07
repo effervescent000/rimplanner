@@ -16,7 +16,7 @@ const WarningsWrapper = ({ warnings }) => {
           return <Warning warning={warning} key={idx} />;
         }
         const Component = componentMapping[warning.type];
-        return <Component key={idx} {...warning.props} />;
+        return <Component key={idx} text={warning.text} {...warning.props} />;
       })}
     </>
   );

@@ -35,18 +35,16 @@ class WarningsBuilder {
     const requiredNutrition =
       (this.numPawns * NUTRITION_REQUIRED_PER_DAY * this.pctNutritionFromPlants) /
       (this.growingSeason / 60);
-    if (sumNutrition < requiredNutrition) {
-      this.warnings.push({
-        text: `Growing ${roundToTwoDecimals(sumNutrition)}, need ${roundToTwoDecimals(
-          requiredNutrition
-        )}`,
-        type: FILL_BAR,
-        props: {
-          target: requiredNutrition,
-          currentValue: sumNutrition,
-        },
-      });
-    }
+    this.warnings.push({
+      text: `Growing ${roundToTwoDecimals(
+        sumNutrition
+      )} points of nutrition, need ${roundToTwoDecimals(requiredNutrition)}.`,
+      type: FILL_BAR,
+      props: {
+        target: requiredNutrition,
+        currentValue: sumNutrition,
+      },
+    });
   }
 }
 

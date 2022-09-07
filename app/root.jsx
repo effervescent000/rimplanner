@@ -46,18 +46,21 @@ export default function App() {
     slaves: [],
     modList: [],
     growingZones: [],
+    initialized: false,
   });
   const [warnings, setWarnings] = useState([]);
 
   useEffect(() => {
-    console.log(saveData);
-    // eventually take these config values from state
-    const wb = new WarningsBuilder({
-      saveData,
-      config: { pctNutritionFromPlants: 0.5, growingSeason: 30 },
-    });
-    wb.calculateNutrition();
-    setWarnings(wb.warnings);
+    if (saveData.initialized) {
+      console.log(saveData);
+      // eventually take these config values from state
+      const wb = new WarningsBuilder({
+        saveData,
+        config: { pctNutritionFromPlants: 0.5, growingSeason: 30 },
+      });
+      wb.calculateNutrition();
+      setWarnings(wb.warnings);
+    }
   }, [saveData]);
   return (
     <html lang="en">
