@@ -53,8 +53,8 @@ class EvaluationBuilder {
   }
 
   processValues(id, values) {
-    this.values[id].colonistValue += values.colonistValue;
-    this.values[id].slaveValue += values.slaveValue;
+    this.values[id].colonistValue += values.colonistValue || 0;
+    this.values[id].slaveValue += values.slaveValue || 0;
   }
 
   addHealthValues() {

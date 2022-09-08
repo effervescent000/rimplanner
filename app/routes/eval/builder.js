@@ -9,7 +9,6 @@ export const action = async ({ request }) => {
   // const modList = body.get("modList");
   // I'm not actually using the action field right now. If i end up expanding the evalBuilder I might use it
   const action = body.get("action");
-  console.dir(selectedPawns);
   if (selectedPawns.length && playerPawns.length) {
     const eb = new EvaluationBuilder({
       targets: selectedPawns,
