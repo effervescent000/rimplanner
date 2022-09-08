@@ -1,3 +1,5 @@
+import { makeValues } from "~/helpers/utils";
+
 const VALUES = {
   excellent: 3,
   very_good: 2,
@@ -11,7 +13,7 @@ const VALUES = {
 export const HEALTH_CONDITIONS = {
   BadBack: {
     name: "Bad back",
-    value: VALUES.bad,
+    value: () => makeValues(VALUES.bad),
   },
-  AlcoholAddiction: { name: "Alcohol addiction", value: VALUES.terrible },
+  AlcoholAddiction: { name: "Alcohol addiction", value: () => makeValues(VALUES.terrible) },
 };
