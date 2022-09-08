@@ -11,6 +11,15 @@ import { HEALTH_CONDITIONS } from "~/constants/healthConstants";
 
 const BASE_VALUE = 1;
 
+// the threshold below which we flag a pawn as bleeding out
+const BLEEDING_OUT_THRESHOLD = 2.5;
+
+const INJURY = "Hediff_Injury";
+const INJURIES_MAP = {
+  Gunshot: 0.06,
+  Cut: 0.06,
+};
+
 class EvaluationBuilder {
   constructor({ targets, playerPawns, modList }) {
     this.targets = targets;
@@ -26,7 +35,10 @@ class EvaluationBuilder {
     );
     this.playerPawns = playerPawns;
     this.colonyStats = buildColonyStats(playerPawns);
-    this.values = this.targets.reduce((total, { id }) => ({ ...total, [id]: 0 }), {});
+    this.values = this.targets.reduce(
+      (total, { id }) => ({ ...total, [id]: { value: 0, bleedingOut: false } }),
+      {}
+    );
     [this.labors, this.laborsLookup] = buildLabors(modList);
   }
 
@@ -50,19 +62,32 @@ class EvaluationBuilder {
       let value = 0;
       if (hediffs) {
         if (hediffs.length) {
-          hediffs.forEach(({ def: hediff }) => {
-            const hediffValue = HEALTH_CONDITIONS[hediff];
-            if (hediffValue) {
-              value += hediffValue.value;
+          let bloodLossSeverity;
+          const bleeding = [];
+          hediffs.forEach(({ $, def: hediff, severity }) => {
+            if ($ && $.Class === INJURY) {
+              bleeding.push((+INJURIES_MAP[hediff] || 0) * +severity);
+            } else if (hediff === "BloodLoss") {
+              bloodLossSeverity = +severity;
+            } else {
+              const hediffValue = HEALTH_CONDITIONS[hediff];
+              if (hediffValue) {
+                value += hediffValue.value;
+              }
             }
           });
+          const bloodLossRate = bleeding.reduce((total, cur) => total + cur, 0);
+          const timeToBleedOut = (1 - bloodLossSeverity) / bloodLossRate;
+          if (timeToBleedOut < BLEEDING_OUT_THRESHOLD) {
+            this.values[id].bleedingOut = true;
+          }
         } else {
           const hediffValue = HEALTH_CONDITIONS[hediffs];
           if (hediffValue) {
             value += hediffValue.value;
           }
         }
-        this.values[id] += value;
+        this.values[id].value += value;
       }
     });
   }
@@ -87,7 +112,7 @@ class EvaluationBuilder {
           value += foundTrait.value(pawn, trait);
         }
       });
-      this.values[id] += value;
+      this.values[id].value += value;
     });
   }
 
@@ -107,7 +132,7 @@ class EvaluationBuilder {
       if (incapableSkills.includes(LABOR_CATEGORIES.dumb)) {
         value += -2;
       }
-      this.values[pawn.id] += value;
+      this.values[pawn.id].value += value;
     });
   }
 
@@ -155,7 +180,7 @@ class EvaluationBuilder {
           }
         }
       });
-      this.values[pawn.id] += value;
+      this.values[pawn.id].value += value;
     });
   }
 }
