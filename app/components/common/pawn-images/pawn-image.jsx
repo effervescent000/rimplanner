@@ -41,10 +41,10 @@ const PawnImage = ({
 
   return (
     imageURI && (
-      <div className="relative">
+      <div className="relative flex justify-center">
         <img src={imageURI} alt="test" />
         {bleedingOut ? (
-          <img className="absolute bottom-0 left-0 h-12" src={bloodImg} alt="bleeding out" />
+          <img className="absolute bottom-0 left-0 h-10" src={bloodImg} alt="bleeding out" />
         ) : (
           ""
         )}

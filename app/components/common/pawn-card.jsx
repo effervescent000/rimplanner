@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 
-import PawnImage from "./pawn-image";
+import PawnImage from "./pawn-images/pawn-image";
 
 const PawnCard = ({
   pawn,
