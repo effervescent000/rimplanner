@@ -13,4 +13,5 @@ export const HEALTH_CONDITIONS = {
     name: "Bad back",
     value: VALUES.bad,
   },
+  AlcoholAddiction: { name: "Alcohol addiction", value: VALUES.terrible },
 };
