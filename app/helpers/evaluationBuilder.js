@@ -77,7 +77,7 @@ class EvaluationBuilder {
             }
           });
           const bloodLossRate = bleeding.reduce((total, cur) => total + cur, 0);
-          const timeToBleedOut = (1 - bloodLossSeverity) / bloodLossRate;
+          const timeToBleedOut = ((1 - bloodLossSeverity) / bloodLossRate) * 24;
           if (timeToBleedOut < BLEEDING_OUT_THRESHOLD) {
             this.values[id].bleedingOut = true;
           }
