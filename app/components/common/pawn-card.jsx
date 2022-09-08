@@ -12,7 +12,7 @@ const PawnCard = ({
     name: { nick: name },
   } = pawn;
   return (
-    <div onClick={() => callback(pawn)}>
+    <div className="max-w-[150px]" onClick={() => callback(pawn)}>
       <div>{name}</div>
       <PawnImage pawn={pawn} bleedingOut={bleedingOut} />
       {colonistValue ? <div>{colonistValue} points</div> : ""}

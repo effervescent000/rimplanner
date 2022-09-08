@@ -125,7 +125,7 @@ class EvaluationBuilder {
       // slaves will do all tasks that are disabled by their backstories except violence
       const incapableSkills = getIncapableSkills(pawn);
       if (incapableSkills.includes(LABOR_CATEGORIES.firefighting)) {
-        this.processValues(pawn.id, { colonistValue: -1, slaveValue: -2 });
+        this.processValues(pawn.id, { colonistValue: -1, slaveValue: 0 });
       }
       if (incapableSkills.includes(LABOR_CATEGORIES.violent)) {
         this.processValues(pawn.id, { colonistValue: -2, slaveValue: 0 });
