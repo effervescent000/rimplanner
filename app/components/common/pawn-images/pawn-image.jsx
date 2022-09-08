@@ -2,8 +2,6 @@ import { useFetcher } from "@remix-run/react";
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
-import bloodImg from "assets/Bleeding.png";
-
 const encodeSearchParams = (params) => {
   const searchTerms = Object.entries(params)
     .filter(([key, value]) => value)
@@ -41,13 +39,8 @@ const PawnImage = ({
 
   return (
     imageURI && (
-      <div className="relative">
+      <div className="relative flex justify-center">
         <img src={imageURI} alt="test" />
-        {bleedingOut ? (
-          <img className="absolute bottom-0 left-0 h-12" src={bloodImg} alt="bleeding out" />
-        ) : (
-          ""
-        )}
       </div>
     )
   );
