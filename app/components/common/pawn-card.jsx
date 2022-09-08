@@ -1,26 +1,19 @@
 import PropTypes from "prop-types";
 
 import PawnImage from "./pawn-images/pawn-image";
+import TilesWrapper from "./pawn-images/tiles-wrapper";
 
-const PawnCard = ({
-  pawn,
-  callback,
-  selected,
-  eval: { colonistValue, slaveValue, bleedingOut },
-}) => {
+const PawnCard = ({ pawn, callback, selected, evalValues }) => {
   const {
     name: { nick: name },
   } = pawn;
   return (
-    <div className="max-w-[150px]" onClick={() => callback(pawn)}>
+    <div className="w-[120px]" onClick={() => callback(pawn)}>
       <div>{name}</div>
-      <PawnImage pawn={pawn} bleedingOut={bleedingOut} />
-      {colonistValue ? <div>{colonistValue} points</div> : ""}
-      {slaveValue > colonistValue ? (
-        <div>{name} might be more useful as a slave than a colonist</div>
-      ) : (
-        ""
-      )}
+      <div className="relative">
+        <PawnImage pawn={pawn} />
+        <TilesWrapper id={pawn.id} evalValues={evalValues} />
+      </div>
     </div>
   );
 };
@@ -28,19 +21,17 @@ const PawnCard = ({
 PawnCard.defaultProps = {
   callback: () => {},
   selected: false,
-  eval: { colonistValue: 0, slaveValue: 0, bleedingOut: false },
+  evalValues: {},
 };
 
 PawnCard.propTypes = {
-  pawn: PropTypes.shape({ name: PropTypes.shape({ nick: PropTypes.string.isRequired }) })
-    .isRequired,
+  pawn: PropTypes.shape({
+    id: PropTypes.string,
+    name: PropTypes.shape({ nick: PropTypes.string.isRequired }),
+  }).isRequired,
   callback: PropTypes.func,
   selected: PropTypes.bool,
-  eval: PropTypes.shape({
-    colonistValue: PropTypes.number,
-    slaveValue: PropTypes.number,
-    bleedingOut: PropTypes.bool,
-  }),
+  evalValues: PropTypes.shape({}),
 };
 
 export default PawnCard;

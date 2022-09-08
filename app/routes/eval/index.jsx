@@ -52,10 +52,10 @@ const EvaluationIndex = () => {
             />
           ))}
       </div>
-      <div className="flex">
+      <div className="flex gap-2">
         {evalStats.ready &&
           selectedPawns.map((pawn) => (
-            <PawnCard key={pawn.id} pawn={pawn} eval={evalStats.values[pawn.id]} />
+            <PawnCard key={pawn.id} pawn={pawn} evalValues={evalStats.values[pawn.id]} />
           ))}
       </div>
     </div>

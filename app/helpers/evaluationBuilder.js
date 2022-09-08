@@ -38,7 +38,7 @@ class EvaluationBuilder {
     this.values = this.targets.reduce(
       (total, { id }) => ({
         ...total,
-        [id]: { colonistValue: 0, slaveValue: 0, bleedingOut: false },
+        [id]: { bleedingOut: false, colonistValue: 0, slaveValue: 0 },
       }),
       {}
     );
