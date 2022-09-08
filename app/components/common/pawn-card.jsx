@@ -9,9 +9,8 @@ const PawnCard = ({ pawn, callback, selected, eval: { value, bleedingOut } }) =>
   return (
     <div onClick={() => callback(pawn)}>
       <div>{name}</div>
-      <PawnImage pawn={pawn} />
+      <PawnImage pawn={pawn} bleedingOut={bleedingOut} />
       {value ? <div>{value} points</div> : ""}
-      {bleedingOut ? `${name} is bleeding out` : ""}
     </div>
   );
 };
