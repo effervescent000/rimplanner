@@ -36,7 +36,10 @@ class EvaluationBuilder {
     this.playerPawns = playerPawns;
     this.colonyStats = buildColonyStats(playerPawns);
     this.values = this.targets.reduce(
-      (total, { id }) => ({ ...total, [id]: { value: 0, bleedingOut: false } }),
+      (total, { id }) => ({
+        ...total,
+        [id]: { colonistValue: 0, slaveValue: 0, bleedingOut: false },
+      }),
       {}
     );
     [this.labors, this.laborsLookup] = buildLabors(modList);
@@ -87,7 +90,7 @@ class EvaluationBuilder {
             value += hediffValue.value;
           }
         }
-        this.values[id].value += value;
+        this.values[id].colonistValue += value;
       }
     });
   }
@@ -112,7 +115,7 @@ class EvaluationBuilder {
           value += foundTrait.value(pawn, trait);
         }
       });
-      this.values[id].value += value;
+      this.values[id].colonistValue += value;
     });
   }
 
@@ -132,7 +135,7 @@ class EvaluationBuilder {
       if (incapableSkills.includes(LABOR_CATEGORIES.dumb)) {
         value += -2;
       }
-      this.values[pawn.id].value += value;
+      this.values[pawn.id].colonistValue += value;
     });
   }
 
@@ -180,7 +183,7 @@ class EvaluationBuilder {
           }
         }
       });
-      this.values[pawn.id].value += value;
+      this.values[pawn.id].colonistValue += value;
     });
   }
 }
