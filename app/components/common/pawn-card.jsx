@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 
 import PawnImage from "./pawn-image";
 
-const PawnCard = ({ pawn, callback, selected, eval: { value, bleedingOut } }) => {
+const PawnCard = ({ pawn, callback, selected, eval: { colonistValue, bleedingOut } }) => {
   const {
     name: { nick: name },
   } = pawn;
@@ -10,7 +10,7 @@ const PawnCard = ({ pawn, callback, selected, eval: { value, bleedingOut } }) =>
     <div onClick={() => callback(pawn)}>
       <div>{name}</div>
       <PawnImage pawn={pawn} bleedingOut={bleedingOut} />
-      {value ? <div>{value} points</div> : ""}
+      {colonistValue ? <div>{colonistValue} points</div> : ""}
     </div>
   );
 };
@@ -18,7 +18,7 @@ const PawnCard = ({ pawn, callback, selected, eval: { value, bleedingOut } }) =>
 PawnCard.defaultProps = {
   callback: () => {},
   selected: false,
-  eval: { value: 0, bleedingOut: false },
+  eval: { colonistValue: 0, bleedingOut: false },
 };
 
 PawnCard.propTypes = {
@@ -26,7 +26,7 @@ PawnCard.propTypes = {
     .isRequired,
   callback: PropTypes.func,
   selected: PropTypes.bool,
-  eval: PropTypes.shape({ value: PropTypes.number, bleedingOut: PropTypes.bool }),
+  eval: PropTypes.shape({ colonistValue: PropTypes.number, bleedingOut: PropTypes.bool }),
 };
 
 export default PawnCard;
