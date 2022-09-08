@@ -656,6 +656,10 @@ video {
   width: 75%;
 }
 
+.max-w-\[150px\] {
+  max-width: 150px;
+}
+
 .resize {
   resize: both;
 }

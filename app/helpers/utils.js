@@ -56,3 +56,9 @@ export const buildLabors = (modList) => {
   });
   return [labors, labors.reduce((total, cur) => ({ ...total, [cur.name]: cur }), {})];
 };
+
+export const makeValues = (baseValue, modifiers = {}) => ({
+  colonistValue: baseValue,
+  slaveValue: baseValue,
+  ...modifiers,
+});

@@ -6,7 +6,7 @@ import {
 } from "../constants/skillsConstants";
 import { LABOR_CATEGORIES, MAJOR_PASSION } from "../constants/constants";
 import { TRAITS } from "../constants/traitConstants";
-import { buildLabors, getIncapableSkills } from "./utils";
+import { buildLabors, getIncapableSkills, makeValues } from "./utils";
 import { HEALTH_CONDITIONS } from "~/constants/healthConstants";
 
 const BASE_VALUE = 1;
@@ -52,6 +52,11 @@ class EvaluationBuilder {
     this.addHealthValues();
   }
 
+  processValues(id, values) {
+    this.values[id].colonistValue += values.colonistValue || 0;
+    this.values[id].slaveValue += values.slaveValue || 0;
+  }
+
   addHealthValues() {
     this.targets.forEach((pawn) => {
       const {
@@ -62,7 +67,6 @@ class EvaluationBuilder {
           },
         },
       } = pawn;
-      let value = 0;
       if (hediffs) {
         if (hediffs.length) {
           let bloodLossSeverity;
@@ -75,7 +79,7 @@ class EvaluationBuilder {
             } else {
               const hediffValue = HEALTH_CONDITIONS[hediff];
               if (hediffValue) {
-                value += hediffValue.value;
+                this.processValues(id, hediffValue.value());
               }
             }
           });
@@ -87,10 +91,9 @@ class EvaluationBuilder {
         } else {
           const hediffValue = HEALTH_CONDITIONS[hediffs];
           if (hediffValue) {
-            value += hediffValue.value;
+            this.processValues(id, hediffValue.value());
           }
         }
-        this.values[id].colonistValue += value;
       }
     });
   }
@@ -105,44 +108,40 @@ class EvaluationBuilder {
           },
         },
       } = pawn;
-      let value = 0;
       traits.forEach((trait) => {
         const traitName = trait.def;
         const foundTrait = TRAITS[traitName];
         if (!foundTrait) {
           console.log("Trait not found, " + traitName);
         } else {
-          value += foundTrait.value(pawn, trait);
+          this.processValues(id, foundTrait.value(pawn, trait));
         }
       });
-      this.values[id].colonistValue += value;
     });
   }
 
   checkIncapables() {
     this.targets.forEach((pawn) => {
+      // slaves will do all tasks that are disabled by their backstories except violence
       const incapableSkills = getIncapableSkills(pawn);
-      let value = 0;
       if (incapableSkills.includes(LABOR_CATEGORIES.firefighting)) {
-        value += -1;
+        this.processValues(pawn.id, { colonistValue: -1, slaveValue: 0 });
       }
       if (incapableSkills.includes(LABOR_CATEGORIES.violent)) {
-        value += -2;
+        this.processValues(pawn.id, { colonistValue: -2, slaveValue: 0 });
       }
       if (incapableSkills.includes(LABOR_CATEGORIES.skilled)) {
-        value += -2;
+        this.processValues(pawn.id, { colonistValue: -2, slaveValue: 0 });
       }
       if (incapableSkills.includes(LABOR_CATEGORIES.dumb)) {
-        value += -2;
+        this.processValues(pawn.id, { colonistValue: -2, slaveValue: 0 });
       }
-      this.values[pawn.id].colonistValue += value;
     });
   }
 
   compareStats() {
     this.targets.forEach((pawn) => {
       const incapableSkills = getIncapableSkills(pawn);
-      let value = 0;
       SKILLS_ARRAY.forEach((skill) => {
         if (!incapableSkills.includes(skill)) {
           const targetSkill = this.targetsSkills[pawn.id][skill];
@@ -153,37 +152,36 @@ class EvaluationBuilder {
                   targetSkill.level >=
                   this.colonyStats[skill].upperQuantile - MAJOR_PASSION_VALUE
                 ) {
-                  value += BASE_VALUE * 2;
+                  this.processValues(pawn.id, makeValues(BASE_VALUE * 2));
                 } else if (
                   targetSkill.level >=
                   this.colonyStats[skill].average - MAJOR_PASSION_VALUE
                 ) {
-                  value += BASE_VALUE;
+                  this.processValues(pawn.id, makeValues(BASE_VALUE));
                 }
               } else {
                 if (
                   targetSkill.level >=
                   this.colonyStats[skill].upperQuantile - MINOR_PASSION_VALUE
                 ) {
-                  value += BASE_VALUE * 1.5;
+                  this.processValues(pawn.id, makeValues(BASE_VALUE * 1.5));
                 } else if (
                   targetSkill.level >=
                   this.colonyStats[skill].average - MINOR_PASSION_VALUE
                 ) {
-                  value += BASE_VALUE * 0.75;
+                  this.processValues(pawn.id, makeValues(BASE_VALUE * 0.75));
                 }
               }
             } else {
               if (targetSkill.level >= this.colonyStats[skill].upperQuantile) {
-                value += BASE_VALUE;
+                this.processValues(pawn.id, makeValues(BASE_VALUE));
               } else if (targetSkill.level >= this.colonyStats[skill].average) {
-                value += BASE_VALUE * 0.5;
+                this.processValues(pawn.id, makeValues(BASE_VALUE * 0.5));
               }
             }
           }
         }
       });
-      this.values[pawn.id].colonistValue += value;
     });
   }
 }

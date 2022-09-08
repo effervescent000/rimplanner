@@ -1,5 +1,6 @@
 import { mods } from "./modConstants";
 import { SKILLS } from "./skillsConstants";
+import { makeValues } from "~/helpers/utils";
 
 const VALUES = {
   excellent: 3,
@@ -25,26 +26,26 @@ export const TRAITS = {
     name: "Drug Desire",
     value: (pawn, trait) => {
       const degrees = { 1: VALUES.bad, 2: VALUES.very_bad };
-      return degrees[trait.degree];
+      return makeValues(degrees[trait.degree]);
     },
   },
   Industriousness: {
     name: "Industriousness",
     value: (pawn, trait) => {
       const degrees = { 1: VALUES.very_good };
-      return degrees[trait.degree];
+      return makeValues(degrees[trait.degree]);
     },
   },
-  Jealous: { name: "Jealous", value: () => VALUES.very_bad },
-  NightOwl: { name: "Night owl", value: () => VALUES.neutral },
-  Psychopath: { name: "Psycopath", value: () => VALUES.excellent },
-  Pyromaniac: { name: "Pyromaniac", value: () => VALUES.very_bad },
-  QuickSleeper: { name: "Quick sleeper", value: () => VALUES.very_good },
+  Jealous: { name: "Jealous", value: () => makeValues(VALUES.very_bad) },
+  NightOwl: { name: "Night owl", value: () => makeValues(VALUES.neutral) },
+  Psychopath: { name: "Psycopath", value: () => makeValues(VALUES.excellent) },
+  Pyromaniac: { name: "Pyromaniac", value: () => makeValues(VALUES.very_bad) },
+  QuickSleeper: { name: "Quick sleeper", value: () => makeValues(VALUES.very_good) },
   ShootingAccuracy: {
     name: "Shooting Accuracy",
     value: (pawn, trait) => {
       const degrees = { 2: VALUES.good };
-      return degrees[trait.degree];
+      return makeValues(degrees[trait.degree]);
     },
   },
   SpeedOffset: {
@@ -53,10 +54,10 @@ export const TRAITS = {
       const degrees = {
         1: VALUES.very_good,
       };
-      return degrees[trait.degree];
+      return makeValues(degrees[trait.degree]);
     },
   },
-  Undergrounder: { name: "Undergrounder", value: () => VALUES.good },
+  Undergrounder: { name: "Undergrounder", value: () => makeValues(VALUES.good, {slaveValue: VALUES.very_good}) },
   // mod added traits below here
   SYR_Haggler: {
     name: "Silver tongue",
@@ -66,18 +67,18 @@ export const TRAITS = {
       },
     }) => {
       const social = skills.find(({ def }) => def === SKILLS.social.name);
-      return getTieredValueForSkill(social);
+      return makeValues(getTieredValueForSkill(social));
     },
     source: mods.individuality,
   },
   SYR_HandEyeCoordination: {
     name: "Hand-eye coordination",
-    value: () => VALUES.very_good,
+    value: () => makeValues(VALUES.very_good),
     source: mods.individuality,
   },
   SYR_MechanoidExpert: {
     name: "Mechanoid expert",
-    value: () => VALUES.good,
+    value: () => makeValues(VALUES.good),
     source: mods.individuality,
   },
   SYR_Perfectionist: {
@@ -88,7 +89,7 @@ export const TRAITS = {
       },
     }) => {
       const crafting = skills.find(({ def }) => def === SKILLS.crafting.name);
-      return getTieredValueForSkill(crafting);
+      return makeValues(getTieredValueForSkill(crafting));
     },
     source: mods.individuality,
   },
@@ -100,12 +101,12 @@ export const TRAITS = {
       },
     }) => {
       const medicine = skills.find(({ def }) => def === SKILLS.medicine.name);
-      return getTieredValueForSkill(medicine);
+      return makeValues(getTieredValueForSkill(medicine));
     },
   },
   SYR_StrongBack: {
     name: "Strong back",
-    value: () => VALUES.good,
+    value: () => makeValues(VALUES.good),
     source: mods.individuality,
   },
   VTE_AnimalLover: {
@@ -116,20 +117,20 @@ export const TRAITS = {
       },
     }) => {
       const cooking = skills.find(({ def }) => def === SKILLS.cooking.name);
-      if (cooking && cooking.passion) return VALUES.bad;
-      return VALUES.neutral;
+      if (cooking && cooking.passion) return makeValues(VALUES.bad);
+      return makeValues(VALUES.neutral);
     },
     source: mods.vanillaTraitsExpanded,
   },
   VTE_ChildOfSea: {
     name: "Ocean lover",
     // TODO maybe inlcude map data, if there's a way to figure out features?
-    value: () => VALUES.neutral,
+    value: () => makeValues(VALUES.neutral),
     source: mods.vanillaTraitsExpanded,
   },
   VTE_Coward: {
     name: "Coward",
-    value: () => VALUES.very_bad,
+    value: () => makeValues(VALUES.very_bad),
     source: mods.vanillaTraitsExpanded,
   },
   VTE_Eccentric: {
@@ -140,7 +141,7 @@ export const TRAITS = {
       },
     }) => {
       const intellectual = skills.find(({ def }) => def === SKILLS.intellectual.name);
-      return getTieredValueForSkill(intellectual);
+      return makeValues(getTieredValueForSkill(intellectual));
     },
     source: mods.vanillaTraitsExpanded,
   },
@@ -154,8 +155,8 @@ export const TRAITS = {
       const plantsAndAnimals = skills.filter(
         ({ def }) => def === SKILLS.animals.name || def === SKILLS.plants.name
       );
-      if (plantsAndAnimals.some(({ passion }) => passion)) return VALUES.excellent;
-      return VALUES.very_good;
+      if (plantsAndAnimals.some(({ passion }) => passion)) return makeValues(VALUES.excellent);
+      return makeValues(VALUES.very_good);
     },
     source: mods.individuality,
   },
@@ -167,36 +168,36 @@ export const TRAITS = {
       },
     }) => {
       const cooking = skills.find(({ def }) => def === SKILLS.cooking.name);
-      if (cooking && cooking.passion) return VALUES.excellent;
-      return VALUES.good;
+      if (cooking && cooking.passion) return makeValues(VALUES.excellent);
+      return makeValues(VALUES.good);
     },
   },
   VTE_HeavySleeper: {
     name: "Heavy sleeper",
-    value: () => VALUES.very_bad,
+    value: () => makeValues(VALUES.very_bad),
     source: mods.vanillaTraitsExpanded,
   },
   VTE_Insomniac: {
     name: "Insomniac",
-    value: () => VALUES.very_good,
+    value: () => makeValues(VALUES.very_good, { slaveValue: VALUES.good }),
     source: mods.vanillaTraitsExpanded,
   },
   VTE_Prude: {
     name: "Prude",
-    value: () => VALUES.bad,
+    value: () => makeValues(VALUES.bad, { slaveValue: VALUES.neutral }),
     source: mods.vanillaTraitsExpanded,
   },
   VTE_Rebel: { name: "Rebel", value: () => VALUES.very_bad, source: mods.vanillaTraitsExpanded },
   VTE_Slob: {
     name: "Slob",
-    value: () => VALUES.bad,
+    value: () => makeValues(VALUES.bad),
     source: mods.vanillaTraitsExpanded,
   },
   VTE_Stoner: {
     name: "Stoner",
     // my logic for Stoner being very bad instead of terrible is that the addiction is already accounted for separately.
     // the trait itself is solely for the fact that the addiction can't be withdrawaled out of
-    value: () => VALUES.very_bad,
+    value: () => makeValues(VALUES.very_bad),
     source: mods.vanillaTraitsExpanded,
   },
   VTE_Tycoon: {
@@ -207,14 +208,14 @@ export const TRAITS = {
       },
     }) => {
       const social = skills.find(({ def }) => def === SKILLS.social.name);
-      if (social && social.passion) return VALUES.excellent;
-      return VALUES.very_good;
+      if (social && social.passion) return makeValues(VALUES.excellent);
+      return makeValues(VALUES.very_good);
     },
     source: mods.vanillaTraitsExpanded,
   },
   VTE_Vengeful: {
     name: "Vengeful",
-    value: () => VALUES.terrible,
+    value: () => makeValues(VALUES.terrible),
     source: mods.vanillaTraitsExpanded,
   },
 };
