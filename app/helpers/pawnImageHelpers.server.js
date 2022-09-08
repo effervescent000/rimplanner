@@ -55,13 +55,13 @@ export const composeImage = async ({ gender, head, body, hairDef, hairColor, mel
       });
       baseImage.blit(hairImage, 0, -25);
     } catch (hairError) {
-      console.log("error rendering hair", hairError);
+      // console.log("error rendering hair", hairError);
     }
     baseImage.resize(100, 100);
     const url = await baseImage.getBase64Async(jimp.MIME_PNG);
     return url;
   } catch (baseError) {
-    console.log(baseError);
+    // console.log(baseError);
     return "";
   }
 };

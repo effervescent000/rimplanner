@@ -176,6 +176,11 @@ export const TRAITS = {
     value: () => VALUES.very_bad,
     source: mods.vanillaTraitsExpanded,
   },
+  VTE_Insomniac: {
+    name: "Insomniac",
+    value: () => VALUES.very_good,
+    source: mods.vanillaTraitsExpanded,
+  },
   VTE_Prude: {
     name: "Prude",
     value: () => VALUES.bad,
@@ -205,6 +210,11 @@ export const TRAITS = {
       if (social && social.passion) return VALUES.excellent;
       return VALUES.very_good;
     },
+    source: mods.vanillaTraitsExpanded,
+  },
+  VTE_Vengeful: {
+    name: "Vengeful",
+    value: () => VALUES.terrible,
     source: mods.vanillaTraitsExpanded,
   },
 };
