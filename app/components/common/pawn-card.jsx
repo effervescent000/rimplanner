@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import PawnImage from "./pawn-images/pawn-image";
 import TilesWrapper from "./pawn-images/tiles-wrapper";
 
-const PawnCard = ({ pawn, callback, selected, evalValues }) => {
+const PawnCard = ({ pawn, callback, selected, evalValues, config }) => {
   const {
     name: { nick: name },
   } = pawn;
@@ -12,7 +12,11 @@ const PawnCard = ({ pawn, callback, selected, evalValues }) => {
       <div>{name}</div>
       <div className="relative">
         <PawnImage pawn={pawn} />
-        <TilesWrapper id={pawn.id} evalValues={evalValues} />
+        {Object.keys(evalValues).length ? (
+          <TilesWrapper id={pawn.id} evalValues={evalValues} config={config} />
+        ) : (
+          <></>
+        )}
       </div>
     </div>
   );

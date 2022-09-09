@@ -21,7 +21,7 @@ const INJURIES_MAP = {
 };
 
 class EvaluationBuilder {
-  constructor({ targets, playerPawns, modList }) {
+  constructor({ targets, playerPawns, modList, config }) {
     this.targets = targets;
     this.targetsSkills = this.targets.reduce(
       (total, { id, skills }) => ({
@@ -34,6 +34,7 @@ class EvaluationBuilder {
       {}
     );
     this.playerPawns = playerPawns;
+    this.config = config;
     this.colonyStats = buildColonyStats(playerPawns);
     this.values = this.targets.reduce(
       (total, { id }) => ({

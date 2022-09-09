@@ -64,7 +64,6 @@ export default function App() {
       wb.calculateNutrition();
       setWarnings(wb.warnings);
     }
-    console.log(config);
   }, [saveData, config]);
   return (
     <html lang="en">

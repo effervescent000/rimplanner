@@ -12,18 +12,18 @@ const IMAGE_MAP = {
   slaveValue: slaveImg,
 };
 
-const makeTiles = (evalValues) => {
+const makeTiles = (evalValues, { slaveryMode }) => {
   const tiles = [];
   Object.entries(evalValues).forEach(([key, value]) => {
-    if (value) {
+    if (value && (key !== "slaveValue" || slaveryMode)) {
       tiles.push({ imgSrc: IMAGE_MAP[key], label: value === true ? undefined : `${value}` });
     }
   });
   return tiles;
 };
 
-const TilesWrapper = ({ id, evalValues }) => {
-  const tiles = makeTiles(evalValues);
+const TilesWrapper = ({ id, evalValues, config }) => {
+  const tiles = makeTiles(evalValues, config);
   return (
     <div className="w-[120px] flex absolute justify-between bottom-[-5px]">
       {tiles.map((tile, idx) => (

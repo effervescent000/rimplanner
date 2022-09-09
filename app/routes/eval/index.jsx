@@ -7,6 +7,7 @@ import PawnCard from "~/components/common/pawn-card";
 const EvaluationIndex = () => {
   const {
     saveData: { worldPawns, mapPawns, colonists, slaves, modList },
+    config,
   } = useOutletContext();
   const [search, setSearch] = useState("");
   const [selectedPawns, setSelectedPawns] = useState([]);
@@ -21,6 +22,7 @@ const EvaluationIndex = () => {
             selectedPawns,
             playerPawns: [...colonists, ...slaves],
             modList,
+            config,
           }),
         },
         { method: "post", action: "/eval/builder" }
@@ -55,7 +57,12 @@ const EvaluationIndex = () => {
       <div className="flex gap-2">
         {evalStats.ready &&
           selectedPawns.map((pawn) => (
-            <PawnCard key={pawn.id} pawn={pawn} evalValues={evalStats.values[pawn.id]} />
+            <PawnCard
+              key={pawn.id}
+              pawn={pawn}
+              evalValues={evalStats.values[pawn.id]}
+              config={config}
+            />
           ))}
       </div>
     </div>
