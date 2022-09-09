@@ -1,3 +1,5 @@
+import PropTypes from "prop-types";
+
 import Tile from "./tile";
 
 import bloodImg from "assets/Bleeding.png";
@@ -14,7 +16,7 @@ const makeTiles = (evalValues) => {
   const tiles = [];
   Object.entries(evalValues).forEach(([key, value]) => {
     if (value) {
-      tiles.push({ imgSrc: IMAGE_MAP[key], label: value === true ? undefined : value });
+      tiles.push({ imgSrc: IMAGE_MAP[key], label: value === true ? undefined : `${value}` });
     }
   });
   return tiles;
@@ -29,6 +31,11 @@ const TilesWrapper = ({ id, evalValues }) => {
       ))}
     </div>
   );
+};
+
+TilesWrapper.propTypes = {
+  id: PropTypes.string.isRequired,
+  evalValues: PropTypes.shape({}).isRequired,
 };
 
 export default TilesWrapper;

@@ -2,6 +2,10 @@ import { LABOR_CATEGORIES } from "./constants";
 
 const CHILDHOOD_BACKSTORIES = [
   { name: "CultChild3", incapable: [LABOR_CATEGORIES.intellectual] },
+  {
+    name: "TestSubject15",
+    incapable: [LABOR_CATEGORIES.firefighting, LABOR_CATEGORIES.caring, LABOR_CATEGORIES.social],
+  },
   { name: "MedicalAssistant12", incapable: [LABOR_CATEGORIES.firefighting] },
   { name: "StudentEngineer34", incapable: [LABOR_CATEGORIES.dumb] },
   { name: "Killer41", incapable: [LABOR_CATEGORIES.social] },
@@ -12,6 +16,18 @@ const CHILDHOOD_BACKSTORIES = [
 ];
 
 const ADULT_BACKSTORIES = [
+  {
+    name: "Assassin20",
+    incapable: [
+      LABOR_CATEGORIES.caring,
+      LABOR_CATEGORIES.social,
+      LABOR_CATEGORIES.cooking,
+      LABOR_CATEGORIES.plantWork,
+      LABOR_CATEGORIES.skilled,
+      LABOR_CATEGORIES.dumb,
+      LABOR_CATEGORIES.intellectual,
+    ],
+  },
   {
     name: "ConstructionEngineer32",
     incapable: [LABOR_CATEGORIES.intellectual, LABOR_CATEGORIES.cooking],
