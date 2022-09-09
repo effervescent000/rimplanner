@@ -84,6 +84,7 @@ export default function App() {
           >
             <Nav.Item eventKey="work">Work priorities</Nav.Item>
             <Nav.Item eventKey="eval">Evaluation</Nav.Item>
+            <Nav.Item eventKey="settings">Settings</Nav.Item>
           </Nav>
           <Outlet context={{ saveData, setSaveData }} />
         </div>
