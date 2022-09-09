@@ -49,7 +49,9 @@ export default function App() {
     initialized: false,
   });
   const [warnings, setWarnings] = useState([]);
-  const [config, setConfig] = useState({});
+  const [config, setConfig] = useState({
+    slaveryMode: false,
+  });
 
   useEffect(() => {
     if (saveData.initialized) {
