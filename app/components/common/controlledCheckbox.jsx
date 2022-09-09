@@ -3,8 +3,15 @@ import PropTypes from "prop-types";
 const ControlledCheckbox = ({ value, callback, label }) => {
   return (
     <div>
-      <input type="checkbox" checked={value} onChange={() => callback(!value)} />
-      <span>{label}</span>
+      <label>
+        <input
+          data-cy="slaveryModeInput"
+          type="checkbox"
+          checked={value}
+          onChange={() => callback(!value)}
+        />
+        {label}
+      </label>
     </div>
   );
 };
