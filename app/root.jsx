@@ -15,7 +15,7 @@ import { Nav } from "rsuite";
 
 // HELPERS
 import WarningsBuilder from "./helpers/warningsBuilder";
-import { getSession, commitSession } from "./sessions";
+import { savedConfig } from "./cookies";
 
 // COMPONENTS
 import SaveFileDropzone from "~/components/save-file-dropzone";
@@ -40,23 +40,24 @@ export const links = () => [
   { rel: "stylesheet", href: commonStyles },
 ];
 
+const DEFAULT_SETTINGS = { savedConfig: { slaveryMode: false } };
+
 export const loader = async ({ request }) => {
-  const session = await getSession(request.headers.get("Cookie"));
-  if (session.has("config")) {
-    const data = { savedConfig: session.get("config") };
-    return json(data);
-  }
-  return json({ savedConfig: null });
+  const cookieHeader = request.headers.get("Cookie");
+  const cookie = (await savedConfig.parse(cookieHeader)) || DEFAULT_SETTINGS;
+  return json(cookie.savedConfig);
 };
 
 export const action = async ({ request }) => {
-  const session = await getSession(request.headers.get("Cookie"));
+  const cookieHeader = request.headers.get("Cookie");
+  const cookie = (await savedConfig.parse(cookieHeader)) || DEFAULT_SETTINGS;
   const body = await request.formData();
-  const config = body.get("config");
-  session.set("savedConfig", config);
-  return new Response("Saved settings to cookie", {
+  const config = JSON.parse(body.get("config"));
+  cookie.savedConfig = config;
+  return new Response(JSON.stringify({ data: "Saved settings to cookie" }), {
     headers: {
-      "Set-Cookie": await commitSession(session),
+      "Set-Cookie": await savedConfig.serialize(cookie),
+      "Content-Type": "application/json",
     },
   });
 };
@@ -64,8 +65,8 @@ export const action = async ({ request }) => {
 export default function App() {
   const location = useLocation();
   const navigate = useNavigate();
+  const loadedConfig = useLoaderData();
   const fetcher = useFetcher();
-  const { savedConfig } = useLoaderData();
 
   const [saveData, setSaveData] = useState({
     factions: [],
@@ -80,9 +81,7 @@ export default function App() {
     initialized: false,
   });
   const [warnings, setWarnings] = useState([]);
-  const [config, setConfig] = useState({
-    slaveryMode: false,
-  });
+  const [config, setConfig] = useState(DEFAULT_SETTINGS.savedConfig);
 
   useEffect(() => {
     fetcher.submit({ config: JSON.stringify(config) }, { method: "POST" });
@@ -103,11 +102,11 @@ export default function App() {
   }, [saveData, config]);
 
   useEffect(() => {
-    const parsedConfig = JSON.parse(savedConfig);
-    if (parsedConfig) {
-      setConfig(parsedConfig);
+    try {
+      setConfig(loadedConfig);
+    } catch (error) {
+      console.log(error);
     }
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

@@ -1,5 +1,6 @@
-const { RemixBrowser } = require("@remix-run/react");
+// Dependencies
+import { RemixBrowser } from "@remix-run/react";
+// import { hydrateRoot } from "react-dom/client";
 
-const { hydrateRoot } = require("react-dom/client");
-
-hydrateRoot(document, <RemixBrowser />);
+// hydrateRoot(document, <RemixBrowser />);
+require("react-dom").hydrate(<RemixBrowser />, document);
