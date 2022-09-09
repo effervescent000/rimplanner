@@ -49,6 +49,7 @@ export default function App() {
     initialized: false,
   });
   const [warnings, setWarnings] = useState([]);
+  const [config, setConfig] = useState({});
 
   useEffect(() => {
     if (saveData.initialized) {
@@ -56,12 +57,12 @@ export default function App() {
       // eventually take these config values from state
       const wb = new WarningsBuilder({
         saveData,
-        config: { pctNutritionFromPlants: 0.5, growingSeason: 30 },
+        config: { ...config, pctNutritionFromPlants: 0.5, growingSeason: 30 },
       });
       wb.calculateNutrition();
       setWarnings(wb.warnings);
     }
-  }, [saveData]);
+  }, [saveData, config]);
   return (
     <html lang="en">
       <head>
@@ -73,8 +74,8 @@ export default function App() {
         <div className="page-wrapper">
           <div className="flex gap-10">
             <SaveFileDropzone setSaveData={setSaveData} />
-            <PawnRow playerPawns={[...saveData.colonists, ...saveData.slaves]} />
-            <WarningsWrapper warnings={warnings} />
+            <PawnRow playerPawns={[...saveData.colonists, ...saveData.slaves]} config={config} />
+            <WarningsWrapper warnings={warnings} config={config} />
           </div>
 
           <Nav
@@ -86,7 +87,7 @@ export default function App() {
             <Nav.Item eventKey="eval">Evaluation</Nav.Item>
             <Nav.Item eventKey="settings">Settings</Nav.Item>
           </Nav>
-          <Outlet context={{ saveData, setSaveData }} />
+          <Outlet context={{ saveData, setSaveData, config, setConfig }} />
         </div>
         <ScrollRestoration />
         <LiveReload />
