@@ -6,19 +6,27 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useFetcher,
+  useLoaderData,
   useLocation,
   useNavigate,
 } from "@remix-run/react";
 import { Nav } from "rsuite";
 
+// HELPERS
+import WarningsBuilder from "./helpers/warningsBuilder";
+import { savedConfig } from "./cookies";
+
+// COMPONENTS
+import SaveFileDropzone from "~/components/save-file-dropzone";
+import PawnRow from "~/components/pawn-display/pawn-display";
+import WarningsWrapper from "./components/warnings/warnings-wrapper";
+
+// STYLES
 import tailwindStyles from "~/styles/tailwind.css";
 import rsuiteStyles from "rsuite/dist/rsuite.min.css";
 import commonStyles from "~/styles/common.css";
-
-import SaveFileDropzone from "~/components/save-file-dropzone";
-import PawnRow from "~/components/pawn-display/pawn-display";
-import WarningsBuilder from "./helpers/warningsBuilder";
-import WarningsWrapper from "./components/warnings/warnings-wrapper";
+import { json } from "@remix-run/node";
 
 export const meta = () => ({
   charset: "utf-8",
@@ -32,9 +40,33 @@ export const links = () => [
   { rel: "stylesheet", href: commonStyles },
 ];
 
+const DEFAULT_SETTINGS = { savedConfig: { slaveryMode: false } };
+
+export const loader = async ({ request }) => {
+  const cookieHeader = request.headers.get("Cookie");
+  const cookie = (await savedConfig.parse(cookieHeader)) || DEFAULT_SETTINGS;
+  return json(cookie.savedConfig);
+};
+
+export const action = async ({ request }) => {
+  const cookieHeader = request.headers.get("Cookie");
+  const cookie = (await savedConfig.parse(cookieHeader)) || DEFAULT_SETTINGS;
+  const body = await request.formData();
+  const config = JSON.parse(body.get("config"));
+  cookie.savedConfig = config;
+  return new Response(JSON.stringify({ data: "Saved settings to cookie" }), {
+    headers: {
+      "Set-Cookie": await savedConfig.serialize(cookie),
+      "Content-Type": "application/json",
+    },
+  });
+};
+
 export default function App() {
   const location = useLocation();
   const navigate = useNavigate();
+  const loadedConfig = useLoaderData();
+  const fetcher = useFetcher();
 
   const [saveData, setSaveData] = useState({
     factions: [],
@@ -49,9 +81,12 @@ export default function App() {
     initialized: false,
   });
   const [warnings, setWarnings] = useState([]);
-  const [config, setConfig] = useState({
-    slaveryMode: false,
-  });
+  const [config, setConfig] = useState(DEFAULT_SETTINGS.savedConfig);
+
+  useEffect(() => {
+    fetcher.submit({ config: JSON.stringify(config) }, { method: "POST" });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [config]);
 
   useEffect(() => {
     if (saveData.initialized) {
@@ -65,6 +100,16 @@ export default function App() {
       setWarnings(wb.warnings);
     }
   }, [saveData, config]);
+
+  useEffect(() => {
+    try {
+      setConfig(loadedConfig);
+    } catch (error) {
+      console.log(error);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <html lang="en">
       <head>
