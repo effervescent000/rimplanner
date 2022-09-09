@@ -49,7 +49,9 @@ export default function App() {
     initialized: false,
   });
   const [warnings, setWarnings] = useState([]);
-  const [config, setConfig] = useState({});
+  const [config, setConfig] = useState({
+    slaveryMode: false,
+  });
 
   useEffect(() => {
     if (saveData.initialized) {
@@ -62,6 +64,7 @@ export default function App() {
       wb.calculateNutrition();
       setWarnings(wb.warnings);
     }
+    console.log(config);
   }, [saveData, config]);
   return (
     <html lang="en">
