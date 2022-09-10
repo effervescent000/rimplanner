@@ -6,7 +6,7 @@ const roundToTwoDecimals = (num) => Math.round(num * 100) / 100;
 class WarningsBuilder {
   constructor({
     saveData: { growingZones, colonists, slaves, prisoners },
-    config: { pctNutritionFromPlants, growingSeason },
+    config: { pctNutritionFromGrowing, growingSeason },
   }) {
     this.growingZones = growingZones;
     this.cropsPlanted = this.growingZones
@@ -19,7 +19,7 @@ class WarningsBuilder {
         {}
       );
     this.nutritionPerDay = {};
-    this.pctNutritionFromPlants = pctNutritionFromPlants;
+    this.pctNutritionFromGrowing = pctNutritionFromGrowing;
     this.growingSeason = growingSeason;
     this.numPawns = [...colonists, ...slaves, ...prisoners].length;
     this.warnings = [];
@@ -33,7 +33,7 @@ class WarningsBuilder {
     });
     const sumNutrition = Object.values(this.nutritionPerDay).reduce((total, cur) => total + cur, 0);
     const requiredNutrition =
-      (this.numPawns * NUTRITION_REQUIRED_PER_DAY * this.pctNutritionFromPlants) /
+      (this.numPawns * NUTRITION_REQUIRED_PER_DAY * this.pctNutritionFromGrowing) /
       (this.growingSeason / 60);
     this.warnings.push({
       text: `Growing ${roundToTwoDecimals(
