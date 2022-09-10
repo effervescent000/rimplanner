@@ -4,6 +4,7 @@ const ControlledTextInput = ({ value, callback, placeholder, label }) => {
   return (
     <label>
       <input
+        className="m-2"
         value={value}
         placeholder={placeholder}
         onChange={(event) => callback(event.target.value)}

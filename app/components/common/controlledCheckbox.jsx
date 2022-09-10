@@ -4,6 +4,7 @@ const ControlledCheckbox = ({ value, callback, label }) => {
   return (
     <label>
       <input
+        className="m-2"
         data-cy="slaveryModeInput"
         type="checkbox"
         checked={value}

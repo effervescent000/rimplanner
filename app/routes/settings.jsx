@@ -18,11 +18,10 @@ const SettingsPage = () => {
           .reduce((total, cur) => ({ ...total, cur }))
       );
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formValues, errors]);
+  }, [formValues, errors, setConfig]);
 
   return (
-    <div>
+    <div className="flex gap-5 items-center">
       {settingsList.map(({ key, Component, label, callback, validators }) => (
         <Component
           key={key}

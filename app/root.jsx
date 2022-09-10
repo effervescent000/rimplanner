@@ -96,7 +96,7 @@ export default function App() {
       // eventually take these config values from state
       const wb = new WarningsBuilder({
         saveData,
-        config: { ...config, pctNutritionFromPlants: 0.5, growingSeason: 30 },
+        config: { ...config, pctNutritionFromGrowing: 0.5, growingSeason: 30 },
       });
       wb.calculateNutrition();
       setWarnings(wb.warnings);
