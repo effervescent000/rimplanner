@@ -44,6 +44,12 @@ class EvaluationBuilder {
       {}
     );
     [this.labors, this.laborsLookup] = buildLabors(modList);
+    // this is here instead of a constant because I want to optionally include shooting based on user config
+    this.slaveIncapable = [
+      LABOR_CATEGORIES.intellectual,
+      LABOR_CATEGORIES.social,
+      LABOR_CATEGORIES.art,
+    ];
   }
 
   fullEval() {
@@ -140,48 +146,42 @@ class EvaluationBuilder {
     });
   }
 
+  getSkillValues({ pawn, skill }) {
+    const targetSkill = this.targetsSkills[pawn.id][skill];
+    if (targetSkill && targetSkill.level > 0) {
+      if (targetSkill.passion) {
+        if (targetSkill.passion === MAJOR_PASSION) {
+          if (targetSkill.level >= this.colonyStats[skill].upperQuantile - MAJOR_PASSION_VALUE) {
+            return BASE_VALUE * 2;
+          } else if (targetSkill.level >= this.colonyStats[skill].average - MAJOR_PASSION_VALUE) {
+            return BASE_VALUE;
+          }
+        } else {
+          if (targetSkill.level >= this.colonyStats[skill].upperQuantile - MINOR_PASSION_VALUE) {
+            return BASE_VALUE * 1.5;
+          } else if (targetSkill.level >= this.colonyStats[skill].average - MINOR_PASSION_VALUE) {
+            return BASE_VALUE * 0.75;
+          }
+        }
+      } else {
+        if (targetSkill.level >= this.colonyStats[skill].upperQuantile) {
+          return BASE_VALUE;
+        } else if (targetSkill.level >= this.colonyStats[skill].average) {
+          return BASE_VALUE * 0.5;
+        }
+      }
+    }
+  }
+
   compareStats() {
     this.targets.forEach((pawn) => {
       const incapableSkills = getIncapableSkills(pawn);
       SKILLS_ARRAY.forEach((skill) => {
-        if (!incapableSkills.includes(skill)) {
-          const targetSkill = this.targetsSkills[pawn.id][skill];
-          if (targetSkill && targetSkill.level > 0) {
-            if (targetSkill.passion) {
-              if (targetSkill.passion === MAJOR_PASSION) {
-                if (
-                  targetSkill.level >=
-                  this.colonyStats[skill].upperQuantile - MAJOR_PASSION_VALUE
-                ) {
-                  this.processValues(pawn.id, makeValues(BASE_VALUE * 2));
-                } else if (
-                  targetSkill.level >=
-                  this.colonyStats[skill].average - MAJOR_PASSION_VALUE
-                ) {
-                  this.processValues(pawn.id, makeValues(BASE_VALUE));
-                }
-              } else {
-                if (
-                  targetSkill.level >=
-                  this.colonyStats[skill].upperQuantile - MINOR_PASSION_VALUE
-                ) {
-                  this.processValues(pawn.id, makeValues(BASE_VALUE * 1.5));
-                } else if (
-                  targetSkill.level >=
-                  this.colonyStats[skill].average - MINOR_PASSION_VALUE
-                ) {
-                  this.processValues(pawn.id, makeValues(BASE_VALUE * 0.75));
-                }
-              }
-            } else {
-              if (targetSkill.level >= this.colonyStats[skill].upperQuantile) {
-                this.processValues(pawn.id, makeValues(BASE_VALUE));
-              } else if (targetSkill.level >= this.colonyStats[skill].average) {
-                this.processValues(pawn.id, makeValues(BASE_VALUE * 0.5));
-              }
-            }
-          }
-        }
+        const skillValue = this.getSkillValues({ pawn, skill });
+        this.processValues(pawn.id, {
+          colonistValue: !incapableSkills.includes(skill) ? skillValue : 0,
+          slaveValue: !this.slaveIncapable.includes(skill) ? skillValue : 0,
+        });
       });
     });
   }
