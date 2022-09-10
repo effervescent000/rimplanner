@@ -26,15 +26,16 @@ export const processSaveFile = ({ savegame }) => {
       $.Class === PAWN_CONSTANT &&
       def === HUMAN_CONSTANT &&
       kindDef === COLONIST &&
-      guest.hostFaction === "null"
+      !guest.guestStatus
   );
   const slaves = savegame.game.maps.li.things.thing.filter(
     ({ $, def, guest, kindDef }) =>
       $ &&
       $.Class === PAWN_CONSTANT &&
       def === HUMAN_CONSTANT &&
-      kindDef === SLAVE &&
-      guest.hostFaction === "null"
+      kindDef === COLONIST &&
+      guest.guestStatus &&
+      guest.guestStatus === SLAVE
   );
   const prisoners = savegame.game.maps.li.things.thing.filter(
     ({ $, def, guest }) =>
