@@ -22,6 +22,10 @@ const getTieredValueForSkill = (skill) => {
 };
 
 export const TRAITS = {
+  Abrasive: {
+    name: "Abrasive",
+    value: () => makeValues(VALUES.bad, { slaveValue: VALUES.neutral }),
+  },
   DrugDesire: {
     name: "Drug Desire",
     value: (pawn, trait) => {
@@ -32,7 +36,7 @@ export const TRAITS = {
   Industriousness: {
     name: "Industriousness",
     value: (pawn, trait) => {
-      const degrees = { 1: VALUES.very_good };
+      const degrees = { 1: VALUES.very_good, [-1]: VALUES.bad };
       return makeValues(degrees[trait.degree]);
     },
   },
@@ -59,7 +63,7 @@ export const TRAITS = {
   },
   TorturedArtist: {
     name: "Tortured artist",
-    value: (pawn, trait) => VALUES.bad,
+    value: (pawn, trait) => makeValues(VALUES.bad),
   },
   Undergrounder: {
     name: "Undergrounder",
@@ -118,7 +122,7 @@ export const TRAITS = {
   },
   VTE_AbsentMinded: {
     name: "Absent-minded",
-    value: () => VALUES.very_bad,
+    value: () => makeValues(VALUES.very_bad),
     source: mods.vanillaTraitsExpanded,
   },
   VTE_AnimalLover: {
@@ -199,7 +203,11 @@ export const TRAITS = {
     value: () => makeValues(VALUES.bad, { slaveValue: VALUES.neutral }),
     source: mods.vanillaTraitsExpanded,
   },
-  VTE_Rebel: { name: "Rebel", value: () => VALUES.very_bad, source: mods.vanillaTraitsExpanded },
+  VTE_Rebel: {
+    name: "Rebel",
+    value: () => makeValues(VALUES.very_bad),
+    source: mods.vanillaTraitsExpanded,
+  },
   VTE_Slob: {
     name: "Slob",
     value: () => makeValues(VALUES.bad),
@@ -232,7 +240,7 @@ export const TRAITS = {
   },
   VTE_WorldWeary: {
     name: "World weary",
-    value: () => VALUES.terrible,
+    value: () => makeValues(VALUES.terrible),
     source: mods.vanillaTraitsExpanded,
   },
 };

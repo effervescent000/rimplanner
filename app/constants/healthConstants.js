@@ -11,9 +11,13 @@ const VALUES = {
 };
 
 export const HEALTH_CONDITIONS = {
+  AlcoholAddiction: { name: "Alcohol addiction", value: () => makeValues(VALUES.terrible) },
   BadBack: {
     name: "Bad back",
     value: () => makeValues(VALUES.bad),
   },
-  AlcoholAddiction: { name: "Alcohol addiction", value: () => makeValues(VALUES.terrible) },
+  Cataract: {
+    name: "Cataract",
+    value: () => makeValues(VALUES.very_bad),
+  },
 };
