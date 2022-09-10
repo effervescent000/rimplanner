@@ -62,3 +62,5 @@ export const makeValues = (baseValue, modifiers = {}) => ({
   slaveValue: baseValue,
   ...modifiers,
 });
+
+export const roundToTwoDecimals = (num) => Math.round(num * 100) / 100;

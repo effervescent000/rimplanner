@@ -57,7 +57,14 @@ export const TRAITS = {
       return makeValues(degrees[trait.degree]);
     },
   },
-  Undergrounder: { name: "Undergrounder", value: () => makeValues(VALUES.good, {slaveValue: VALUES.very_good}) },
+  TorturedArtist: {
+    name: "Tortured artist",
+    value: (pawn, trait) => VALUES.bad,
+  },
+  Undergrounder: {
+    name: "Undergrounder",
+    value: () => makeValues(VALUES.good, { slaveValue: VALUES.very_good }),
+  },
   // mod added traits below here
   SYR_Haggler: {
     name: "Silver tongue",
@@ -108,6 +115,11 @@ export const TRAITS = {
     name: "Strong back",
     value: () => makeValues(VALUES.good),
     source: mods.individuality,
+  },
+  VTE_AbsentMinded: {
+    name: "Absent-minded",
+    value: () => VALUES.very_bad,
+    source: mods.vanillaTraitsExpanded,
   },
   VTE_AnimalLover: {
     name: "Animal Lover",
@@ -216,6 +228,11 @@ export const TRAITS = {
   VTE_Vengeful: {
     name: "Vengeful",
     value: () => makeValues(VALUES.terrible),
+    source: mods.vanillaTraitsExpanded,
+  },
+  VTE_WorldWeary: {
+    name: "World weary",
+    value: () => VALUES.terrible,
     source: mods.vanillaTraitsExpanded,
   },
 };
