@@ -40,7 +40,9 @@ export const links = () => [
   { rel: "stylesheet", href: commonStyles },
 ];
 
-const DEFAULT_SETTINGS = { savedConfig: { slaveryMode: false } };
+const DEFAULT_SETTINGS = {
+  savedConfig: { slaveryMode: false, growingSeason: 30, pctNutritionFromGrowing: 0.5 },
+};
 
 export const loader = async ({ request }) => {
   const cookieHeader = request.headers.get("Cookie");
