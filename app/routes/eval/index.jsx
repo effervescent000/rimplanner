@@ -70,6 +70,7 @@ const EvaluationIndex = () => {
               pawn={pawn}
               callback={(pawn) => setSelectedPawns([pawn])}
               selected={pawn.id === selectedPawns.id}
+              hideImage
             />
           ))}
       </div>
