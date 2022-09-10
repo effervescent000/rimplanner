@@ -93,10 +93,9 @@ export default function App() {
   useEffect(() => {
     if (saveData.initialized) {
       console.log(saveData);
-      // eventually take these config values from state
       const wb = new WarningsBuilder({
         saveData,
-        config: { ...config, pctNutritionFromGrowing: 0.5, growingSeason: 30 },
+        config,
       });
       wb.calculateNutrition();
       setWarnings(wb.warnings);
