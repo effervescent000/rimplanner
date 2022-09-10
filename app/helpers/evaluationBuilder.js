@@ -10,7 +10,7 @@ import {
 } from "../constants/skillsConstants";
 import { LABOR_CATEGORIES, MAJOR_PASSION } from "../constants/constants";
 import { TRAITS } from "../constants/traitConstants";
-import { buildLabors, getIncapableLabors, roundToTwoDecimals } from "./utils";
+import { buildLabors, getIncapableLabors, makeValues, roundToTwoDecimals } from "./utils";
 import { HEALTH_CONDITIONS } from "~/constants/healthConstants";
 
 const BASE_VALUE = 1;
@@ -46,7 +46,11 @@ class EvaluationBuilder {
     this.values = this.targets.reduce(
       (total, { id }) => ({
         ...total,
-        [id]: { bleedingOut: false, colonistValue: 0, slaveValue: 0 },
+        [id]: {
+          bleedingOut: false,
+          colonist: { value: 0, reasons: [] },
+          slave: { value: 0, reasons: [] },
+        },
       }),
       {}
     );
@@ -74,17 +78,30 @@ class EvaluationBuilder {
         ...total,
         [cur]: {
           ...this.values[cur],
-          colonistValue: roundToTwoDecimals(this.values[cur].colonistValue),
-          slaveValue: roundToTwoDecimals(this.values[cur].colonistValue),
+          colonist: {
+            ...this.values[cur].colonist,
+            value: roundToTwoDecimals(this.values[cur].colonist.value),
+          },
+          slave: {
+            ...this.values[cur].slave,
+            value: roundToTwoDecimals(this.values[cur].slave.value),
+          },
         },
       }),
       {}
     );
   }
 
-  processValues(id, values) {
-    this.values[id].colonistValue += values.colonistValue || 0;
-    this.values[id].slaveValue += values.slaveValue || 0;
+  processValues({ id, values, reason }) {
+    const colonistValue = values.colonistValue || 0;
+    const slaveValue = values.slaveValue || 0;
+
+    this.values[id].colonist.value += colonistValue;
+    this.values[id].slave.value += slaveValue;
+    if (reason) {
+      this.values[id].colonist.reasons.push({ reason, value: colonistValue });
+      this.values[id].slave.reasons.push({ reason, value: slaveValue });
+    }
   }
 
   addHealthValues() {
@@ -109,7 +126,7 @@ class EvaluationBuilder {
             } else {
               const hediffValue = HEALTH_CONDITIONS[hediff];
               if (hediffValue) {
-                this.processValues(id, hediffValue.value());
+                this.processValues({ id, values: hediffValue.value(), reason: hediff });
               }
             }
           });
@@ -121,7 +138,7 @@ class EvaluationBuilder {
         } else {
           const hediffValue = HEALTH_CONDITIONS[hediffs];
           if (hediffValue) {
-            this.processValues(id, hediffValue.value());
+            this.processValues({ id, values: hediffValue.value(), reason: hediffs });
           }
         }
       }
@@ -144,27 +161,26 @@ class EvaluationBuilder {
         if (!foundTrait) {
           console.log("Trait not found, " + traitName);
         } else {
-          this.processValues(id, foundTrait.value(pawn, trait));
+          this.processValues({ id, values: foundTrait.value(pawn, trait), reason: traitName });
         }
       });
     });
   }
 
   checkIncapables() {
+    const laborsToCheck = [
+      { labor: LABOR_CATEGORIES.firefighting.value, values: { colonistValue: -1, slaveValue: 0 } },
+      { labor: LABOR_CATEGORIES.violent.value, values: { colonistValue: -2, slaveValue: 0 } },
+      { labor: LABOR_CATEGORIES.dumb.value, values: { colonistValue: -3, slaveValue: 0 } },
+    ];
+
     this.targets.forEach((pawn) => {
       const incapableLabors = getIncapableLabors(pawn, true);
-      if (incapableLabors.includes(LABOR_CATEGORIES.firefighting.value)) {
-        this.processValues(pawn.id, { colonistValue: -1, slaveValue: 0 });
-      }
-      if (incapableLabors.includes(LABOR_CATEGORIES.violent.value)) {
-        this.processValues(pawn.id, { colonistValue: -2, slaveValue: 0 });
-      }
-      if (incapableLabors.includes(LABOR_CATEGORIES.skilled.value)) {
-        this.processValues(pawn.id, { colonistValue: -2, slaveValue: 0 });
-      }
-      if (incapableLabors.includes(LABOR_CATEGORIES.dumb.value)) {
-        this.processValues(pawn.id, { colonistValue: -2, slaveValue: 0 });
-      }
+      laborsToCheck.forEach(({ labor, values }) => {
+        if (incapableLabors.includes(labor)) {
+          this.processValues({ id: pawn.id, values, reason: `Incapable of ${labor}` });
+        }
+      });
     });
   }
 
@@ -222,6 +238,7 @@ class EvaluationBuilder {
         }
       }
     }
+    return 0;
   }
 
   compareStats() {
@@ -229,9 +246,15 @@ class EvaluationBuilder {
       const incapableSkills = makeIncapableSkills(getIncapableLabors(pawn));
       SKILLS_ARRAY.forEach((skill) => {
         const skillValue = this.getSkillValues({ pawn, skill });
-        this.processValues(pawn.id, {
+        const values = {
           colonistValue: !incapableSkills.includes(skill) ? skillValue : 0,
           slaveValue: !this.slaveIncapableSkills.includes(skill) ? skillValue : 0,
+        };
+        const reason = values.colonistValue || values.slaveValue ? skill : undefined;
+        this.processValues({
+          id: pawn.id,
+          values,
+          reason,
         });
       });
     });

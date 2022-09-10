@@ -8,15 +8,19 @@ import slaveImg from "assets/Slavery.png";
 
 const IMAGE_MAP = {
   bleedingOut: bloodImg,
-  colonistValue: townImg,
-  slaveValue: slaveImg,
+  colonist: townImg,
+  slave: slaveImg,
 };
 
 const makeTiles = (evalValues, { slaveryMode }) => {
   const tiles = [];
   Object.entries(evalValues).forEach(([key, value]) => {
-    if (value && (key !== "slaveValue" || slaveryMode)) {
-      tiles.push({ imgSrc: IMAGE_MAP[key], label: value === true ? undefined : `${value}` });
+    if (value.value !== undefined && (key !== "slave" || slaveryMode)) {
+      tiles.push({
+        imgSrc: IMAGE_MAP[key],
+        label: value.value === true ? undefined : `${value.value}`,
+        reasons: value.reasons,
+      });
     }
   });
   return tiles;
@@ -36,6 +40,7 @@ const TilesWrapper = ({ id, evalValues, config }) => {
 TilesWrapper.propTypes = {
   id: PropTypes.string.isRequired,
   evalValues: PropTypes.shape({}).isRequired,
+  config: PropTypes.shape({}).isRequired,
 };
 
 export default TilesWrapper;
