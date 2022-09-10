@@ -41,8 +41,27 @@ const EvaluationIndex = () => {
   return (
     <div className="flex">
       <div>
-        <ControlledTextInput value={search} callback={setSearch} />
-        <button onClick={() => setSelectedPawns(mapPawns)}>All on map</button>
+        <div className="flex">
+          <ControlledTextInput value={search} callback={setSearch} />
+          <div className="flex flex-col">
+            <button
+              className="border-slate-400 border-2 bg-slate-200 rounded-sm p-1"
+              onClick={() => setSelectedPawns(mapPawns)}
+            >
+              All on map
+            </button>
+            <button
+              className="border-slate-400 border-2 bg-slate-200 rounded-sm p-1"
+              onClick={() =>
+                setSelectedPawns(
+                  mapPawns.filter(({ healthTracker: { healthState: state } }) => state === "Down")
+                )
+              }
+            >
+              All downed on map
+            </button>
+          </div>
+        </div>
         {[...worldPawns, ...mapPawns]
           .filter(({ name: { nick } }) => nick && nick.toLowerCase().includes(search.toLowerCase()))
           .map((pawn) => (
