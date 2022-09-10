@@ -51,20 +51,23 @@ export const LABORS = [
 ];
 
 export const LABOR_CATEGORIES = {
-  violent: "Violent",
-  firefighting: "Firefighting",
-  caring: "Caring",
-  plantWork: "Plant Work",
-  social: "Social",
-  dumb: "Dumb Labor",
-  skilled: "Skilled Labor",
-  intellectual: "Intellectual",
-  animals: "Animals",
-  cooking: "Cooking",
-  hauling: "Hauling",
-  cleaning: "Cleaning",
-  mining: "Mining",
-  art: "Art",
+  violent: { value: "Violent", skills: [SKILLS.shooting.name, SKILLS.melee.name] },
+  firefighting: { value: "Firefighting" },
+  caring: { value: "Caring", skills: [SKILLS.medicine.name] },
+  plantWork: { value: "Plant Work", skills: [SKILLS.plants.name] },
+  social: { value: "Social", skills: [SKILLS.social.name] },
+  dumb: { value: "Dumb Labor" },
+  skilled: {
+    value: "Skilled Labor",
+    skills: [SKILLS.crafting.name, SKILLS.cooking.name, SKILLS.intellectual.name],
+  },
+  intellectual: { value: "Intellectual", skills: [SKILLS.intellectual.name] },
+  animals: { value: "Animals", skills: [SKILLS.animals.name] },
+  cooking: { value: "Cooking", skills: [SKILLS.cooking.name] },
+  hauling: { value: "Hauling" },
+  cleaning: { value: "Cleaning" },
+  mining: { value: "Mining", skills: [SKILLS.mining.name] },
+  art: { value: "Art", skills: [SKILLS.artistic.name] },
 };
 
 export const BASE_GAME_LABORS = [

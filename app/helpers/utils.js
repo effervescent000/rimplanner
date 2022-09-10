@@ -21,10 +21,14 @@ export const isPawnCapable = ({
   return !pawnCantDo.length;
 };
 
-export const getIncapableSkills = ({ story: { childhood, adulthood } }) => [
-  ...(BACKSTORIES_LOOKUP[childhood] || []),
-  ...(BACKSTORIES_LOOKUP[adulthood] || []),
-];
+export const getIncapableLabors = ({ story: { childhood, adulthood } }, laborsOnly = false) => {
+  const labors = [
+    ...(BACKSTORIES_LOOKUP[childhood] || []),
+    ...(BACKSTORIES_LOOKUP[adulthood] || []),
+  ];
+  if (!laborsOnly) return labors;
+  return labors.reduce((total, cur) => [...total, cur.value], []);
+};
 
 export const buildLabors = (modList) => {
   const labors = [...BASE_GAME_LABORS];

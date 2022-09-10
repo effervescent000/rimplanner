@@ -10,7 +10,7 @@ import {
 } from "../constants/skillsConstants";
 import { LABOR_CATEGORIES, MAJOR_PASSION } from "../constants/constants";
 import { TRAITS } from "../constants/traitConstants";
-import { buildLabors, getIncapableSkills, roundToTwoDecimals } from "./utils";
+import { buildLabors, getIncapableLabors, roundToTwoDecimals } from "./utils";
 import { HEALTH_CONDITIONS } from "~/constants/healthConstants";
 
 const BASE_VALUE = 1;
@@ -23,6 +23,9 @@ const INJURIES_MAP = {
   Gunshot: 0.06,
   Cut: 0.06,
 };
+
+const makeIncapableSkills = (laborCategories) =>
+  laborCategories.reduce((total, cur) => [...total, ...(cur.skills || [])], []);
 
 class EvaluationBuilder {
   constructor({ targets, playerPawns, modList, config }) {
@@ -49,11 +52,12 @@ class EvaluationBuilder {
     );
     [this.labors, this.laborsLookup] = buildLabors(modList);
     // this is here instead of a constant because I want to optionally include shooting based on user config
-    this.slaveIncapable = [
+    this.slaveIncapableLabors = [
       LABOR_CATEGORIES.intellectual,
       LABOR_CATEGORIES.social,
       LABOR_CATEGORIES.art,
     ];
+    this.slaveIncapableSkills = makeIncapableSkills(this.slaveIncapableLabors);
   }
 
   fullEval() {
@@ -148,18 +152,17 @@ class EvaluationBuilder {
 
   checkIncapables() {
     this.targets.forEach((pawn) => {
-      // slaves will do all tasks that are disabled by their backstories except violence
-      const incapableSkills = getIncapableSkills(pawn);
-      if (incapableSkills.includes(LABOR_CATEGORIES.firefighting)) {
+      const incapableLabors = getIncapableLabors(pawn, true);
+      if (incapableLabors.includes(LABOR_CATEGORIES.firefighting.value)) {
         this.processValues(pawn.id, { colonistValue: -1, slaveValue: 0 });
       }
-      if (incapableSkills.includes(LABOR_CATEGORIES.violent)) {
+      if (incapableLabors.includes(LABOR_CATEGORIES.violent.value)) {
         this.processValues(pawn.id, { colonistValue: -2, slaveValue: 0 });
       }
-      if (incapableSkills.includes(LABOR_CATEGORIES.skilled)) {
+      if (incapableLabors.includes(LABOR_CATEGORIES.skilled.value)) {
         this.processValues(pawn.id, { colonistValue: -2, slaveValue: 0 });
       }
-      if (incapableSkills.includes(LABOR_CATEGORIES.dumb)) {
+      if (incapableLabors.includes(LABOR_CATEGORIES.dumb.value)) {
         this.processValues(pawn.id, { colonistValue: -2, slaveValue: 0 });
       }
     });
@@ -223,12 +226,12 @@ class EvaluationBuilder {
 
   compareStats() {
     this.targets.forEach((pawn) => {
-      const incapableSkills = getIncapableSkills(pawn);
+      const incapableSkills = makeIncapableSkills(getIncapableLabors(pawn));
       SKILLS_ARRAY.forEach((skill) => {
         const skillValue = this.getSkillValues({ pawn, skill });
         this.processValues(pawn.id, {
           colonistValue: !incapableSkills.includes(skill) ? skillValue : 0,
-          slaveValue: !this.slaveIncapable.includes(skill) ? skillValue : 0,
+          slaveValue: !this.slaveIncapableSkills.includes(skill) ? skillValue : 0,
         });
       });
     });
