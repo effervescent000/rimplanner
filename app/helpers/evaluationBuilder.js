@@ -1,12 +1,16 @@
 import { buildColonyStats } from "./rosterHelpers";
 import {
+  MAJOR_PASSION_MODIFIER,
   MAJOR_PASSION_VALUE,
+  MINIMUM_USEFUL_SKILL_LEVEL,
+  MINOR_PASSION_MODIFIER,
   MINOR_PASSION_VALUE,
+  NO_PASSION_MODIFIER,
   SKILLS_ARRAY,
 } from "../constants/skillsConstants";
 import { LABOR_CATEGORIES, MAJOR_PASSION } from "../constants/constants";
 import { TRAITS } from "../constants/traitConstants";
-import { buildLabors, getIncapableSkills, makeValues } from "./utils";
+import { buildLabors, getIncapableSkills, roundToTwoDecimals } from "./utils";
 import { HEALTH_CONDITIONS } from "~/constants/healthConstants";
 
 const BASE_VALUE = 1;
@@ -57,6 +61,21 @@ class EvaluationBuilder {
     this.checkIncapables();
     this.addTraitValues();
     this.addHealthValues();
+    this.cleanValues();
+  }
+
+  cleanValues() {
+    this.values = Object.keys(this.values).reduce(
+      (total, cur) => ({
+        ...total,
+        [cur]: {
+          ...this.values[cur],
+          colonistValue: roundToTwoDecimals(this.values[cur].colonistValue),
+          slaveValue: roundToTwoDecimals(this.values[cur].colonistValue),
+        },
+      }),
+      {}
+    );
   }
 
   processValues(id, values) {
@@ -151,23 +170,52 @@ class EvaluationBuilder {
     if (targetSkill && targetSkill.level > 0) {
       if (targetSkill.passion) {
         if (targetSkill.passion === MAJOR_PASSION) {
-          if (targetSkill.level >= this.colonyStats[skill].upperQuantile - MAJOR_PASSION_VALUE) {
-            return BASE_VALUE * 2;
-          } else if (targetSkill.level >= this.colonyStats[skill].average - MAJOR_PASSION_VALUE) {
-            return BASE_VALUE;
+          if (
+            targetSkill.level >=
+            Math.max(
+              this.colonyStats[skill].upperQuantile - MAJOR_PASSION_VALUE,
+              MINIMUM_USEFUL_SKILL_LEVEL
+            )
+          ) {
+            return BASE_VALUE * 2 * MAJOR_PASSION_MODIFIER;
+          } else if (
+            targetSkill.level >=
+            Math.max(
+              this.colonyStats[skill].average - MAJOR_PASSION_VALUE,
+              MINIMUM_USEFUL_SKILL_LEVEL
+            )
+          ) {
+            return BASE_VALUE * MAJOR_PASSION_MODIFIER;
           }
         } else {
-          if (targetSkill.level >= this.colonyStats[skill].upperQuantile - MINOR_PASSION_VALUE) {
-            return BASE_VALUE * 1.5;
-          } else if (targetSkill.level >= this.colonyStats[skill].average - MINOR_PASSION_VALUE) {
-            return BASE_VALUE * 0.75;
+          if (
+            targetSkill.level >=
+            Math.max(
+              this.colonyStats[skill].upperQuantile - MINOR_PASSION_VALUE,
+              MINIMUM_USEFUL_SKILL_LEVEL
+            )
+          ) {
+            return BASE_VALUE * 1.5 * MINOR_PASSION_MODIFIER;
+          } else if (
+            targetSkill.level >=
+            Math.max(
+              this.colonyStats[skill].average - MINOR_PASSION_VALUE,
+              MINIMUM_USEFUL_SKILL_LEVEL
+            )
+          ) {
+            return BASE_VALUE * 0.75 * MINOR_PASSION_MODIFIER;
           }
         }
       } else {
-        if (targetSkill.level >= this.colonyStats[skill].upperQuantile) {
-          return BASE_VALUE;
-        } else if (targetSkill.level >= this.colonyStats[skill].average) {
-          return BASE_VALUE * 0.5;
+        if (
+          targetSkill.level >=
+          Math.max(this.colonyStats[skill].upperQuantile, MINIMUM_USEFUL_SKILL_LEVEL)
+        ) {
+          return BASE_VALUE * NO_PASSION_MODIFIER;
+        } else if (
+          targetSkill.level >= Math.max(this.colonyStats[skill].average, MINIMUM_USEFUL_SKILL_LEVEL)
+        ) {
+          return BASE_VALUE * 0.5 * NO_PASSION_MODIFIER;
         }
       }
     }
