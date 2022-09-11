@@ -1,5 +1,7 @@
-import { useState, useEffect } from "react";
-import { useFetcher, useOutletContext } from "@remix-run/react";
+import { useState, useEffect, useContext } from "react";
+import { useFetcher } from "@remix-run/react";
+
+import RWContext from "~/context/RWContext";
 
 import ControlledTextInput from "~/components/common/controlled-text-input";
 import PawnCard from "~/components/common/pawn-card";
@@ -8,7 +10,7 @@ const EvaluationIndex = () => {
   const {
     saveData: { worldPawns, mapPawns, colonists, slaves, modList },
     config,
-  } = useOutletContext();
+  } = useContext(RWContext);
   const [search, setSearch] = useState("");
   const [selectedPawns, setSelectedPawns] = useState([]);
   const [evalStats, setEvalStats] = useState({ values: {}, ready: false });

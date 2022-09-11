@@ -1,11 +1,13 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useContext } from "react";
 import { useDropzone } from "react-dropzone";
 import { parseString } from "xml2js";
 import PropTypes from "prop-types";
 
 import { processSaveFile } from "~/helpers/saveFileProcessingHelper";
+import RWContext from "~/context/RWContext";
 
-const SaveFileDropzone = ({ setSaveData }) => {
+const SaveFileDropzone = () => {
+  const { setSaveData } = useContext(RWContext);
   const [processing, setProcessing] = useState(false);
 
   const onDrop = useCallback(
@@ -51,10 +53,6 @@ const SaveFileDropzone = ({ setSaveData }) => {
       </div>
     </div>
   );
-};
-
-SaveFileDropzone.propTypes = {
-  setSaveData: PropTypes.func.isRequired,
 };
 
 export default SaveFileDropzone;

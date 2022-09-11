@@ -1,12 +1,12 @@
-import { useState, useEffect, useCallback } from "react";
-import { useOutletContext } from "@remix-run/react";
+import { useState, useEffect, useCallback, useContext } from "react";
 import { debounce } from "lodash";
 
 // HELPERS
 import { makeSettings } from "~/helpers/settingsHelpers";
+import RWContext from "~/context/RWContext";
 
 const SettingsPage = () => {
-  const { config, setConfig } = useOutletContext();
+  const { config, setConfig } = useContext(RWContext);
   const [errors, setErrors] = useState({});
   const [formValues, setFormValues] = useState(
     Object.keys(config).reduce(
