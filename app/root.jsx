@@ -16,6 +16,8 @@ import { Nav } from "rsuite";
 // HELPERS
 import WarningsBuilder from "./helpers/warningsBuilder";
 import { savedConfig } from "./cookies";
+import RWContext from "./context/RWContext";
+import { json } from "@remix-run/node";
 
 // COMPONENTS
 import SaveFileDropzone from "~/components/save-file-dropzone";
@@ -26,7 +28,6 @@ import WarningsWrapper from "./components/warnings/warnings-wrapper";
 import tailwindStyles from "~/styles/tailwind.css";
 import rsuiteStyles from "rsuite/dist/rsuite.min.css";
 import commonStyles from "~/styles/common.css";
-import { json } from "@remix-run/node";
 
 export const meta = () => ({
   charset: "utf-8",
@@ -112,34 +113,36 @@ export default function App() {
   }, []);
 
   return (
-    <html lang="en">
-      <head>
-        <Meta />
-        <Links />
-        <Scripts />
-      </head>
-      <body>
-        <div className="page-wrapper">
-          <div className="flex gap-10">
-            <SaveFileDropzone setSaveData={setSaveData} />
-            <PawnRow playerPawns={[...saveData.colonists, ...saveData.slaves]} config={config} />
-            <WarningsWrapper warnings={warnings} config={config} />
-          </div>
+    <RWContext.Provider value={{ saveData, setSaveData, config, setConfig }}>
+      <html lang="en">
+        <head>
+          <Meta />
+          <Links />
+          <Scripts />
+        </head>
+        <body>
+          <div className="page-wrapper">
+            <div className="flex gap-10">
+              <SaveFileDropzone />
+              <PawnRow />
+              <WarningsWrapper warnings={warnings} />
+            </div>
 
-          <Nav
-            appearance="tabs"
-            activeKey={location.pathname}
-            onSelect={(key) => navigate(key, { replace: true })}
-          >
-            <Nav.Item eventKey="work">Work priorities</Nav.Item>
-            <Nav.Item eventKey="eval">Evaluation</Nav.Item>
-            <Nav.Item eventKey="settings">Settings</Nav.Item>
-          </Nav>
-          <Outlet context={{ saveData, setSaveData, config, setConfig }} />
-        </div>
-        <ScrollRestoration />
-        <LiveReload />
-      </body>
-    </html>
+            <Nav
+              appearance="tabs"
+              activeKey={location.pathname}
+              onSelect={(key) => navigate(key, { replace: true })}
+            >
+              <Nav.Item eventKey="work">Work priorities</Nav.Item>
+              <Nav.Item eventKey="eval">Evaluation</Nav.Item>
+              <Nav.Item eventKey="settings">Settings</Nav.Item>
+            </Nav>
+            <Outlet />
+          </div>
+          <ScrollRestoration />
+          <LiveReload />
+        </body>
+      </html>
+    </RWContext.Provider>
   );
 }

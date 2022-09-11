@@ -1,7 +1,7 @@
-import { useOutletContext } from "@remix-run/react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 
 import { buildLaborsList } from "~/helpers/rosterHelpers";
+import RWContext from "~/context/RWContext";
 
 import PrioritiesWrapper from "~/components/work-priorities/priorities-wrapper";
 import PriorityBuilder from "~/helpers/priorityBuilder";
@@ -9,7 +9,7 @@ import PriorityBuilder from "~/helpers/priorityBuilder";
 const WorkPriorityIndex = () => {
   const {
     saveData: { colonists, slaves, modList },
-  } = useOutletContext();
+  } = useContext(RWContext);
   const [finalPrios, setFinalPrios] = useState({});
 
   useEffect(() => {

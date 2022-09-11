@@ -26,6 +26,13 @@ export const TRAITS = {
     name: "Abrasive",
     value: () => makeValues(VALUES.bad, { slaveValue: VALUES.neutral }),
   },
+  Beauty: {
+    name: "Beauty",
+    value: (pawn, trait) => {
+      const degrees = { 1: VALUES.good, [-1]: VALUES.very_bad };
+      return makeValues(degrees[trait.degree]);
+    },
+  },
   DrugDesire: {
     name: "Drug Desire",
     value: (pawn, trait) => {
@@ -42,6 +49,13 @@ export const TRAITS = {
   },
   Jealous: { name: "Jealous", value: () => makeValues(VALUES.very_bad) },
   NightOwl: { name: "Night owl", value: () => makeValues(VALUES.neutral) },
+  Neurotic: {
+    name: "Neurotic",
+    value: (pawn, trait) => {
+      const degrees = { 1: VALUES.good, 2: VALUES.good };
+      return makeValues(degrees[trait.degree]);
+    },
+  },
   Psychopath: { name: "Psycopath", value: () => makeValues(VALUES.excellent) },
   Pyromaniac: { name: "Pyromaniac", value: () => makeValues(VALUES.very_bad) },
   QuickSleeper: { name: "Quick sleeper", value: () => makeValues(VALUES.very_good) },
@@ -142,6 +156,11 @@ export const TRAITS = {
     name: "Ocean lover",
     // TODO maybe inlcude map data, if there's a way to figure out features?
     value: () => makeValues(VALUES.neutral),
+    source: mods.vanillaTraitsExpanded,
+  },
+  VTE_Clumsy: {
+    name: "Clumsy",
+    value: () => makeValues(VALUES.bad),
     source: mods.vanillaTraitsExpanded,
   },
   VTE_Coward: {

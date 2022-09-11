@@ -10,6 +10,7 @@ const CHILDHOOD_BACKSTORIES = [
   { name: "Bookworm19", incapable: [LABOR_CATEGORIES.dumb] },
   { name: "StudentEngineer34", incapable: [LABOR_CATEGORIES.dumb] },
   { name: "Killer41", incapable: [LABOR_CATEGORIES.social] },
+  { name: "SoldiersKid55", incapable: [LABOR_CATEGORIES.plantWork, LABOR_CATEGORIES.animals] },
   {
     name: "ScienceProdigy65",
     incapable: [LABOR_CATEGORIES.firefighting, LABOR_CATEGORIES.violent],
