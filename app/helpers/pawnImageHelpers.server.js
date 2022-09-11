@@ -28,7 +28,14 @@ const getSkinColor = (melanin) => {
   return "#694424";
 };
 
-export const composeImage = async ({ gender, head, body, hairDef, hairColor, melanin }) => {
+export const composeImage = async ({
+  gender = "Male",
+  head,
+  body,
+  hairDef,
+  hairColor,
+  melanin,
+}) => {
   try {
     const baseImage = await jimp.read(BASE_ASSET_URL + `bodies/${body}.png`);
     baseImage.blit(
