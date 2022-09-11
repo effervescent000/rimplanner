@@ -10,7 +10,7 @@ import {
 } from "../constants/skillsConstants";
 import { LABOR_CATEGORIES, MAJOR_PASSION } from "../constants/constants";
 import { TRAITS } from "../constants/traitConstants";
-import { buildLabors, getIncapableLabors, makeValues, roundToTwoDecimals } from "./utils";
+import { buildLabors, getIncapableLabors, roundToTwoDecimals } from "./utils";
 import { HEALTH_CONDITIONS } from "~/constants/healthConstants";
 
 const BASE_VALUE = 1;
@@ -136,9 +136,10 @@ class EvaluationBuilder {
             this.values[id].bleedingOut = true;
           }
         } else {
-          const hediffValue = HEALTH_CONDITIONS[hediffs];
+          const hediff = hediffs.def;
+          const hediffValue = HEALTH_CONDITIONS[hediff];
           if (hediffValue) {
-            this.processValues({ id, values: hediffValue.value(), reason: hediffs });
+            this.processValues({ id, values: hediffValue.value(), reason: hediff });
           }
         }
       }

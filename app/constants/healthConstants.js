@@ -20,4 +20,8 @@ export const HEALTH_CONDITIONS = {
     name: "Cataract",
     value: () => makeValues(VALUES.very_bad),
   },
+  SmokeleafAddiction: {
+    name: "Smokeleaf dependence",
+    value: () => makeValues(VALUES.terrible),
+  },
 };
