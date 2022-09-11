@@ -3,11 +3,11 @@ import { buildLaborsList } from "./rosterHelpers";
 import { buildLabors, isPawnCapable } from "./utils";
 
 class PriorityBuilder {
-  constructor({ pawns, modList, rawPriorities }) {
+  constructor({ pawns, modList, currentPriorities }) {
     this.pawns = pawns;
     this.numPawns = this.pawns.length;
     this.modList = modList;
-    this.rawPriorities = rawPriorities;
+    this.currentPriorities = currentPriorities;
     this.priorities = {};
     this.numToAssign = Math.ceil(this.numPawns * (1 / 3));
     [this.labors, this.laborsLookup] = buildLabors(this.modList);
@@ -118,7 +118,7 @@ class PriorityBuilder {
   }
 
   getCurrentPriority(pawn, idx) {
-    return this.rawPriorities.find(({ name }) => name === pawn).priorities[idx];
+    return this.currentPriorities.find(({ name }) => name === pawn).priorities[idx];
   }
 }
 

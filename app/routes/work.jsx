@@ -1,4 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect, useContext } from "react";
+import { useFetcher } from "@remix-run/react";
 
 import { buildLaborsList } from "~/helpers/rosterHelpers";
 import RWContext from "~/context/RWContext";
@@ -7,26 +9,31 @@ import PrioritiesWrapper from "~/components/work-priorities/priorities-wrapper";
 import PriorityBuilder from "~/helpers/priorityBuilder";
 
 const WorkPriorityIndex = () => {
+  const fetcher = useFetcher();
   const {
     saveData: { colonists, slaves, modList },
+    config,
   } = useContext(RWContext);
   const [finalPrios, setFinalPrios] = useState({});
 
   useEffect(() => {
-    const priorities = [...colonists, ...slaves].map(({ name, workSettings }) => ({
+    const currentPriorities = [...colonists, ...slaves].map(({ name, workSettings }) => ({
       name: name.nick,
       priorities: workSettings.priorities.vals.li,
     }));
-    if (modList.length && priorities.length) {
-      const priorityBuilder = new PriorityBuilder({
-        pawns: [...colonists, ...slaves],
-        modList,
-        rawPriorities: priorities,
-      });
-      priorityBuilder.buildSuggestions();
-      setFinalPrios(priorityBuilder.getOrderedPriorities());
+    if (modList.length && currentPriorities.length) {
+      fetcher.submit(
+        { values: JSON.stringify({ colonists, slaves, modList, config, currentPriorities }) },
+        { method: "post", action: "/work/builder" }
+      );
     }
-  }, [colonists, slaves, modList]);
+  }, [colonists, slaves, modList, config]);
+
+  useEffect(() => {
+    if (fetcher.type === "done") {
+      setFinalPrios(fetcher.data.suggestions);
+    }
+  }, [fetcher.type]);
 
   return (
     <div>
