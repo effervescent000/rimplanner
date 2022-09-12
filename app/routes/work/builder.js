@@ -3,9 +3,16 @@ import PriorityBuilder from "~/helpers/priorityBuilder";
 
 export const action = async ({ request }) => {
   const body = await request.formData();
-  const { colonists, slaves, modList, currentPriorities, config, action } = JSON.parse(
-    body.get("values")
-  );
+  const {
+    colonists,
+    slaves,
+    modList,
+    currentPriorities,
+    config,
+    homeZoneSize,
+    growingZones,
+    action,
+  } = JSON.parse(body.get("values"));
   if (action) {
     // do something with that action
   } else {
@@ -14,6 +21,8 @@ export const action = async ({ request }) => {
       pawns: [...colonists, ...slaves],
       modList,
       currentPriorities,
+      homeZoneSize,
+      growingZones,
       config,
     });
     priorityBuilder.buildSuggestions();

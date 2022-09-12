@@ -1,13 +1,19 @@
-import { DEFAULT_LABOR_PRIO, MAJOR_PASSION } from "../constants/constants";
+import { round } from "lodash";
+import { GROW_DAY_DIVISOR, PLANTS } from "~/constants/plantsConstants";
+import { DEFAULT_LABOR_PRIO, HOUR, LABORS_OBJ, MAJOR_PASSION } from "../constants/constants";
 import { buildLaborsList } from "./rosterHelpers";
 import { buildLabors, isPawnCapable } from "./utils";
 
 class PriorityBuilder {
-  constructor({ pawns, modList, currentPriorities }) {
+  constructor({ pawns, modList, currentPriorities, config, homeZoneSize, growingZones }) {
     this.pawns = pawns;
     this.numPawns = this.pawns.length;
     this.modList = modList;
     this.currentPriorities = currentPriorities;
+    this.config = config;
+    this.homeZoneSize = homeZoneSize;
+    this.growingZones = growingZones;
+
     this.priorities = {};
     this.numToAssign = Math.ceil(this.numPawns * (1 / 3));
     [this.labors, this.laborsLookup] = buildLabors(this.modList);
@@ -33,6 +39,35 @@ class PriorityBuilder {
     this.pawnSkills.sort(
       (a, b) => this.getSkillValue(b.skills[skill]) - this.getSkillValue(a.skills[skill])
     );
+  }
+
+  makeManHours() {
+    const makeGrowingTimePerDay = () =>
+      this.growingZones.map(({ plantDefToGrow: plant, cells: { li: cells } }) => {
+        const plantInfo = PLANTS[plant];
+        return {
+          plant,
+          manHoursPerDay:
+            ((plantInfo.sowWork || 170) +
+              ((plantInfo.harvestWork || 200) / (plantInfo.growDays / GROW_DAY_DIVISOR)) *
+                cells.length) /
+            HOUR,
+        };
+      });
+
+    return {
+      [LABORS_OBJ.construction.name]: (this.homeZoneSize / 1000) * 4,
+      [LABORS_OBJ.growing.name]: makeGrowingTimePerDay().reduce(
+        (total, cur) => total + cur.manHoursPerDay,
+        0
+      ),
+      [LABORS_OBJ.hunting.name]: this.config.huntingManHoursPerPawn * this.numPawns,
+      [LABORS_OBJ.cooking.name]: this.config.cookingManHoursPerPawn * this.numPawns,
+    };
+  }
+
+  buildSuggestionsV2() {
+    const manHours = this.makeManHours();
   }
 
   buildSuggestions() {

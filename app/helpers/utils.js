@@ -1,5 +1,5 @@
 import { BACKSTORIES_LOOKUP } from "../constants/backstoryConstants";
-import { BASE_GAME_LABORS, MOD_LABORS } from "../constants/constants";
+import { BASE_GAME_LABORS, MOD_LABORS, SLAVE } from "../constants/constants";
 import { mods } from "~/constants/modConstants";
 
 export const getFactionKey = (faction) => `Faction_${faction.loadID}`;
@@ -68,3 +68,5 @@ export const makeValues = (baseValue, modifiers = {}) => ({
 });
 
 export const roundToTwoDecimals = (num) => Math.round(num * 100) / 100;
+
+export const isSlave = (pawn) => pawn.guest.guestStatus && pawn.guest.guestStatus === SLAVE;

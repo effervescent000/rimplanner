@@ -6,12 +6,11 @@ import { buildLaborsList } from "~/helpers/rosterHelpers";
 import RWContext from "~/context/RWContext";
 
 import PrioritiesWrapper from "~/components/work-priorities/priorities-wrapper";
-import PriorityBuilder from "~/helpers/priorityBuilder";
 
 const WorkPriorityIndex = () => {
   const fetcher = useFetcher();
   const {
-    saveData: { colonists, slaves, modList },
+    saveData: { colonists, slaves, modList, homeZoneSize, growingZones },
     config,
   } = useContext(RWContext);
   const [finalPrios, setFinalPrios] = useState({});
@@ -23,7 +22,17 @@ const WorkPriorityIndex = () => {
     }));
     if (modList.length && currentPriorities.length) {
       fetcher.submit(
-        { values: JSON.stringify({ colonists, slaves, modList, config, currentPriorities }) },
+        {
+          values: JSON.stringify({
+            colonists,
+            slaves,
+            modList,
+            config,
+            currentPriorities,
+            homeZoneSize,
+            growingZones,
+          }),
+        },
         { method: "post", action: "/work/builder" }
       );
     }

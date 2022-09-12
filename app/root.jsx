@@ -87,6 +87,7 @@ export default function App() {
     slaves: [],
     modList: [],
     growingZones: [],
+    homeZoneSize: 0,
     initialized: false,
   });
   const [warnings, setWarnings] = useState([]);
