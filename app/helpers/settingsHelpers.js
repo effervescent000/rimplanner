@@ -13,4 +13,14 @@ export const makeSettings = () => [
     Component: ControlledTextInput,
     label: "% of food from growing",
   },
+  {
+    key: "cookingManHoursPerPawn",
+    Component: ControlledTextInput,
+    label: "# of hours of cooking per pawn in colony",
+  },
+  {
+    key: "huntingManHoursPerPawn",
+    Component: ControlledTextInput,
+    label: "# of hours of cooking per pawn in colony",
+  },
 ];

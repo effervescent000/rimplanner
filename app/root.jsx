@@ -42,7 +42,13 @@ export const links = () => [
 ];
 
 const DEFAULT_SETTINGS = {
-  savedConfig: { slaveryMode: false, growingSeason: 30, pctNutritionFromGrowing: 0.5 },
+  savedConfig: {
+    slaveryMode: false,
+    growingSeason: 30,
+    pctNutritionFromGrowing: 0.5,
+    cookingManHoursPerPawn: 2,
+    huntingManHoursPerPawn: 1,
+  },
 };
 
 export const loader = async ({ request }) => {
