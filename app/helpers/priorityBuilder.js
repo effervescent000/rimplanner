@@ -26,6 +26,10 @@ class PriorityBuilder {
     this.pawns.forEach(({ name: { nick: name } }) => (this.priorities[name] = []));
     this.numToAssign = Math.ceil(this.numPawns * (1 / 3));
     [this.labors, this.laborsLookup] = buildLabors(this.modList);
+    this.laborLabels = buildLaborsList(this.modList).reduce(
+      (total, cur) => [...total, cur.name],
+      []
+    );
     // this is here instead of a constant because I want to optionally include shooting based on user config
     this.slaveIncapableLabors = [
       LABOR_CATEGORIES.intellectual,
@@ -73,18 +77,18 @@ class PriorityBuilder {
 
     return {
       [LABORS_OBJ.construction.name]: (this.homeZoneSize / 1000) * 4,
-      [LABORS_OBJ.growing.name]: makeGrowingTimePerDay().reduce(
-        (total, cur) => total + cur.manHoursPerDay,
-        0
-      ) * 1.05,
+      [LABORS_OBJ.growing.name]:
+        makeGrowingTimePerDay().reduce((total, cur) => total + cur.manHoursPerDay, 0) * 1.05,
       [LABORS_OBJ.hunting.name]: this.config.huntingManHoursPerPawn * this.numPawns,
       [LABORS_OBJ.cooking.name]: this.config.cookingManHoursPerPawn * this.numPawns,
       [LABORS_OBJ.researching.name]: AVAILABLE_PAWN_HOURS,
     };
   }
 
-  pawnHasFocusTask(pawnName) {
-    return !!this.priorities[pawnName].filter(({ suggested }) => suggested === HIGH_PRIO).length;
+  pawnHasAvailableTime(pawnName) {
+    const tasksWithHours = this.priorities[pawnName].filter(({ hours }) => hours);
+    const currentHours = tasksWithHours.reduce((total, cur) => total + cur.hours, 0);
+    return currentHours < AVAILABLE_PAWN_HOURS * 0.8;
   }
 
   buildSuggestionsV2() {
@@ -116,7 +120,7 @@ class PriorityBuilder {
           this.sortBySkill(labor.skill);
         }
         if (labor.focusTask) {
-          const hoursForTask = manHours[labor.name];
+          let hoursForTask = manHours[labor.name];
           const pawnsNeededForTask = Math.ceil(hoursForTask / AVAILABLE_PAWN_HOURS);
           let counter = 0;
           while (
@@ -132,16 +136,19 @@ class PriorityBuilder {
                 laborsLookup: this.laborsLookup,
                 slaveIncapableSkills: this.slaveIncapableLabors,
               }) &&
-              !this.pawnHasFocusTask(pawnName)
+              hoursForTask > 0 &&
+              this.pawnHasAvailableTime(pawnName)
             ) {
+              const hours = Math.min(hoursForTask, AVAILABLE_PAWN_HOURS);
               this.addLaborPriority({
                 pawnName,
                 laborName: labor.name,
                 suggestedPrio: labor.maxPrio ? MAX_PRIO : HIGH_PRIO,
                 laborIdx: idx,
+                hours: Math.min(hoursForTask, AVAILABLE_PAWN_HOURS),
               });
+              hoursForTask -= hours;
             }
-
             counter++;
           }
         } else {
@@ -172,11 +179,12 @@ class PriorityBuilder {
     });
   }
 
-  addLaborPriority({ pawnName, laborName, suggestedPrio, laborIdx }) {
+  addLaborPriority({ pawnName, laborName, suggestedPrio, laborIdx, hours }) {
     this.priorities[pawnName].push({
       name: laborName,
       suggested: suggestedPrio,
       current: this.getCurrentPriority(pawnName, laborIdx),
+      hours,
     });
   }
 
@@ -261,7 +269,7 @@ class PriorityBuilder {
   }
 
   getCurrentPriority(pawn, idx) {
-    return this.currentPriorities.find(({ name }) => name === pawn).priorities[idx];
+    return this.currentPriorities.find(({ name }) => name === pawn).priorities[idx].currentPrio;
   }
 }
 

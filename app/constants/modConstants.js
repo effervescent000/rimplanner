@@ -6,6 +6,7 @@ export const mods = {
   individuality: "syrchalis.individuality",
   quarry: "ogliss.thewhitecrayon.quarry",
   vanillaBooksExpanded: "vanillaexpanded.vbookse",
+  vanillaFishingExpanded: "vanillaexpanded.vfecore",
   vanillaGeneticsExpanded: "vanillaexpanded.vgeneticse",
   vanillaTraitsExpanded: "vanillaexpanded.vtexe",
 };
