@@ -7,7 +7,7 @@ class WarningsBuilder {
     saveData: { growingZones, colonists, slaves, prisoners },
     config: { pctNutritionFromGrowing, growingSeason },
   }) {
-    this.growingZones = growingZones;
+    this.growingZones = growingZones.filter(({ allowSow }) => allowSow !== "False");
     this.cropsPlanted = this.growingZones
       .filter(({ plantDefToGrow: plant }) => FOOD_PLANTS_ARRAY.includes(plant))
       .reduce(
