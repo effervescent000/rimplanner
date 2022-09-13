@@ -25,7 +25,7 @@ export const action = async ({ request }) => {
       growingZones,
       config,
     });
-    priorityBuilder.buildSuggestionsV2();
+    priorityBuilder.buildSuggestionsV3();
     const suggestions = priorityBuilder.getOrderedPriorities();
     return json({ suggestions });
   }

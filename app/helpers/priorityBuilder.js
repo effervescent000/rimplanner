@@ -10,7 +10,7 @@ import {
   MAX_PRIO,
 } from "../constants/constants";
 import { buildLaborsList } from "./rosterHelpers";
-import { buildLabors, isPawnCapable } from "./utils";
+import { buildLabors, isPawnCapable, weightedChoice } from "./utils";
 
 class PriorityBuilder {
   constructor({ pawns, modList, currentPriorities, config, homeZoneSize, growingZones }) {
@@ -44,6 +44,13 @@ class PriorityBuilder {
           skills: { li: skills },
         },
       }) => ({ name, skills: skills.reduce((total, cur) => ({ ...total, [cur.def]: cur }), {}) })
+    );
+    this.pawnSkillsV2 = this.pawnSkills.reduce(
+      (total, cur) => ({
+        ...total,
+        [cur.name]: cur.skills,
+      }),
+      {}
     );
   }
 
@@ -85,10 +92,149 @@ class PriorityBuilder {
     };
   }
 
-  pawnHasAvailableTime(pawnName) {
-    const tasksWithHours = this.priorities[pawnName].filter(({ hours }) => hours);
+  pawnHasAvailableTime(pawnName, priorities) {
+    const tasksWithHours = (priorities || this.priorities)[pawnName].filter(({ hours }) => hours);
     const currentHours = tasksWithHours.reduce((total, cur) => total + cur.hours, 0);
     return currentHours < AVAILABLE_PAWN_HOURS * 0.8;
+  }
+
+  getCapablePawns(labor, priorities) {
+    const capablePawns = [];
+    this.pawns.forEach((pawn) => {
+      if (
+        isPawnCapable({
+          pawn,
+          laborName: labor.name,
+          laborsLookup: this.laborsLookup,
+          slaveIncapableSkills: this.slaveIncapableLabors,
+        }) &&
+        (!labor.focusTask ||
+          (labor.focusTask && this.pawnHasAvailableTime(pawn.name.nick, priorities)))
+      ) {
+        capablePawns.push({
+          pawn,
+          score: labor.skill
+            ? this.getSkillValue(
+                this.pawnSkills.find(({ name }) => name === pawn.name.nick).skills[labor.skill]
+              ) || 0
+            : 1,
+        });
+      }
+    });
+    return capablePawns;
+  }
+
+  buildSuggestionsV3() {
+    const manHours = this.makeManHours();
+    const laborCombinations = [];
+    while (laborCombinations.length < 500) {
+      const combo = { priorities: { ...this.priorities }, score: 0 };
+      const addLaborPriorityToCombo = ({ pawnName, laborName, suggestedPrio, laborIdx, hours }) => {
+        combo.priorities[pawnName].push({
+          name: laborName,
+          suggested: suggestedPrio,
+          current: this.getCurrentPriority(pawnName, laborIdx),
+          hours,
+        });
+      };
+      const countPawnsAssignedToLaborInCombo = ({ labor, focus }) => {
+        return Object.keys(combo.priorities).filter(
+          (pawn) =>
+            !!combo.priorities[pawn].find(
+              ({ name, suggested }) =>
+                name === labor && (focus ? suggested === 1 || suggested === 2 : suggested > 0)
+            )
+        );
+      };
+      this.labors.forEach((labor, idx) => {
+        if (labor.allDo) {
+          this.pawns.forEach((pawn) => {
+            const {
+              name: { nick: name },
+            } = pawn;
+            if (
+              isPawnCapable({
+                pawn,
+                laborName: labor.name,
+                laborsLookup: this.laborsLookup,
+                slaveIncapableSkills: this.slaveIncapableLabors,
+              })
+            ) {
+              addLaborPriorityToCombo({
+                pawnName: name,
+                laborName: labor.name,
+                suggestedPrio: labor.maxPrio ? MAX_PRIO : DEFAULT_LABOR_PRIO,
+                laborIdx: idx,
+              });
+            }
+          });
+        } else {
+          if (labor.skill) {
+            this.sortBySkill(labor.skill);
+          }
+          if (labor.focusTask) {
+            let hoursForTask = manHours[labor.name];
+            const pawnsNeededForTask = Math.ceil(hoursForTask / AVAILABLE_PAWN_HOURS);
+            let counter = 0;
+            while (
+              countPawnsAssignedToLaborInCombo({ labor: labor.name, focus: true }) <
+              pawnsNeededForTask
+            ) {
+              if (counter === this.numPawns) break;
+              const chosenPawn = weightedChoice(
+                this.getCapablePawns(labor, combo.priorities),
+                "score"
+              );
+              addLaborPriorityToCombo({
+                pawnName: chosenPawn.pawn.name.nick,
+                laborName: labor.name,
+                suggestedPrio: labor.maxPrio ? MAX_PRIO : HIGH_PRIO,
+                laborIdx: idx,
+                hours: Math.min(hoursForTask, AVAILABLE_PAWN_HOURS),
+              });
+              counter++;
+            }
+          } else {
+            let counter = 0;
+            while (countPawnsAssignedToLaborInCombo({ labor: labor.name }) < this.numToAssign) {
+              if (counter === this.numPawns) break;
+              const pawn = this.pawnSkills[counter].name;
+              if (
+                isPawnCapable({
+                  pawn: this.pawns.find(({ name: { nick } }) => nick === pawn),
+                  laborName: labor.name,
+                  laborsLookup: this.laborsLookup,
+                  slaveIncapableSkills: this.slaveIncapableLabors,
+                })
+              ) {
+                addLaborPriorityToCombo({
+                  pawnName: pawn,
+                  laborName: labor.name,
+                  suggestedPrio: labor.maxPrio ? MAX_PRIO : DEFAULT_LABOR_PRIO,
+                  laborIdx: idx,
+                });
+              }
+              counter++;
+            }
+          }
+        }
+      });
+      this.pawns.forEach((pawn) => {
+        const {
+          name: { nick: pawnsName },
+        } = pawn;
+        const prioList = [...combo.priorities[pawnsName]];
+        prioList.forEach(({ name: laborName }) => {
+          const pawnSkill = this.pawnSkillsV2[pawnsName][this.laborsLookup[laborName].skill];
+          if (pawnSkill) {
+            combo.score += this.getSkillValue(pawnSkill);
+          }
+        });
+      });
+      laborCombinations.push(combo);
+    }
+    laborCombinations.sort((a, b) => b.score - a.score);
+    this.priorities = laborCombinations[0].priorities;
   }
 
   buildSuggestionsV2() {
