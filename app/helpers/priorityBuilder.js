@@ -85,8 +85,10 @@ class PriorityBuilder {
     };
   }
 
-  pawnHasFocusTask(pawnName) {
-    return !!this.priorities[pawnName].filter(({ suggested }) => suggested === HIGH_PRIO).length;
+  pawnHasAvailableTime(pawnName) {
+    const tasksWithHours = this.priorities[pawnName].filter(({ hours }) => hours);
+    const currentHours = tasksWithHours.reduce((total, cur) => total + cur.hours, 0);
+    return currentHours < AVAILABLE_PAWN_HOURS * 0.8;
   }
 
   buildSuggestionsV2() {
@@ -118,7 +120,7 @@ class PriorityBuilder {
           this.sortBySkill(labor.skill);
         }
         if (labor.focusTask) {
-          const hoursForTask = manHours[labor.name];
+          let hoursForTask = manHours[labor.name];
           const pawnsNeededForTask = Math.ceil(hoursForTask / AVAILABLE_PAWN_HOURS);
           let counter = 0;
           while (
@@ -134,16 +136,19 @@ class PriorityBuilder {
                 laborsLookup: this.laborsLookup,
                 slaveIncapableSkills: this.slaveIncapableLabors,
               }) &&
-              !this.pawnHasFocusTask(pawnName)
+              hoursForTask > 0 &&
+              this.pawnHasAvailableTime(pawnName)
             ) {
+              const hours = Math.min(hoursForTask, AVAILABLE_PAWN_HOURS);
               this.addLaborPriority({
                 pawnName,
                 laborName: labor.name,
                 suggestedPrio: labor.maxPrio ? MAX_PRIO : HIGH_PRIO,
                 laborIdx: idx,
+                hours: Math.min(hoursForTask, AVAILABLE_PAWN_HOURS),
               });
+              hoursForTask -= hours;
             }
-
             counter++;
           }
         } else {
@@ -174,11 +179,12 @@ class PriorityBuilder {
     });
   }
 
-  addLaborPriority({ pawnName, laborName, suggestedPrio, laborIdx }) {
+  addLaborPriority({ pawnName, laborName, suggestedPrio, laborIdx, hours }) {
     this.priorities[pawnName].push({
       name: laborName,
       suggested: suggestedPrio,
       current: this.getCurrentPriority(pawnName, laborIdx),
+      hours,
     });
   }
 
