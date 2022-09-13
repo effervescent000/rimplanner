@@ -7,14 +7,16 @@ export const getFactionKey = (faction) => `Faction_${faction.loadID}`;
 export const isPawnCapable = ({
   pawn: {
     story: { childhood, adulthood },
+    guest: { guestStatus },
   },
   laborName,
   laborsLookup,
+  slaveIncapableSkills,
 }) => {
-  const incapableSkills = [
-    ...(BACKSTORIES_LOOKUP[childhood] || []),
-    ...(BACKSTORIES_LOOKUP[adulthood] || []),
-  ];
+  const incapableSkills =
+    guestStatus && guestStatus === SLAVE
+      ? [...slaveIncapableSkills]
+      : [...(BACKSTORIES_LOOKUP[childhood] || []), ...(BACKSTORIES_LOOKUP[adulthood] || [])];
   const pawnCantDo = incapableSkills.filter((skill) =>
     (laborsLookup[laborName].categories || []).includes(skill)
   );

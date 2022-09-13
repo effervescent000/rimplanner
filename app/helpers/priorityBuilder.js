@@ -1,4 +1,3 @@
-import { round } from "lodash";
 import { GROW_DAY_DIVISOR, PLANTS } from "~/constants/plantsConstants";
 import {
   AVAILABLE_PAWN_HOURS,
@@ -6,6 +5,7 @@ import {
   HIGH_PRIO,
   HOUR,
   LABORS_OBJ,
+  LABOR_CATEGORIES,
   MAJOR_PASSION,
   MAX_PRIO,
 } from "../constants/constants";
@@ -26,6 +26,13 @@ class PriorityBuilder {
     this.pawns.forEach(({ name: { nick: name } }) => (this.priorities[name] = []));
     this.numToAssign = Math.ceil(this.numPawns * (1 / 3));
     [this.labors, this.laborsLookup] = buildLabors(this.modList);
+    // this is here instead of a constant because I want to optionally include shooting based on user config
+    this.slaveIncapableLabors = [
+      LABOR_CATEGORIES.intellectual,
+      LABOR_CATEGORIES.social,
+      LABOR_CATEGORIES.art,
+      LABOR_CATEGORIES.violent,
+    ];
     this.pawnSkills = this.pawns.map(
       ({
         name: { nick: name },
@@ -76,6 +83,11 @@ class PriorityBuilder {
     };
   }
 
+  pawnHasFocusTask(pawnName) {
+    return !!this.priorities[pawnName].filter(({ suggested }) => suggested === HIGH_PRIO)
+      .length;
+  }
+
   buildSuggestionsV2() {
     const manHours = this.makeManHours();
     this.labors.forEach((labor, idx) => {
@@ -84,7 +96,14 @@ class PriorityBuilder {
           const {
             name: { nick: name },
           } = pawn;
-          if (isPawnCapable({ pawn, laborName: labor.name, laborsLookup: this.laborsLookup })) {
+          if (
+            isPawnCapable({
+              pawn,
+              laborName: labor.name,
+              laborsLookup: this.laborsLookup,
+              slaveIncapableSkills: this.slaveIncapableLabors,
+            })
+          ) {
             this.addLaborPriority({
               pawnName: name,
               laborName: labor.name,
@@ -104,16 +123,19 @@ class PriorityBuilder {
           while (
             this.countPawnsAssignedToLabor({ labor: labor.name, focus: true }) < pawnsNeededForTask
           ) {
-            const pawn = this.pawnSkills[counter].name;
+            const pawnName = this.pawnSkills[counter].name;
+            const pawn = this.pawns.find(({ name: { nick } }) => nick === pawnName);
             if (
               isPawnCapable({
-                pawn: this.pawns.find(({ name: { nick } }) => nick === pawn),
+                pawn,
                 laborName: labor.name,
                 laborsLookup: this.laborsLookup,
-              })
+                slaveIncapableSkills: this.slaveIncapableLabors,
+              }) &&
+              !this.pawnHasFocusTask(pawnName)
             ) {
               this.addLaborPriority({
-                pawnName: pawn,
+                pawnName,
                 laborName: labor.name,
                 suggestedPrio: labor.maxPrio ? MAX_PRIO : HIGH_PRIO,
                 laborIdx: idx,
@@ -131,6 +153,7 @@ class PriorityBuilder {
                 pawn: this.pawns.find(({ name: { nick } }) => nick === pawn),
                 laborName: labor.name,
                 laborsLookup: this.laborsLookup,
+                slaveIncapableSkills: this.slaveIncapableLabors,
               })
             ) {
               this.addLaborPriority({
