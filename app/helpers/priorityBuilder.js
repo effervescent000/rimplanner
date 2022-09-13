@@ -108,6 +108,7 @@ class PriorityBuilder {
           laborsLookup: this.laborsLookup,
           slaveIncapableSkills: this.slaveIncapableLabors,
         }) &&
+        !priorities[pawn.name.nick].find(({ name }) => name === labor.name) &&
         (!labor.focusTask ||
           (labor.focusTask && this.pawnHasAvailableTime(pawn.name.nick, priorities)))
       ) {
@@ -144,7 +145,7 @@ class PriorityBuilder {
               ({ name, suggested }) =>
                 name === labor && (focus ? suggested === 1 || suggested === 2 : suggested > 0)
             )
-        );
+        ).length;
       };
       this.labors.forEach((labor, idx) => {
         if (labor.allDo) {
