@@ -12,6 +12,9 @@ export const MINOR_PASSION = "Minor";
 export const MAJOR_PASSION = "Major";
 
 export const DEFAULT_LABOR_PRIO = 3;
+export const HIGH_PRIO = 2;
+export const MAX_PRIO = 1;
+export const LOW_PRIO = 4;
 
 export const GROWING_ZONE = "Zone_Growing";
 export const AQUATIC_GROWING_ZONE = "VanillaPlantsExpandedMorePlants.Zone_GrowingAquatic";
@@ -23,6 +26,9 @@ export const FILL_BAR = "bar";
 
 export const HOUR = 2500;
 export const DAY = HOUR * 24;
+
+// how many work-hours pawns have after you take out eating and sleeping
+export const AVAILABLE_PAWN_HOURS = 12;
 
 export const LABORS = [
   { name: "Firefight", allDo: true },
@@ -103,7 +109,12 @@ export const BASE_GAME_LABORS = [
   { name: "Craft", skill: "Crafting" },
   { name: "Haul", allDo: true, categories: [LABOR_CATEGORIES.dumb, LABOR_CATEGORIES.hauling] },
   { name: "Clean", allDo: true, categories: [LABOR_CATEGORIES.dumb, LABOR_CATEGORIES.cleaning] },
-  { name: "Research", skill: "Intellectual", categories: [LABOR_CATEGORIES.intellectual] },
+  {
+    name: "Research",
+    skill: "Intellectual",
+    categories: [LABOR_CATEGORIES.intellectual],
+    focusTask: true,
+  },
 ];
 
 export const MOD_LABORS = () => ({

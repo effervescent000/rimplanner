@@ -1,6 +1,14 @@
 import { round } from "lodash";
 import { GROW_DAY_DIVISOR, PLANTS } from "~/constants/plantsConstants";
-import { DEFAULT_LABOR_PRIO, HOUR, LABORS_OBJ, MAJOR_PASSION } from "../constants/constants";
+import {
+  AVAILABLE_PAWN_HOURS,
+  DEFAULT_LABOR_PRIO,
+  HIGH_PRIO,
+  HOUR,
+  LABORS_OBJ,
+  MAJOR_PASSION,
+  MAX_PRIO,
+} from "../constants/constants";
 import { buildLaborsList } from "./rosterHelpers";
 import { buildLabors, isPawnCapable } from "./utils";
 
@@ -15,6 +23,7 @@ class PriorityBuilder {
     this.growingZones = growingZones;
 
     this.priorities = {};
+    this.pawns.forEach(({ name: { nick: name } }) => (this.priorities[name] = []));
     this.numToAssign = Math.ceil(this.numPawns * (1 / 3));
     [this.labors, this.laborsLookup] = buildLabors(this.modList);
     this.pawnSkills = this.pawns.map(
@@ -63,15 +72,91 @@ class PriorityBuilder {
       ),
       [LABORS_OBJ.hunting.name]: this.config.huntingManHoursPerPawn * this.numPawns,
       [LABORS_OBJ.cooking.name]: this.config.cookingManHoursPerPawn * this.numPawns,
+      [LABORS_OBJ.researching.name]: AVAILABLE_PAWN_HOURS,
     };
   }
 
   buildSuggestionsV2() {
     const manHours = this.makeManHours();
+    this.labors.forEach((labor, idx) => {
+      if (labor.allDo) {
+        this.pawns.forEach((pawn) => {
+          const {
+            name: { nick: name },
+          } = pawn;
+          if (isPawnCapable({ pawn, laborName: labor.name, laborsLookup: this.laborsLookup })) {
+            this.addLaborPriority({
+              pawnName: name,
+              laborName: labor.name,
+              suggestedPrio: labor.maxPrio ? MAX_PRIO : DEFAULT_LABOR_PRIO,
+              laborIdx: idx,
+            });
+          }
+        });
+      } else {
+        if (labor.skill) {
+          this.sortBySkill(labor.skill);
+        }
+        if (labor.focusTask) {
+          const hoursForTask = manHours[labor.name];
+          const pawnsNeededForTask = Math.ceil(hoursForTask / AVAILABLE_PAWN_HOURS);
+          let counter = 0;
+          while (
+            this.countPawnsAssignedToLabor({ labor: labor.name, focus: true }) < pawnsNeededForTask
+          ) {
+            const pawn = this.pawnSkills[counter].name;
+            if (
+              isPawnCapable({
+                pawn: this.pawns.find(({ name: { nick } }) => nick === pawn),
+                laborName: labor.name,
+                laborsLookup: this.laborsLookup,
+              })
+            ) {
+              this.addLaborPriority({
+                pawnName: pawn,
+                laborName: labor.name,
+                suggestedPrio: labor.maxPrio ? MAX_PRIO : HIGH_PRIO,
+                laborIdx: idx,
+              });
+            }
+            if (counter === this.numPawns) break;
+            counter++;
+          }
+        } else {
+          let counter = 0;
+          while (this.countPawnsAssignedToLabor({ labor: labor.name }) < this.numToAssign) {
+            const pawn = this.pawnSkills[counter].name;
+            if (
+              isPawnCapable({
+                pawn: this.pawns.find(({ name: { nick } }) => nick === pawn),
+                laborName: labor.name,
+                laborsLookup: this.laborsLookup,
+              })
+            ) {
+              this.addLaborPriority({
+                pawnName: pawn,
+                laborName: labor.name,
+                suggestedPrio: labor.maxPrio ? MAX_PRIO : DEFAULT_LABOR_PRIO,
+                laborIdx: idx,
+              });
+            }
+            if (counter === this.numPawns) break;
+            counter++;
+          }
+        }
+      }
+    });
+  }
+
+  addLaborPriority({ pawnName, laborName, suggestedPrio, laborIdx }) {
+    this.priorities[pawnName].push({
+      name: laborName,
+      suggested: suggestedPrio,
+      current: this.getCurrentPriority(pawnName, laborIdx),
+    });
   }
 
   buildSuggestions() {
-    this.pawns.forEach(({ name: { nick: name } }) => (this.priorities[name] = []));
     this.labors.forEach((labor, idx) => {
       if (labor.allDo) {
         Object.keys(this.priorities).forEach((name) => {
@@ -82,14 +167,12 @@ class PriorityBuilder {
               laborsLookup: this.laborsLookup,
             })
           ) {
-            this.priorities[name] = [
-              ...this.priorities[name],
-              {
-                name: labor.name,
-                suggested: DEFAULT_LABOR_PRIO,
-                current: this.getCurrentPriority(name, idx),
-              },
-            ];
+            this.addLaborPriority({
+              pawnName: name,
+              laborName: labor.name,
+              suggestedPrio: DEFAULT_LABOR_PRIO,
+              laborIdx: idx,
+            });
           }
         });
       } else {
@@ -98,7 +181,7 @@ class PriorityBuilder {
         }
       }
       let counter = 0;
-      while (this.countPawnsAssignedToLabor(labor.name) < this.numToAssign) {
+      while (this.countPawnsAssignedToLabor({ labor: labor.name }) < this.numToAssign) {
         const pawn = this.pawnSkills[counter].name;
         if (
           isPawnCapable({
@@ -107,14 +190,12 @@ class PriorityBuilder {
             laborsLookup: this.laborsLookup,
           })
         ) {
-          this.priorities[pawn] = [
-            ...this.priorities[pawn],
-            {
-              name: labor.name,
-              suggested: DEFAULT_LABOR_PRIO,
-              current: this.getCurrentPriority(pawn, idx),
-            },
-          ];
+          this.addLaborPriority({
+            pawnName: pawn,
+            laborName: labor.name,
+            suggestedPrio: DEFAULT_LABOR_PRIO,
+            laborIdx: idx,
+          });
         }
         if (counter === this.numPawns) break;
         counter++;
@@ -122,10 +203,13 @@ class PriorityBuilder {
     });
   }
 
-  countPawnsAssignedToLabor(labor) {
+  countPawnsAssignedToLabor({ labor, focus }) {
     return Object.keys(this.priorities).filter(
       (pawn) =>
-        !!this.priorities[pawn].find(({ name, suggested }) => name === labor && suggested > 0)
+        !!this.priorities[pawn].find(
+          ({ name, suggested }) =>
+            name === labor && (focus ? suggested === 1 || suggested === 2 : suggested > 0)
+        )
     ).length;
   }
 

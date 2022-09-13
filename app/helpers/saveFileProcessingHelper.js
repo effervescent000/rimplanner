@@ -49,7 +49,7 @@ export const processSaveFile = ({ savegame }) => {
   const growingZones = savegame.game.maps.li.zoneManager.allZones.li.filter(
     ({ $ }) => $ && [GROWING_ZONE, AQUATIC_GROWING_ZONE].includes($.Class)
   );
-  const homeZoneSize = +savegame.game.maps.li.areaManager.area[0].innerGrid.trueCount;
+  const homeZoneSize = +savegame.game.maps.li.areaManager.areas.li[0].innerGrid.trueCount;
 
   return {
     factions,
