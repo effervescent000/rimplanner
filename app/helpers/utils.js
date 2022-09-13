@@ -53,6 +53,9 @@ export const buildLabors = (modList) => {
       case mods.vanillaBooksExpanded:
         labors.push(modLabors.writing);
         break;
+      case mods.vanillaFishingExpanded:
+        labors.push(modLabors.fishing);
+        break;
       case mods.vanillaGeneticsExpanded:
         labors.push(modLabors.genetics);
         break;

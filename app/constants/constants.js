@@ -145,6 +145,12 @@ export const MOD_LABORS = () => ({
     skill: "Intellectual",
     categories: [LABOR_CATEGORIES.intellectual],
   },
+  fishing: {
+    name: "Fishing",
+    source: mods.vanillaFishingExpanded,
+    skill: SKILLS.animals.name,
+    categories: [LABOR_CATEGORIES.animals],
+  },
 });
 
 export const LABORS_OBJ = {

@@ -6,6 +6,7 @@ import { buildLaborsList } from "~/helpers/rosterHelpers";
 import RWContext from "~/context/RWContext";
 
 import PrioritiesWrapper from "~/components/work-priorities/priorities-wrapper";
+import { buildLabors } from "~/helpers/utils";
 
 const WorkPriorityIndex = () => {
   const fetcher = useFetcher();
@@ -16,10 +17,18 @@ const WorkPriorityIndex = () => {
   const [finalPrios, setFinalPrios] = useState({});
 
   useEffect(() => {
-    const currentPriorities = [...colonists, ...slaves].map(({ name, workSettings }) => ({
-      name: name.nick,
-      priorities: workSettings.priorities.vals.li,
-    }));
+    const [laborLabels] = buildLabors(modList);
+    const currentPriorities = [...colonists, ...slaves].map(({ name, workSettings }) => {
+      return {
+        name: name.nick,
+        priorities: workSettings.priorities.vals.li.map((prio, idx) => {
+          return {
+            labor: laborLabels[idx].name,
+            currentPrio: prio,
+          };
+        }),
+      };
+    });
     if (modList.length && currentPriorities.length) {
       fetcher.submit(
         {

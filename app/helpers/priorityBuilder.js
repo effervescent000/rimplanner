@@ -26,6 +26,10 @@ class PriorityBuilder {
     this.pawns.forEach(({ name: { nick: name } }) => (this.priorities[name] = []));
     this.numToAssign = Math.ceil(this.numPawns * (1 / 3));
     [this.labors, this.laborsLookup] = buildLabors(this.modList);
+    this.laborLabels = buildLaborsList(this.modList).reduce(
+      (total, cur) => [...total, cur.name],
+      []
+    );
     // this is here instead of a constant because I want to optionally include shooting based on user config
     this.slaveIncapableLabors = [
       LABOR_CATEGORIES.intellectual,
@@ -73,10 +77,8 @@ class PriorityBuilder {
 
     return {
       [LABORS_OBJ.construction.name]: (this.homeZoneSize / 1000) * 4,
-      [LABORS_OBJ.growing.name]: makeGrowingTimePerDay().reduce(
-        (total, cur) => total + cur.manHoursPerDay,
-        0
-      ) * 1.05,
+      [LABORS_OBJ.growing.name]:
+        makeGrowingTimePerDay().reduce((total, cur) => total + cur.manHoursPerDay, 0) * 1.05,
       [LABORS_OBJ.hunting.name]: this.config.huntingManHoursPerPawn * this.numPawns,
       [LABORS_OBJ.cooking.name]: this.config.cookingManHoursPerPawn * this.numPawns,
       [LABORS_OBJ.researching.name]: AVAILABLE_PAWN_HOURS,
@@ -261,7 +263,7 @@ class PriorityBuilder {
   }
 
   getCurrentPriority(pawn, idx) {
-    return this.currentPriorities.find(({ name }) => name === pawn).priorities[idx];
+    return this.currentPriorities.find(({ name }) => name === pawn).priorities[idx].currentPrio;
   }
 }
 
