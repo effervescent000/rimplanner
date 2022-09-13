@@ -15,6 +15,10 @@ const CHILDHOOD_BACKSTORIES = [
     name: "ScienceProdigy65",
     incapable: [LABOR_CATEGORIES.firefighting, LABOR_CATEGORIES.violent],
   },
+  {
+    name: "JoywireAddict76",
+    incapable: [LABOR_CATEGORIES.intellectual, LABOR_CATEGORIES.cleaning],
+  },
 ];
 
 const ADULT_BACKSTORIES = [

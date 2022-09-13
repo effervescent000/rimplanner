@@ -76,7 +76,7 @@ class PriorityBuilder {
       [LABORS_OBJ.growing.name]: makeGrowingTimePerDay().reduce(
         (total, cur) => total + cur.manHoursPerDay,
         0
-      ),
+      ) * 1.05,
       [LABORS_OBJ.hunting.name]: this.config.huntingManHoursPerPawn * this.numPawns,
       [LABORS_OBJ.cooking.name]: this.config.cookingManHoursPerPawn * this.numPawns,
       [LABORS_OBJ.researching.name]: AVAILABLE_PAWN_HOURS,
@@ -84,8 +84,7 @@ class PriorityBuilder {
   }
 
   pawnHasFocusTask(pawnName) {
-    return !!this.priorities[pawnName].filter(({ suggested }) => suggested === HIGH_PRIO)
-      .length;
+    return !!this.priorities[pawnName].filter(({ suggested }) => suggested === HIGH_PRIO).length;
   }
 
   buildSuggestionsV2() {
@@ -123,6 +122,7 @@ class PriorityBuilder {
           while (
             this.countPawnsAssignedToLabor({ labor: labor.name, focus: true }) < pawnsNeededForTask
           ) {
+            if (counter === this.numPawns) break;
             const pawnName = this.pawnSkills[counter].name;
             const pawn = this.pawns.find(({ name: { nick } }) => nick === pawnName);
             if (
@@ -141,12 +141,13 @@ class PriorityBuilder {
                 laborIdx: idx,
               });
             }
-            if (counter === this.numPawns) break;
+
             counter++;
           }
         } else {
           let counter = 0;
           while (this.countPawnsAssignedToLabor({ labor: labor.name }) < this.numToAssign) {
+            if (counter === this.numPawns) break;
             const pawn = this.pawnSkills[counter].name;
             if (
               isPawnCapable({
@@ -163,7 +164,7 @@ class PriorityBuilder {
                 laborIdx: idx,
               });
             }
-            if (counter === this.numPawns) break;
+
             counter++;
           }
         }
