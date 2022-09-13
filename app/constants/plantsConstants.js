@@ -4,8 +4,17 @@ export const FERTILITY = 1;
 
 export const PLANTS = {
   Plant_Corn: { key: "Plant_Corn", growDays: 11.3, harvestYield: 22 },
+  Plant_Cotton: { key: "Plant_Cotton", growDays: 8, harvestYield: 10 },
+  Plant_Healroot: {
+    key: "Plant_Healroot",
+    growDays: 7,
+    harvestYield: 1,
+    harvestWork: 400,
+    sowWork: 800,
+  },
   Plant_Potato: { key: "Plant_Potato", growDays: 5.8, harvestYield: 11 },
   Plant_Rice: { key: "Plant_Rice", growDays: 3, harvestYield: 6 },
+  Plant_Strawberry: { key: "Plant_Strawberry", growDays: 4.6, harvestYield: 8 },
   // modded foods after here
   VCE_Agave: { key: "VCE_Agave", growDays: 6, harvestYield: 10, harvestWork: 300 },
   VCE_Beans: { key: "VCE_Beans", growDays: 6, harvestYield: 8 },
@@ -26,6 +35,7 @@ export const PLANTS = {
     harvestWork: 1000,
     sowWork: 1000,
   },
+  VCE_Grass: { key: "VCE_Grass", growDays: 1.5, harvestYield: 0, harvestWork: 40 },
   VCE_Lotus: { key: "VCE_Lotus", growDays: 18, harvestYield: 34, harvestWork: 1000, sowWork: 1000 },
   VCE_Melon: {
     key: "VCE_Melon",
