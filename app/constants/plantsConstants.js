@@ -28,6 +28,7 @@ export const PLANTS = {
     sowWork: 1000,
   },
   VCE_Carrot: { key: "VCE_Carrot", growDays: 6, harvestYield: 8 },
+  VCE_Chickpea: { key: "VCE_Chickpea", growDays: 4.7, harvestYield: 38 },
   VCE_Cucumber: {
     key: "VCE_Cucumber",
     growDays: 3,
@@ -49,6 +50,7 @@ export const PLANTS = {
   VCE_Peanut: { key: "VCE_Peanut", growDays: 6.25, harvestYield: 12 },
   VCE_Pepper: { key: "VCE_Pepper", growDays: 5.2, harvestYield: 10 },
   VCE_Pumpkin: { key: "VCE_Pumpkin", growDays: 10.4, harvestYield: 19, harvestWork: 300 },
+  VCE_Sorghum: { key: "VCE_Sorghum", growDays: 15, harvestYield: 24 },
   VCE_SweetPotato: { key: "VCE_SweetPotato", growDays: 5.8, harvestYield: 10 },
   VCE_Taro: { key: "VCE_Taro", growDays: 5.8, harvestYield: 11, harvestWork: 1000, sowWork: 1000 },
   VCE_Tomato: { key: "VCE_Tomato", growDays: 7.2, harvestYield: 10 },

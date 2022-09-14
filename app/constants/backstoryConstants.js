@@ -34,6 +34,7 @@ const ADULT_BACKSTORIES = [
       LABOR_CATEGORIES.intellectual,
     ],
   },
+  { name: "TournamentFighter28", incapable: [LABOR_CATEGORIES.skilled] },
   {
     name: "ConstructionEngineer32",
     incapable: [LABOR_CATEGORIES.intellectual, LABOR_CATEGORIES.cooking],
