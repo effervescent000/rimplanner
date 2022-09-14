@@ -2,9 +2,9 @@ import PropTypes from "prop-types";
 
 import Tile from "./tile";
 
-import bloodImg from "app/assets/Bleeding.png";
-import townImg from "app/assets/Town.png";
-import slaveImg from "app/assets/Slavery.png";
+import bloodImg from "public/assets/Bleeding.png";
+import townImg from "public/assets/Town.png";
+import slaveImg from "public/assets/Slavery.png";
 
 const IMAGE_MAP = {
   bleedingOut: bloodImg,
