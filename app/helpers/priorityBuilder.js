@@ -56,7 +56,7 @@ class PriorityBuilder {
 
   getSkillValue(skillObj) {
     if (skillObj) {
-      const passionValue = skillObj.passion ? (skillObj.passion === MAJOR_PASSION ? 5 : 2) : 0;
+      const passionValue = skillObj.passion ? (skillObj.passion === MAJOR_PASSION ? 2 : 1) : 0;
       return Math.min(+skillObj.level + passionValue, 20);
     }
     return 0;
@@ -128,7 +128,7 @@ class PriorityBuilder {
   buildSuggestionsV3() {
     const manHours = this.makeManHours();
     const laborCombinations = [];
-    while (laborCombinations.length < 500) {
+    while (laborCombinations.length < 1000) {
       const combo = { priorities: { ...this.priorities }, score: 0 };
       const addLaborPriorityToCombo = ({ pawnName, laborName, suggestedPrio, laborIdx, hours }) => {
         combo.priorities[pawnName].push({
