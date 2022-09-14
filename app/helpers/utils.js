@@ -75,3 +75,16 @@ export const makeValues = (baseValue, modifiers = {}) => ({
 export const roundToTwoDecimals = (num) => Math.round(num * 100) / 100;
 
 export const isSlave = (pawn) => pawn.guest.guestStatus && pawn.guest.guestStatus === SLAVE;
+
+export const weightedChoice = (choiceArray, accumulatorKey) => {
+  const total = choiceArray.reduce((total, cur) => total + cur[accumulatorKey], 0);
+  const threshold = Math.random() * total;
+  let runningValue = 0;
+  for (let i = 0; i < choiceArray.length; i++) {
+    runningValue += choiceArray[i][accumulatorKey];
+    if (runningValue > threshold) {
+      return choiceArray[i];
+    }
+  }
+  return choiceArray[-1];
+};

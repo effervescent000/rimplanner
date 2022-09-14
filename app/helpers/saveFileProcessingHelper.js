@@ -26,6 +26,7 @@ export const processSaveFile = ({ savegame }) => {
       $.Class === PAWN_CONSTANT &&
       def === HUMAN_CONSTANT &&
       kindDef === COLONIST &&
+      guest.hostFaction === "null" &&
       !guest.guestStatus
   );
   const slaves = savegame.game.maps.li.things.thing.filter(
