@@ -68,7 +68,7 @@ export const composeImage = async ({
     const url = await baseImage.getBase64Async(jimp.MIME_PNG);
     return url;
   } catch (baseError) {
-    // console.log(baseError);
+    console.log(baseError);
     return "";
   }
 };
