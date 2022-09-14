@@ -28,6 +28,8 @@ const getSkinColor = (melanin) => {
   return "#694424";
 };
 
+const importFile = async (path) => await import(path);
+
 export const composeImage = async ({
   gender = "Male",
   head,
@@ -37,9 +39,11 @@ export const composeImage = async ({
   melanin,
 }) => {
   try {
-    const baseImage = await jimp.read(BASE_ASSET_URL + `bodies/${body}.png`);
+    const baseImage = await jimp.read(await importFile(BASE_ASSET_URL + `bodies/${body}.png`));
     baseImage.blit(
-      await jimp.read(BASE_ASSET_URL + getHeadFromPath({ head, gender }) + "_south.png"),
+      await jimp.read(
+        await importFile(BASE_ASSET_URL + getHeadFromPath({ head, gender }) + "_south.png")
+      ),
       0,
       -25
     );
