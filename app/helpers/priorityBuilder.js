@@ -72,6 +72,7 @@ class PriorityBuilder {
     const makeGrowingTimePerDay = () =>
       this.growingZones.map(({ plantDefToGrow: plant, cells: { li: cells } }) => {
         const plantInfo = PLANTS[plant];
+        if (!plantInfo) console.log(plant);
         return {
           plant,
           manHoursPerDay:
@@ -85,7 +86,7 @@ class PriorityBuilder {
     return {
       [LABORS_OBJ.construction.name]: (this.homeZoneSize / 1000) * 4,
       [LABORS_OBJ.growing.name]:
-        makeGrowingTimePerDay().reduce((total, cur) => total + cur.manHoursPerDay, 0) * 1.05,
+        makeGrowingTimePerDay().reduce((total, cur) => total + cur.manHoursPerDay, 0) * 1.15,
       [LABORS_OBJ.hunting.name]: this.config.huntingManHoursPerPawn * this.numPawns,
       [LABORS_OBJ.cooking.name]: this.config.cookingManHoursPerPawn * this.numPawns,
       [LABORS_OBJ.researching.name]: AVAILABLE_PAWN_HOURS,
