@@ -39,7 +39,9 @@ export const composeImage = async ({
   melanin,
 }) => {
   try {
-    const baseImage = await jimp.read(`public${bodies[body]}`);
+    const baseImage = await jimp.read(
+      `https://papaya-kleicha-87b491.netlify.app/.netlify/functions/server${bodies[body]}`
+    );
     baseImage.blit(await jimp.read(`./public${heads[getHeadFromPath({ head, gender })]}`), 0, -25);
     const skinToColor = baseImage.clone();
     skinToColor.color([{ apply: "mix", params: [getSkinColor(melanin), 100] }]);
