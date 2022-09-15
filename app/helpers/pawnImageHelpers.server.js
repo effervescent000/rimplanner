@@ -1,16 +1,13 @@
 import jimp from "jimp";
-import fs from "fs";
+import axios from "axios";
 
 import { BASE_ASSET_URL } from "~/constants/constants";
 
-import { heads, bodies } from "./pawnImageIndex";
-import path from "path";
-
 const getHeadFromPath = ({ head, gender }) => {
   if (head) {
-    return head.replace(`Things/Pawn/Humanlike/Heads/${gender}/`, "");
+    return head.replace(`Things/Pawn/Humanlike/`, "");
   }
-  return `${gender}_Average_Normal`;
+  return `Heads/${gender}/${gender}_Average_Normal`;
 };
 
 const rgbToHex = ({ red, green, blue }) =>
@@ -41,20 +38,18 @@ export const composeImage = async ({
   melanin,
 }) => {
   try {
-    console.log("body output", bodies[body]);
-    const bodyImageBufferPromise = fs.promises.readFile(__dirname, path.join(bodies[body]));
-    const bodyImageBuffer = await Promise.resolve(bodyImageBufferPromise);
-    console.log(bodyImageBuffer);
-    const baseImage = await jimp.read(bodyImageBuffer);
-    // baseImage.blit(
-    //   await jimp.read(
-    //     `https://papaya-kleicha-87b491.netlify.app/.netlify/functions/server${
-    //       heads[getHeadFromPath({ head, gender })]
-    //     }`
-    //   ),
-    //   0,
-    //   -25
-    // );
+    const bodyImageBuffer = await axios({
+      method: "get",
+      url: BASE_ASSET_URL + `/bodies/${body}.png`,
+      responseType: "arraybuffer",
+    });
+    const baseImage = await jimp.read(bodyImageBuffer.data);
+    const headImageBuffer = await axios({
+      method: "get",
+      url: BASE_ASSET_URL + `/${getHeadFromPath({ head, gender })}_south.png`,
+      responseType: "arraybuffer",
+    });
+    baseImage.blit(await jimp.read(headImageBuffer.data), 0, -25);
     const skinToColor = baseImage.clone();
     skinToColor.color([{ apply: "mix", params: [getSkinColor(melanin), 100] }]);
     baseImage.composite(skinToColor, 0, 0, {
@@ -80,7 +75,7 @@ export const composeImage = async ({
     const url = await baseImage.getBase64Async(jimp.MIME_PNG);
     return url;
   } catch (baseError) {
-    // console.log(baseError);
+    console.log(baseError);
     return baseError;
   }
 };

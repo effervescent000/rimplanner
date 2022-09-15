@@ -1,7 +1,8 @@
 import { mods } from "./modConstants";
 import { SKILLS } from "./skillsConstants";
 
-export const BASE_ASSET_URL = "~/assets/";
+export const BASE_ASSET_URL =
+  "https://raw.githubusercontent.com/effervescent000/rimplanner/main/public/assets";
 
 export const PLAYER_COLONY = "PlayerColony";
 export const PAWN_CONSTANT = "Pawn";
