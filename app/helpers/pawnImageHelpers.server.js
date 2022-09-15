@@ -43,7 +43,15 @@ export const composeImage = async ({
     const baseImage = await jimp.read({
       url: `https://papaya-kleicha-87b491.netlify.app/.netlify/functions/server${bodies[body]}`,
     });
-    baseImage.blit(await jimp.read(`./public${heads[getHeadFromPath({ head, gender })]}`), 0, -25);
+    baseImage.blit(
+      await jimp.read(
+        `https://papaya-kleicha-87b491.netlify.app/.netlify/functions/server${
+          heads[getHeadFromPath({ head, gender })]
+        }`
+      ),
+      0,
+      -25
+    );
     const skinToColor = baseImage.clone();
     skinToColor.color([{ apply: "mix", params: [getSkinColor(melanin), 100] }]);
     baseImage.composite(skinToColor, 0, 0, {
