@@ -42,10 +42,9 @@ export const composeImage = async ({
 }) => {
   try {
     console.log("body output", bodies[body]);
-    const bodyImageBufferPromise = fs.promises.readFile(
-      path.join("https://papaya-kleicha-87b491.netlify.app/.netlify/functions/server", bodies[body])
-    );
+    const bodyImageBufferPromise = fs.promises.readFile(__dirname, path.join(bodies[body]));
     const bodyImageBuffer = await Promise.resolve(bodyImageBufferPromise);
+    console.log(bodyImageBuffer);
     const baseImage = await jimp.read(bodyImageBuffer);
     // baseImage.blit(
     //   await jimp.read(
