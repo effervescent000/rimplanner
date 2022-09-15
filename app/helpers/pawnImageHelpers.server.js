@@ -39,6 +39,7 @@ export const composeImage = async ({
   melanin,
 }) => {
   try {
+    console.log("body output", bodies[body]);
     const baseImage = await jimp.read(
       `https://papaya-kleicha-87b491.netlify.app/.netlify/functions/server${bodies[body]}`
     );
