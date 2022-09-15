@@ -39,8 +39,8 @@ export const composeImage = async ({
   melanin,
 }) => {
   try {
-    const baseImage = await jimp.read(`./public/${bodies[body]}`);
-    baseImage.blit(await jimp.read(`./public/${heads[getHeadFromPath({ head, gender })]}`), 0, -25);
+    const baseImage = await jimp.read(`./public${bodies[body]}`);
+    baseImage.blit(await jimp.read(`./public${heads[getHeadFromPath({ head, gender })]}`), 0, -25);
     const skinToColor = baseImage.clone();
     skinToColor.color([{ apply: "mix", params: [getSkinColor(melanin), 100] }]);
     baseImage.composite(skinToColor, 0, 0, {
