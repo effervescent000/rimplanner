@@ -2,11 +2,13 @@ import jimp from "jimp";
 
 import { BASE_ASSET_URL } from "~/constants/constants";
 
+import { heads, bodies } from "./pawnImageIndex";
+
 const getHeadFromPath = ({ head, gender }) => {
   if (head) {
-    return head.replace("Things/Pawn/Humanlike/", "");
+    return head.replace(`Things/Pawn/Humanlike/Heads/${gender}/`, "");
   }
-  return `Heads/${gender}/${gender}_Average_Normal`;
+  return `${gender}_Average_Normal`;
 };
 
 const rgbToHex = ({ red, green, blue }) =>
@@ -28,8 +30,6 @@ const getSkinColor = (melanin) => {
   return "#694424";
 };
 
-const importFile = async (path) => await import(path);
-
 export const composeImage = async ({
   gender = "Male",
   head,
@@ -39,14 +39,8 @@ export const composeImage = async ({
   melanin,
 }) => {
   try {
-    const baseImage = await jimp.read(await importFile(BASE_ASSET_URL + `bodies/${body}.png`));
-    baseImage.blit(
-      await jimp.read(
-        await importFile(BASE_ASSET_URL + getHeadFromPath({ head, gender }) + "_south.png")
-      ),
-      0,
-      -25
-    );
+    const baseImage = await jimp.read(`./public/${bodies[body]}`);
+    baseImage.blit(await jimp.read(`./public/${heads[getHeadFromPath({ head, gender })]}`), 0, -25);
     const skinToColor = baseImage.clone();
     skinToColor.color([{ apply: "mix", params: [getSkinColor(melanin), 100] }]);
     baseImage.composite(skinToColor, 0, 0, {

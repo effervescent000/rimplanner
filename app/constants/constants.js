@@ -1,7 +1,7 @@
 import { mods } from "./modConstants";
 import { SKILLS } from "./skillsConstants";
 
-export const BASE_ASSET_URL = "/public/assets/";
+export const BASE_ASSET_URL = "~/assets/";
 
 export const PLAYER_COLONY = "PlayerColony";
 export const PAWN_CONSTANT = "Pawn";

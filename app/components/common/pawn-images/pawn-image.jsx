@@ -14,7 +14,6 @@ const PawnImage = ({
     story: { bodyType, headGraphicPath, hairDef, hairColor, melanin },
     gender,
   },
-  bleedingOut,
 }) => {
   const [imageURI, setImageURI] = useState("");
   const fetcher = useFetcher();
