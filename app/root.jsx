@@ -31,7 +31,7 @@ import commonStyles from "~/styles/common.css";
 
 export const meta = () => ({
   charset: "utf-8",
-  title: "New Remix App",
+  title: "Rimplanner",
   viewport: "width=device-width,initial-scale=1",
 });
 

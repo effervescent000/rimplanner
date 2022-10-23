@@ -1,12 +1,11 @@
 import PropTypes from "prop-types";
+import { getName } from "~/helpers/utils";
 
 import PawnImage from "./pawn-images/pawn-image";
 import TilesWrapper from "./pawn-images/tiles-wrapper";
 
 const PawnCard = ({ pawn, callback, selected, evalValues, config, hideImage }) => {
-  const {
-    name: { nick: name },
-  } = pawn;
+  const name = getName(pawn);
   return (
     <div className="w-[120px]" onClick={() => callback(pawn)}>
       <div>{name}</div>
@@ -36,7 +35,6 @@ PawnCard.defaultProps = {
 PawnCard.propTypes = {
   pawn: PropTypes.shape({
     id: PropTypes.string,
-    name: PropTypes.shape({ nick: PropTypes.string.isRequired }),
   }).isRequired,
   callback: PropTypes.func,
   selected: PropTypes.bool,
