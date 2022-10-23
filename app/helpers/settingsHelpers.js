@@ -21,6 +21,6 @@ export const makeSettings = () => [
   {
     key: "huntingManHoursPerPawn",
     Component: ControlledTextInput,
-    label: "# of hours of cooking per pawn in colony",
+    label: "# of hours of hunting per pawn in colony",
   },
 ];
