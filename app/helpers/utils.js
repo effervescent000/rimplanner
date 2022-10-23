@@ -91,3 +91,5 @@ export const weightedChoice = (choiceArray, accumulatorKey) => {
   }
   return choiceArray[-1];
 };
+
+export const getName = ({ name }) => name.nick || name.last;

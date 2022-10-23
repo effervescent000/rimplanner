@@ -5,6 +5,7 @@ import RWContext from "~/context/RWContext";
 
 import ControlledTextInput from "~/components/common/controlled-text-input";
 import PawnCard from "~/components/common/pawn-card";
+import { getName } from "~/helpers/utils";
 
 const EvaluationIndex = () => {
   const {
@@ -65,7 +66,9 @@ const EvaluationIndex = () => {
           </div>
         </div>
         {[...worldPawns, ...mapPawns]
-          .filter(({ name: { nick } }) => nick && nick.toLowerCase().includes(search.toLowerCase()))
+          .filter(
+            (pawn) => getName(pawn) && getName(pawn).toLowerCase().includes(search.toLowerCase())
+          )
           .map((pawn) => (
             <PawnCard
               key={pawn.id}

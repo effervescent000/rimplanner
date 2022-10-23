@@ -10,7 +10,7 @@ import {
   MAX_PRIO,
 } from "../constants/constants";
 import { buildLaborsList } from "./rosterHelpers";
-import { buildLabors, isPawnCapable, weightedChoice } from "./utils";
+import { buildLabors, getName, isPawnCapable, weightedChoice } from "./utils";
 
 class PriorityBuilder {
   constructor({ pawns, modList, currentPriorities, config, homeZoneSize, growingZones }) {
@@ -23,7 +23,10 @@ class PriorityBuilder {
     this.growingZones = growingZones;
 
     this.priorities = {};
-    this.pawns.forEach(({ name: { nick: name } }) => (this.priorities[name] = []));
+    this.pawns.forEach((pawn) => {
+      const name = getName(pawn);
+      this.priorities[name] = [];
+    });
     this.numToAssign = Math.ceil(this.numPawns * (1 / 3));
     [this.labors, this.laborsLookup] = buildLabors(this.modList);
     this.laborLabels = buildLaborsList(this.modList).reduce(
@@ -37,14 +40,11 @@ class PriorityBuilder {
       LABOR_CATEGORIES.art,
       LABOR_CATEGORIES.violent,
     ];
-    this.pawnSkills = this.pawns.map(
-      ({
-        name: { nick: name },
-        skills: {
-          skills: { li: skills },
-        },
-      }) => ({ name, skills: skills.reduce((total, cur) => ({ ...total, [cur.def]: cur }), {}) })
-    );
+    this.pawnSkills = this.pawns.map((pawn) => {
+      const name = getName(pawn);
+      const skills = pawn.skills.skills.li;
+      return { name, skills: skills.reduce((total, cur) => ({ ...total, [cur.def]: cur }), {}) };
+    });
     this.pawnSkillsV2 = this.pawnSkills.reduce(
       (total, cur) => ({
         ...total,
@@ -109,15 +109,15 @@ class PriorityBuilder {
           laborsLookup: this.laborsLookup,
           slaveIncapableSkills: this.slaveIncapableLabors,
         }) &&
-        !priorities[pawn.name.nick].find(({ name }) => name === labor.name) &&
+        !priorities[getName(pawn)].find(({ name }) => name === labor.name) &&
         (!labor.focusTask ||
-          (labor.focusTask && this.pawnHasAvailableTime(pawn.name.nick, priorities)))
+          (labor.focusTask && this.pawnHasAvailableTime(getName(pawn), priorities)))
       ) {
         capablePawns.push({
           pawn,
           score: labor.skill
             ? this.getSkillValue(
-                this.pawnSkills.find(({ name }) => name === pawn.name.nick).skills[labor.skill]
+                this.pawnSkills.find(({ name }) => name === getName(pawn)).skills[labor.skill]
               ) || 0
             : 1,
         });
@@ -151,9 +151,7 @@ class PriorityBuilder {
       this.labors.forEach((labor, idx) => {
         if (labor.allDo) {
           this.pawns.forEach((pawn) => {
-            const {
-              name: { nick: name },
-            } = pawn;
+            const name = getName(pawn);
             if (
               isPawnCapable({
                 pawn,
@@ -188,7 +186,7 @@ class PriorityBuilder {
                 "score"
               );
               addLaborPriorityToCombo({
-                pawnName: chosenPawn.pawn.name.nick,
+                pawnName: getName(chosenPawn.pawn),
                 laborName: labor.name,
                 suggestedPrio: labor.maxPrio ? MAX_PRIO : HIGH_PRIO,
                 laborIdx: idx,
@@ -200,17 +198,17 @@ class PriorityBuilder {
             let counter = 0;
             while (countPawnsAssignedToLaborInCombo({ labor: labor.name }) < this.numToAssign) {
               if (counter === this.numPawns) break;
-              const pawn = this.pawnSkills[counter].name;
+              const pawnName = this.pawnSkills[counter].name;
               if (
                 isPawnCapable({
-                  pawn: this.pawns.find(({ name: { nick } }) => nick === pawn),
+                  pawn: this.pawns.find((searchPawn) => getName(searchPawn) === pawnName),
                   laborName: labor.name,
                   laborsLookup: this.laborsLookup,
                   slaveIncapableSkills: this.slaveIncapableLabors,
                 })
               ) {
                 addLaborPriorityToCombo({
-                  pawnName: pawn,
+                  pawnName,
                   laborName: labor.name,
                   suggestedPrio: labor.maxPrio ? MAX_PRIO : DEFAULT_LABOR_PRIO,
                   laborIdx: idx,
@@ -222,9 +220,7 @@ class PriorityBuilder {
         }
       });
       this.pawns.forEach((pawn) => {
-        const {
-          name: { nick: pawnsName },
-        } = pawn;
+        const pawnsName = getName(pawn);
         const prioList = [...combo.priorities[pawnsName]];
         prioList.forEach(({ name: laborName }) => {
           const pawnSkill = this.pawnSkillsV2[pawnsName][this.laborsLookup[laborName].skill];
@@ -244,9 +240,7 @@ class PriorityBuilder {
     this.labors.forEach((labor, idx) => {
       if (labor.allDo) {
         this.pawns.forEach((pawn) => {
-          const {
-            name: { nick: name },
-          } = pawn;
+          const name = getName(pawn);
           if (
             isPawnCapable({
               pawn,
@@ -276,7 +270,7 @@ class PriorityBuilder {
           ) {
             if (counter === this.numPawns) break;
             const pawnName = this.pawnSkills[counter].name;
-            const pawn = this.pawns.find(({ name: { nick } }) => nick === pawnName);
+            const pawn = this.pawns.find((pawn) => getName(pawn) === pawnName);
             if (
               isPawnCapable({
                 pawn,
@@ -306,7 +300,7 @@ class PriorityBuilder {
             const pawn = this.pawnSkills[counter].name;
             if (
               isPawnCapable({
-                pawn: this.pawns.find(({ name: { nick } }) => nick === pawn),
+                pawn: this.pawns.find((pawn) => getName(pawn) === pawn),
                 laborName: labor.name,
                 laborsLookup: this.laborsLookup,
                 slaveIncapableSkills: this.slaveIncapableLabors,
@@ -342,7 +336,7 @@ class PriorityBuilder {
         Object.keys(this.priorities).forEach((name) => {
           if (
             isPawnCapable({
-              pawn: this.pawns.find(({ name: { nick } }) => nick === name),
+              pawn: this.pawns.find((pawn) => getName(pawn) === pawn),
               laborName: labor.name,
               laborsLookup: this.laborsLookup,
             })
@@ -365,7 +359,7 @@ class PriorityBuilder {
         const pawn = this.pawnSkills[counter].name;
         if (
           isPawnCapable({
-            pawn: this.pawns.find(({ name: { nick } }) => nick === pawn),
+            pawn: this.pawns.find((pawn) => getName(pawn) === pawn),
             laborName: labor.name,
             laborsLookup: this.laborsLookup,
           })

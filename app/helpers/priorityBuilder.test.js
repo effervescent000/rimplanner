@@ -2,12 +2,12 @@ import { LABORS_OBJ } from "../constants/constants";
 import { SKILLS } from "../constants/skillsConstants";
 import PriorityBuilder from "./priorityBuilder";
 import { getBasicPawns, modListFactory } from "./test-helpers/shapes";
+import { getName } from "./utils";
 
 const pawns = getBasicPawns();
-const rawPriorities = pawns.map(({ name, workSettings }) => ({
-  name: name.nick,
-  priorities: workSettings.priorities.vals.li,
-}));
+const rawPriorities = pawns.map((pawn) => {
+  return { name: getName(pawn), priorities: pawn.workSettings.priorities.vals.li };
+});
 
 const findPawnPriority = ({ pawnName, pb, labor }) => {
   const prioObj = pb.priorities[pawnName].find(({ name }) => name === labor);

@@ -3,6 +3,7 @@ import { mean, quantile } from "simple-statistics";
 import { DEFAULT_LABOR_PRIO, LABORS, MAJOR_PASSION, MINOR_PASSION } from "../constants/constants";
 
 import { SKILLS_ARRAY } from "../constants/skillsConstants";
+import { getName } from "./utils";
 
 export const buildColonyStats = (pawns) => {
   let allSkills = {};
@@ -36,29 +37,24 @@ export const buildColonyStats = (pawns) => {
 export const buildRosterHighlights = (playerPawns) => {
   let stats = {};
   const colonyStats = buildColonyStats(playerPawns);
-  playerPawns.forEach(
-    ({
-      name: { nick: name },
-      skills: {
-        skills: { li: skills },
+  playerPawns.forEach((pawn) => {
+    const name = getName(pawn);
+    const skills = pawn.skills.skills.li;
+    stats = {
+      ...stats,
+      [name]: {
+        highlights: skills.map(({ def: skill, level, passion }) => {
+          if (
+            level >= colonyStats[skill].upperQuantile ||
+            (level >= colonyStats[skill].upperQuantile - 2 && passion === MINOR_PASSION) ||
+            (level >= colonyStats[skill].upperQuantile - 5 && passion === MAJOR_PASSION)
+          )
+            return { skill, level, passion };
+          return undefined;
+        }),
       },
-    }) => {
-      stats = {
-        ...stats,
-        [name]: {
-          highlights: skills.map(({ def: skill, level, passion }) => {
-            if (
-              level >= colonyStats[skill].upperQuantile ||
-              (level >= colonyStats[skill].upperQuantile - 2 && passion === MINOR_PASSION) ||
-              (level >= colonyStats[skill].upperQuantile - 5 && passion === MAJOR_PASSION)
-            )
-              return { skill, level, passion };
-            return undefined;
-          }),
-        },
-      };
-    }
-  );
+    };
+  });
   return stats;
 };
 
@@ -69,15 +65,15 @@ export const buildPrioritySuggestions = ({ labors, playerPawns }) => {
   const numPawns = playerPawns.length;
   const third = Math.ceil(numPawns * (1 / 3));
   const prios = {};
-  playerPawns.forEach(({ name: { nick: name } }) => (prios[name] = []));
-  const pawnSkills = playerPawns.map(
-    ({
-      name: { nick: name },
-      skills: {
-        skills: { li: skills },
-      },
-    }) => ({ name, skills })
-  );
+  playerPawns.forEach((pawn) => {
+    const name = getName(pawn);
+    prios[name] = [];
+  });
+  const pawnSkills = playerPawns.map((pawn) => {
+    const name = getName(pawn);
+    const skills = pawn.skills.skills.li;
+    return { name, skills };
+  });
   labors.forEach((labor) => {
     if (labor.allDo) {
       Object.keys(prios).forEach(
