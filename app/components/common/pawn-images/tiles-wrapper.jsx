@@ -1,15 +1,12 @@
 import PropTypes from "prop-types";
+import { BASE_ASSET_URL } from "~/constants/constants";
 
 import Tile from "./tile";
 
-import bloodImg from "~/assets/Bleeding.png";
-import townImg from "~/assets/Town.png";
-import slaveImg from "~/assets/Slavery.png";
-
 const IMAGE_MAP = {
-  bleedingOut: bloodImg,
-  colonist: townImg,
-  slave: slaveImg,
+  bleedingOut: BASE_ASSET_URL + "Bleeding.png",
+  colonist: BASE_ASSET_URL + "Town.png",
+  slave: BASE_ASSET_URL + "Slavery.png",
 };
 
 const makeTiles = (evalValues, { slaveryMode }) => {
