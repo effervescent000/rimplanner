@@ -37,6 +37,9 @@ export const buildLabors = (modList) => {
   const modLabors = MOD_LABORS();
   modList.forEach((mod) => {
     switch (mod) {
+      case mods.biotech:
+        labors.push(modLabors.childcare);
+        break;
       case mods.allowTool:
         labors.push(modLabors.haulPlus);
         labors.push(modLabors.hiddenLabor);
