@@ -156,7 +156,7 @@ class EvaluationBuilder {
           },
         },
       } = pawn;
-      traits.forEach((trait) => {
+      (Array.isArray(traits) ? traits : [traits]).forEach((trait) => {
         const traitName = trait.def;
         const foundTrait = TRAITS[traitName];
         if (!foundTrait) {
