@@ -1,5 +1,6 @@
 export const mods = {
   core: "ludeon.rimworld",
+  biotech: "ludeon.rimworld.biotech",
   colonyManager: "fluffy.colonymanager",
   allowTool: "unlimitedhugs.allowtool",
   hospitality: "orion.hospitality",

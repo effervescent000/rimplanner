@@ -37,6 +37,7 @@ export const LABORS = [
   { name: "Doctor", skill: SKILLS.medicine.name },
   { name: "Bed rest", allDo: true },
   { name: "Haul+", source: mods.allowTool },
+  { name: "Childcare", source: mods.biotech, skill: SKILLS.social.name },
   { name: "Basic", allDo: true },
   { name: "Warden", skill: "Social" },
   { name: "Handle", skill: "Animals" },
@@ -86,6 +87,7 @@ export const LABORS_OBJ = {
   medicine: { name: "Doctor", skill: SKILLS.medicine.name },
   bedRest: { name: "Bed rest", allDo: true },
   haulPlus: { name: "Haul+", source: mods.allowTool },
+  childcare: { name: "Childcare", source: mods.biotech, skill: SKILLS.social.name },
   basic: { name: "Basic", allDo: true },
   wardening: { name: "Warden", skill: "Social" },
   handling: { name: "Handle", skill: "Animals" },
@@ -153,6 +155,7 @@ export const BASE_GAME_LABORS = [
 ];
 
 export const MOD_LABORS = () => ({
+  childcare: { name: "Childcare", source: mods.biotech, skill: SKILLS.social.name },
   haulPlus: { name: "Haul+", source: mods.allowTool },
   hiddenLabor: { name: "Hidden", source: mods.allowTool },
   entertaining: {
