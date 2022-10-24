@@ -14,6 +14,7 @@ export const PLANTS = {
   },
   Plant_Hops: { key: "Plant_Hops", growDays: 5, harvestYield: 8 },
   Plant_Potato: { key: "Plant_Potato", growDays: 5.8, harvestYield: 11 },
+  Plant_Psychoid: { key: "Plant_Psychoid", growDays: 9, harvestYield: 8 },
   Plant_Rice: { key: "Plant_Rice", growDays: 3, harvestYield: 6 },
   Plant_Smokeleaf: { key: "Plant_Smokeleaf", growDays: 7.5, harvestYield: 9 },
   Plant_Strawberry: { key: "Plant_Strawberry", growDays: 4.6, harvestYield: 8 },

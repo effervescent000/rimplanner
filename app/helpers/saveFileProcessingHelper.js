@@ -3,6 +3,7 @@ import {
   COLONIST,
   GROWING_ZONE,
   HUMAN_CONSTANT,
+  MAN_IN_BLACK,
   PAWN_CONSTANT,
   PLAYER_COLONY,
   SLAVE,
@@ -18,14 +19,15 @@ export const processSaveFile = ({ savegame }) => {
       $ &&
       $.Class === PAWN_CONSTANT &&
       def === HUMAN_CONSTANT &&
-      ((kindDef !== COLONIST && kindDef !== SLAVE) || guest.hostFaction !== "null")
+      ((kindDef !== COLONIST && kindDef !== SLAVE && kindDef !== MAN_IN_BLACK) ||
+        guest.hostFaction !== "null")
   );
   const colonists = savegame.game.maps.li.things.thing.filter(
     ({ $, def, guest, kindDef }) =>
       $ &&
       $.Class === PAWN_CONSTANT &&
       def === HUMAN_CONSTANT &&
-      kindDef === COLONIST &&
+      (kindDef === COLONIST || kindDef === MAN_IN_BLACK) &&
       guest.hostFaction === "null" &&
       !guest.guestStatus
   );

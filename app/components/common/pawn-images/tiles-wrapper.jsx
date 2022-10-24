@@ -4,9 +4,9 @@ import { BASE_ASSET_URL } from "~/constants/constants";
 import Tile from "./tile";
 
 const IMAGE_MAP = {
-  bleedingOut: BASE_ASSET_URL + "Bleeding.png",
-  colonist: BASE_ASSET_URL + "Town.png",
-  slave: BASE_ASSET_URL + "Slavery.png",
+  bleedingOut: BASE_ASSET_URL + "/Bleeding.png",
+  colonist: BASE_ASSET_URL + "/Town.png",
+  slave: BASE_ASSET_URL + "/Slavery.png",
 };
 
 const makeTiles = (evalValues, { slaveryMode }) => {
