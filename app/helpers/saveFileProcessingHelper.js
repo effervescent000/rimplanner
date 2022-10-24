@@ -13,7 +13,7 @@ export const processSaveFile = ({ savegame }) => {
   const world = savegame.game.world;
   const factions = world.factionManager.allFactions.li;
   const playerFactions = factions.filter(({ def }) => def === PLAYER_COLONY);
-  const worldPawns = world.worldPawns.pawnsAlive.li;
+  const worldPawns = world.worldPawns.pawnsAlive.li || [];
   const mapPawns = savegame.game.maps.li.things.thing.filter(
     ({ $, def, guest, kindDef }) =>
       $ &&
