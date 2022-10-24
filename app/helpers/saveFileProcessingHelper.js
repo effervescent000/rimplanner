@@ -48,7 +48,9 @@ export const processSaveFile = ({ savegame }) => {
       guest.guestStatus &&
       guest.guestStatus === "Prisoner"
   );
-  const modList = savegame.meta.modIds.li;
+  const modList = Array.isArray(savegame.meta.modIds.li)
+    ? savegame.meta.modIds.li
+    : [savegame.meta.modIds.li];
   const growingZones = savegame.game.maps.li.zoneManager.allZones.li.filter(
     ({ $ }) => $ && [GROWING_ZONE, AQUATIC_GROWING_ZONE].includes($.Class)
   );
