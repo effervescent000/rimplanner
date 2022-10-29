@@ -1,6 +1,6 @@
 import { FILL_BAR, NUTRITION_REQUIRED_PER_DAY, NUTRITION_VALUE } from "~/constants/constants";
 import { PLANTS, FOOD_PLANTS_ARRAY, GROW_DAY_DIVISOR } from "~/constants/plantsConstants";
-import { roundToTwoDecimals } from "./utils";
+import { getNutritionRequired, roundToTwoDecimals } from "./utils";
 
 class WarningsBuilder {
   constructor({
@@ -21,6 +21,12 @@ class WarningsBuilder {
     this.pctNutritionFromGrowing = pctNutritionFromGrowing;
     this.growingSeason = growingSeason;
     this.numPawns = [...colonists, ...slaves, ...prisoners].length;
+    this.baseNutritionRequired = () => {
+      const nutritionPerColonist = [...colonists, ...slaves, ...prisoners].map((pawn) =>
+        getNutritionRequired(pawn)
+      );
+      return nutritionPerColonist.reduce((x, y) => x + y, 0);
+    };
     this.warnings = [];
   }
 
@@ -32,8 +38,7 @@ class WarningsBuilder {
     });
     const sumNutrition = Object.values(this.nutritionPerDay).reduce((total, cur) => total + cur, 0);
     const requiredNutrition =
-      (this.numPawns * NUTRITION_REQUIRED_PER_DAY * this.pctNutritionFromGrowing) /
-      (this.growingSeason / 60);
+      (this.baseNutritionRequired() * this.pctNutritionFromGrowing) / (this.growingSeason / 60);
     this.warnings.push({
       text: `Growing ${roundToTwoDecimals(
         sumNutrition

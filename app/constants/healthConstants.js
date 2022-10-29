@@ -1,4 +1,5 @@
 import { makeValues } from "~/helpers/utils";
+import { DAY } from "./constants";
 
 const VALUES = {
   excellent: 3,
@@ -25,3 +26,9 @@ export const HEALTH_CONDITIONS = {
     value: () => makeValues(VALUES.terrible),
   },
 };
+
+export const LIFE_STAGES = [
+  { key: "Adult", minAge: DAY * 60 * 16, bodySize: 1 },
+  { key: "Child", minAge: DAY * 60 * 3, bodySize: 0.5, nutritionMod: 1 },
+  { key: "Baby", minAge: 0, bodySize: 0.2, nutritionMod: 0.62 },
+];

@@ -1,6 +1,7 @@
 import { BACKSTORIES_LOOKUP } from "../constants/backstoryConstants";
-import { BASE_GAME_LABORS, MOD_LABORS, SLAVE } from "../constants/constants";
+import { BASE_GAME_LABORS, DAY, MOD_LABORS, SLAVE } from "../constants/constants";
 import { mods } from "~/constants/modConstants";
+import { LIFE_STAGES } from "~/constants/healthConstants";
 
 export const getFactionKey = (faction) => `Faction_${faction.loadID}`;
 
@@ -93,3 +94,12 @@ export const weightedChoice = (choiceArray, accumulatorKey) => {
 };
 
 export const getName = ({ name }) => name.nick || `${name.first} ${name.last}`;
+
+export const getNutritionRequired = (pawn) => {
+  // TODO also look at traits (for Gourmand) and health (for breastfeeding)
+  const {
+    ageTracker: { ageBiologicalTicks },
+  } = pawn;
+  const age = LIFE_STAGES.find(({ minAge }) => ageBiologicalTicks > minAge);
+  return 1.6 * age.bodySize * (age.nutritionMod || 1);
+};
