@@ -181,6 +181,10 @@ class PriorityBuilder {
               pawnsNeededForTask
             ) {
               if (counter === this.numPawns) break;
+              const capables = this.getCapablePawns(labor, combo.priorities);
+              if (!capables) {
+                break;
+              }
               const chosenPawn = weightedChoice(
                 this.getCapablePawns(labor, combo.priorities),
                 "score"
