@@ -19,6 +19,7 @@ export const PLANTS = {
   Plant_Rice: { key: "Plant_Rice", growDays: 3, harvestYield: 6 },
   Plant_Smokeleaf: { key: "Plant_Smokeleaf", growDays: 7.5, harvestYield: 9 },
   Plant_Strawberry: { key: "Plant_Strawberry", growDays: 4.6, harvestYield: 8 },
+  Plant_Tinctoria: { key: "Plant_Tinctoria", growDays: 2, harvestYield: 1 },
   // modded foods after here
   VCE_Agave: { key: "VCE_Agave", growDays: 6, harvestYield: 10, harvestWork: 300 },
   VCE_Beans: { key: "VCE_Beans", growDays: 6, harvestYield: 8 },
