@@ -1,6 +1,7 @@
 import { BACKSTORIES_LOOKUP } from "../constants/backstoryConstants";
-import { BASE_GAME_LABORS, MOD_LABORS, SLAVE } from "../constants/constants";
+import { BASE_GAME_LABORS, DAY, MOD_LABORS, SLAVE } from "../constants/constants";
 import { mods } from "~/constants/modConstants";
+import { LIFE_STAGES } from "~/constants/healthConstants";
 
 export const getFactionKey = (faction) => `Faction_${faction.loadID}`;
 
@@ -93,3 +94,27 @@ export const weightedChoice = (choiceArray, accumulatorKey) => {
 };
 
 export const getName = ({ name }) => name.nick || `${name.first} ${name.last}`;
+
+export const getNutritionRequired = (pawn) => {
+  // TODO also look at traits (for Gourmand)
+  const {
+    ageTracker: { ageBiologicalTicks },
+    gender,
+    healthTracker: {
+      hediffSet: {
+        hediffs: { li: hediffs },
+      },
+    },
+  } = pawn;
+  const age = LIFE_STAGES.find(({ minAge }) => ageBiologicalTicks > minAge);
+  const breastfeedingNutrition = () => {
+    if (gender !== "Female") return 0;
+    if (!Array.isArray(hediffs)) {
+      return hediffs.def === "Lactating" ? 0.5 : 0;
+    } else {
+      const lactatingHediff = hediffs.find(({ def }) => def === "Lactating");
+      return lactatingHediff ? 0.5 : 0;
+    }
+  };
+  return 1.6 * age.bodySize * (age.nutritionMod || 1) + breastfeedingNutrition();
+};
