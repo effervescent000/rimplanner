@@ -2,8 +2,8 @@ import { useState, useEffect, useCallback, useContext } from "react";
 import { debounce } from "lodash";
 
 // HELPERS
-import { makeSettings } from "~/helpers/settingsHelpers";
-import RWContext from "~/context/RWContext";
+import { makeSettings } from "app/helpers/settingsHelpers";
+import RWContext from "app/context/RWContext";
 
 const SettingsPage = () => {
   const { config, setConfig } = useContext(RWContext);

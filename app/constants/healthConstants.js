@@ -1,4 +1,4 @@
-import { makeValues } from "~/helpers/utils";
+import { makeValues } from "app/helpers/utils";
 import { DAY } from "./constants";
 
 const VALUES = {

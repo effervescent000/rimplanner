@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { BASE_ASSET_URL } from "~/constants/constants";
+import { BASE_ASSET_URL } from "app/constants/constants";
 
 import Tile from "./tile";
 

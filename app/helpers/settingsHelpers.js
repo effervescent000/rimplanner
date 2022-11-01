@@ -1,5 +1,5 @@
-import ControlledCheckbox from "~/components/common/controlledCheckbox";
-import ControlledTextInput from "~/components/common/controlled-text-input";
+import ControlledCheckbox from "app/components/common/controlledCheckbox";
+import ControlledTextInput from "app/components/common/controlled-text-input";
 
 export const makeSettings = () => [
   { key: "slaveryMode", Component: ControlledCheckbox, label: "Slavery mode?" },

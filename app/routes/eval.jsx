@@ -1,11 +1,11 @@
 import { useState, useEffect, useContext } from "react";
 import { useFetcher } from "@remix-run/react";
 
-import RWContext from "~/context/RWContext";
+import RWContext from "app/context/RWContext";
 
-import ControlledTextInput from "~/components/common/controlled-text-input";
-import PawnCard from "~/components/common/pawn-card";
-import { getName } from "~/helpers/utils";
+import ControlledTextInput from "app/components/common/controlled-text-input";
+import PawnCard from "app/components/common/pawn-card";
+import { getName } from "app/helpers/utils";
 
 const EvaluationIndex = () => {
   const {

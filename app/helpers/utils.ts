@@ -1,30 +1,39 @@
-import { BACKSTORIES_LOOKUP } from "../constants/backstoryConstants";
-import { BASE_GAME_LABORS, DAY, MOD_LABORS, SLAVE } from "../constants/constants";
-import { mods } from "~/constants/modConstants";
-import { LIFE_STAGES } from "~/constants/healthConstants";
+import type { LaborCategoryParams, LaborLookupParams, PawnParams } from "app/types/interfaces";
 
-export const getFactionKey = (faction) => `Faction_${faction.loadID}`;
+import { BACKSTORIES_LOOKUP } from "../constants/backstoryConstants";
+import { BASE_GAME_LABORS, MOD_LABORS, SLAVE } from "../constants/constants";
+import { mods } from "../constants/modConstants";
+import { LIFE_STAGES } from "../constants/healthConstants";
+
+export const getFactionKey = (faction: { loadID: number }) => `Faction_${faction.loadID}`;
 
 export const isPawnCapable = ({
-  pawn: {
-    story: { childhood, adulthood },
-    guest: { guestStatus },
-  },
+  pawn,
   laborName,
   laborsLookup,
   slaveIncapableSkills,
-}) => {
-  const incapableSkills =
-    guestStatus && guestStatus === SLAVE
-      ? [...slaveIncapableSkills]
-      : [...(BACKSTORIES_LOOKUP[childhood] || []), ...(BACKSTORIES_LOOKUP[adulthood] || [])];
+}: {
+  pawn: PawnParams;
+  laborName: string;
+  laborsLookup: LaborLookupParams;
+  slaveIncapableSkills: Array<LaborCategoryParams>;
+}): boolean => {
+  const {
+    story: { childhood, adulthood },
+  } = pawn;
+  const incapableSkills = isSlave(pawn)
+    ? [...slaveIncapableSkills]
+    : [...(BACKSTORIES_LOOKUP[childhood] || []), ...(BACKSTORIES_LOOKUP[adulthood] || [])];
   const pawnCantDo = incapableSkills.filter((skill) =>
     (laborsLookup[laborName].categories || []).includes(skill)
   );
   return !pawnCantDo.length;
 };
 
-export const getIncapableLabors = ({ story: { childhood, adulthood } }, laborsOnly = false) => {
+export const getIncapableLabors = (
+  { story: { childhood, adulthood } }: PawnParams,
+  laborsOnly: boolean = false
+): Array<string> => {
   const labors = [
     ...(BACKSTORIES_LOOKUP[childhood] || []),
     ...(BACKSTORIES_LOOKUP[adulthood] || []),
@@ -33,7 +42,7 @@ export const getIncapableLabors = ({ story: { childhood, adulthood } }, laborsOn
   return labors.reduce((total, cur) => [...total, cur.value], []);
 };
 
-export const buildLabors = (modList) => {
+export const buildLabors = (modList: Array<string>) => {
   const labors = [...BASE_GAME_LABORS];
   const modLabors = MOD_LABORS();
   modList.forEach((mod) => {
@@ -70,17 +79,18 @@ export const buildLabors = (modList) => {
   return [labors, labors.reduce((total, cur) => ({ ...total, [cur.name]: cur }), {})];
 };
 
-export const makeValues = (baseValue, modifiers = {}) => ({
+export const makeValues = (baseValue: number, modifiers = {}) => ({
   colonistValue: baseValue,
   slaveValue: baseValue,
   ...modifiers,
 });
 
-export const roundToTwoDecimals = (num) => Math.round(num * 100) / 100;
+export const roundToTwoDecimals = (num: number) => Math.round(num * 100) / 100;
 
-export const isSlave = (pawn) => pawn.guest.guestStatus && pawn.guest.guestStatus === SLAVE;
+export const isSlave = (pawn: PawnParams) =>
+  pawn.guest.guestStatus && pawn.guest.guestStatus === SLAVE;
 
-export const weightedChoice = (choiceArray, accumulatorKey) => {
+export const weightedChoice = (choiceArray: Array<any>, accumulatorKey: string) => {
   const total = choiceArray.reduce((total, cur) => total + cur[accumulatorKey], 0);
   const threshold = Math.random() * total;
   let runningValue = 0;
@@ -93,9 +103,9 @@ export const weightedChoice = (choiceArray, accumulatorKey) => {
   return choiceArray[-1];
 };
 
-export const getName = ({ name }) => name.nick || `${name.first} ${name.last}`;
+export const getName = ({ name }: PawnParams) => name.nick || `${name.first} ${name.last}`;
 
-export const getNutritionRequired = (pawn) => {
+export const getNutritionRequired = (pawn: PawnParams) => {
   // TODO also look at traits (for Gourmand)
   const {
     ageTracker: { ageBiologicalTicks },

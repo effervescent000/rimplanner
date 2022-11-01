@@ -1,6 +1,7 @@
+import type { BackstoryLookupParams, BackstoryParams } from "../types/interfaces";
 import { LABOR_CATEGORIES } from "./constants";
 
-const CHILDHOOD_BACKSTORIES = [
+const CHILDHOOD_BACKSTORIES: Array<BackstoryParams> = [
   { name: "CultChild3", incapable: [LABOR_CATEGORIES.intellectual] },
   { name: "MedicalAssistant12", incapable: [LABOR_CATEGORIES.firefighting] },
   {
@@ -43,7 +44,7 @@ const ADULT_BACKSTORIES = [
   { name: "Healer35", incapable: [LABOR_CATEGORIES.mining, LABOR_CATEGORIES.dumb] },
 ];
 
-export const BACKSTORIES_LOOKUP = [...CHILDHOOD_BACKSTORIES, ...ADULT_BACKSTORIES].reduce(
-  (total, cur) => ({ ...total, [cur.name]: cur.incapable }),
-  {}
-);
+export const BACKSTORIES_LOOKUP: BackstoryLookupParams = [
+  ...CHILDHOOD_BACKSTORIES,
+  ...ADULT_BACKSTORIES,
+].reduce((total, cur) => ({ ...total, [cur.name]: cur.incapable }), {});

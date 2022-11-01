@@ -20,14 +20,14 @@ import RWContext from "./context/RWContext";
 import { json } from "@remix-run/node";
 
 // COMPONENTS
-import SaveFileDropzone from "~/components/save-file-dropzone";
-import PawnRow from "~/components/pawn-display/pawn-display";
+import SaveFileDropzone from "./components/save-file-dropzone";
+import PawnRow from "./components/pawn-display/pawn-display";
 import WarningsWrapper from "./components/warnings/warnings-wrapper";
 
 // STYLES
-import tailwindStyles from "~/styles/tailwind.css";
+import tailwindStyles from "./styles/tailwind.css";
 import rsuiteStyles from "rsuite/dist/rsuite.min.css";
-import commonStyles from "~/styles/common.css";
+import commonStyles from "./styles/common.css";
 
 export const meta = () => ({
   charset: "utf-8",

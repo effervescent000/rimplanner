@@ -1,5 +1,5 @@
-import { FILL_BAR, NUTRITION_REQUIRED_PER_DAY, NUTRITION_VALUE } from "~/constants/constants";
-import { PLANTS, FOOD_PLANTS_ARRAY, GROW_DAY_DIVISOR } from "~/constants/plantsConstants";
+import { FILL_BAR, NUTRITION_VALUE } from "../constants/constants";
+import { PLANTS, FOOD_PLANTS_ARRAY, GROW_DAY_DIVISOR } from "../constants/plantsConstants";
 import { getNutritionRequired, roundToTwoDecimals } from "./utils";
 
 class WarningsBuilder {
