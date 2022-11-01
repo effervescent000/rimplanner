@@ -1,4 +1,9 @@
-import type { LaborCategoryParams, LaborLookupParams, PawnParams } from "app/types/interfaces";
+import type {
+  LaborCategoryParams,
+  LaborLookupParams,
+  LaborParams,
+  PawnParams,
+} from "app/types/interfaces";
 
 import { BACKSTORIES_LOOKUP } from "../constants/backstoryConstants";
 import { BASE_GAME_LABORS, MOD_LABORS, SLAVE } from "../constants/constants";
@@ -43,8 +48,10 @@ export const getIncapableLabors = (
 };
 
 export const buildLabors = (modList: Array<string>) => {
-  const labors = [...BASE_GAME_LABORS];
-  const modLabors = MOD_LABORS();
+  const labors: Array<LaborParams> = [...BASE_GAME_LABORS];
+  const modLabors: {
+    [key: string]: LaborParams;
+  } = MOD_LABORS();
   modList.forEach((mod) => {
     switch (mod) {
       case mods.biotech:

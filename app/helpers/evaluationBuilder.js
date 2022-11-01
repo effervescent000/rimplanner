@@ -11,7 +11,7 @@ import {
 import { LABOR_CATEGORIES, MAJOR_PASSION } from "../constants/constants";
 import { TRAITS } from "../constants/traitConstants";
 import { buildLabors, getIncapableLabors, roundToTwoDecimals } from "./utils";
-import { HEALTH_CONDITIONS } from "~/constants/healthConstants";
+import { HEALTH_CONDITIONS } from "app/constants/healthConstants";
 
 const BASE_VALUE = 1;
 

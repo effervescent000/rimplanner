@@ -1,6 +1,6 @@
 import { mods } from "./modConstants";
 import { SKILLS } from "./skillsConstants";
-import { makeValues } from "~/helpers/utils";
+import { makeValues } from "app/helpers/utils";
 
 const VALUES = {
   excellent: 3,

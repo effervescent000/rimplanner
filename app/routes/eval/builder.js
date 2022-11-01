@@ -1,5 +1,5 @@
 import { json } from "@remix-run/node";
-import EvaluationBuilder from "~/helpers/evaluationBuilder";
+import EvaluationBuilder from "app/helpers/evaluationBuilder";
 
 export const action = async ({ request }) => {
   const body = await request.formData();

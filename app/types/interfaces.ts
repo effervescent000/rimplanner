@@ -29,7 +29,7 @@ export interface PawnParams {
 export interface LaborParams {
   name: string;
   allDo?: boolean;
-  categories?: Array<string>;
+  categories?: Array<LaborCategoryParams>;
   maxPrio?: boolean;
   skill?: string;
   focusTask?: boolean;

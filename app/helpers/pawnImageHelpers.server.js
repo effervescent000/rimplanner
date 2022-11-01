@@ -1,7 +1,7 @@
 import jimp from "jimp";
 import axios from "axios";
 
-import { BASE_ASSET_URL } from "~/constants/constants";
+import { BASE_ASSET_URL } from "app/constants/constants";
 
 const getHeadFromPath = ({ head, gender }) => {
   if (head) {
