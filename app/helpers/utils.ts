@@ -1,7 +1,10 @@
 import type {
+  BackstoryLookupParams,
+  BackstoryParams,
   LaborCategoryParams,
   LaborLookupParams,
   LaborParams,
+  LifeStageParams,
   PawnParams,
 } from "app/types/interfaces";
 
@@ -28,7 +31,10 @@ export const isPawnCapable = ({
   } = pawn;
   const incapableSkills = isSlave(pawn)
     ? [...slaveIncapableSkills]
-    : [...(BACKSTORIES_LOOKUP[childhood] || []), ...(BACKSTORIES_LOOKUP[adulthood] || [])];
+    : [
+        ...(childhood ? BACKSTORIES_LOOKUP[childhood] || [] : []),
+        ...(adulthood ? BACKSTORIES_LOOKUP[adulthood] || [] : []),
+      ];
   const pawnCantDo = incapableSkills.filter((skill) =>
     (laborsLookup[laborName].categories || []).includes(skill)
   );
@@ -38,10 +44,10 @@ export const isPawnCapable = ({
 export const getIncapableLabors = (
   { story: { childhood, adulthood } }: PawnParams,
   laborsOnly: boolean = false
-): Array<string> => {
-  const labors = [
-    ...(BACKSTORIES_LOOKUP[childhood] || []),
-    ...(BACKSTORIES_LOOKUP[adulthood] || []),
+): Array<string> | Array<BackstoryParams> => {
+  const labors: Array<BackstoryParams> = [
+    ...(childhood ? BACKSTORIES_LOOKUP[childhood] || [] : []),
+    ...(adulthood ? BACKSTORIES_LOOKUP[adulthood] || [] : []),
   ];
   if (!laborsOnly) return labors;
   return labors.reduce((total, cur) => [...total, cur.value], []);
@@ -123,7 +129,7 @@ export const getNutritionRequired = (pawn: PawnParams) => {
       },
     },
   } = pawn;
-  const age = LIFE_STAGES.find(({ minAge }) => ageBiologicalTicks > minAge);
+  const age = LIFE_STAGES.find(({ minAge }) => ageBiologicalTicks > minAge) as LifeStageParams;
   const breastfeedingNutrition = () => {
     if (gender !== "Female") return 0;
     if (!Array.isArray(hediffs)) {

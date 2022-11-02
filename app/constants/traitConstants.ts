@@ -1,6 +1,7 @@
 import { mods } from "./modConstants";
 import { SKILLS } from "./skillsConstants";
 import { makeValues } from "app/helpers/utils";
+import { SkillParams, ValueMapping } from "app/types/interfaces";
 
 const VALUES = {
   excellent: 3,
@@ -12,7 +13,7 @@ const VALUES = {
   terrible: -3,
 };
 
-const getTieredValueForSkill = (skill) => {
+const getTieredValueForSkill = (skill: SkillParams | undefined) => {
   if (skill) {
     if (skill.level > 4 && skill.passion) return VALUES.excellent;
     if (skill.passion || skill.level > 4) return VALUES.very_good;
@@ -21,7 +22,7 @@ const getTieredValueForSkill = (skill) => {
   return VALUES.neutral;
 };
 
-export const TRAITS = {
+export const TRAITS: ValueMapping = {
   Abrasive: {
     name: "Abrasive",
     value: () => makeValues(VALUES.bad, { slaveValue: VALUES.neutral }),
