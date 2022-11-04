@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { FILL_BAR } from "~/constants/constants";
+import { FILL_BAR } from "app/constants/constants";
 
 import FillBar from "../common/fillBar";
 import GenericWarning from "./warning";

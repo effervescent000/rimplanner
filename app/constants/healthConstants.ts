@@ -1,7 +1,8 @@
-import { makeValues } from "~/helpers/utils";
+import { makeValues } from "app/helpers/utils";
+import type { LifeStageParams, StringIndexedValues, ValueMapping } from "app/types/interfaces";
 import { DAY } from "./constants";
 
-const VALUES = {
+const VALUES: StringIndexedValues = {
   excellent: 3,
   very_good: 2,
   good: 1,
@@ -11,7 +12,7 @@ const VALUES = {
   terrible: -3,
 };
 
-export const HEALTH_CONDITIONS = {
+export const HEALTH_CONDITIONS: ValueMapping = {
   AlcoholAddiction: { name: "Alcohol addiction", value: () => makeValues(VALUES.terrible) },
   BadBack: {
     name: "Bad back",
@@ -27,7 +28,7 @@ export const HEALTH_CONDITIONS = {
   },
 };
 
-export const LIFE_STAGES = [
+export const LIFE_STAGES: Array<LifeStageParams> = [
   { key: "Adult", minAge: DAY * 60 * 16, bodySize: 1 },
   { key: "Child", minAge: DAY * 60 * 3, bodySize: 0.5, nutritionMod: 1 },
   { key: "Baby", minAge: 0, bodySize: 0.2, nutritionMod: 0.62 },

@@ -7,7 +7,7 @@ import {
   PAWN_CONSTANT,
   PLAYER_COLONY,
   SLAVE,
-} from "~/constants/constants";
+} from "../constants/constants";
 
 export const processSaveFile = ({ savegame }) => {
   const world = savegame.game.world;

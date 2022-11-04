@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { getName } from "~/helpers/utils";
+import { getName } from "app/helpers/utils";
 
 import PawnImage from "./pawn-images/pawn-image";
 import TilesWrapper from "./pawn-images/tiles-wrapper";

@@ -2,11 +2,12 @@
 import { useState, useEffect, useContext } from "react";
 import { useFetcher } from "@remix-run/react";
 
-import { buildLaborsList } from "~/helpers/rosterHelpers";
-import RWContext from "~/context/RWContext";
+import PrioritiesWrapper from "app/components/work-priorities/priorities-wrapper";
 
-import PrioritiesWrapper from "~/components/work-priorities/priorities-wrapper";
-import { buildLabors, getName } from "~/helpers/utils";
+import RWContext from "app/context/RWContext";
+
+import { buildLaborsList } from "app/helpers/rosterHelpers";
+import { buildLabors, getName } from "app/helpers/utils";
 
 const WorkPriorityIndex = () => {
   const fetcher = useFetcher();

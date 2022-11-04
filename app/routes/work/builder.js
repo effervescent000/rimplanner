@@ -1,5 +1,5 @@
 import { json } from "@remix-run/node";
-import PriorityBuilder from "~/helpers/priorityBuilder";
+import PriorityBuilder from "app/helpers/priorityBuilder";
 
 export const action = async ({ request }) => {
   const body = await request.formData();

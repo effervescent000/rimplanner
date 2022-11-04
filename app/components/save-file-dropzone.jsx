@@ -1,10 +1,9 @@
 import { useState, useCallback, useContext } from "react";
 import { useDropzone } from "react-dropzone";
 import { parseString } from "xml2js";
-import PropTypes from "prop-types";
 
-import { processSaveFile } from "~/helpers/saveFileProcessingHelper";
-import RWContext from "~/context/RWContext";
+import { processSaveFile } from "app/helpers/saveFileProcessingHelper";
+import RWContext from "app/context/RWContext";
 
 const SaveFileDropzone = () => {
   const { setSaveData } = useContext(RWContext);

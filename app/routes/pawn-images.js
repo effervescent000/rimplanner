@@ -1,4 +1,4 @@
-import { composeImage } from "~/helpers/pawnImageHelpers.server";
+import { composeImage } from "app/helpers/pawnImageHelpers.server";
 
 export const loader = async ({ request }) => {
   const url = new URL(request.url);

@@ -1,4 +1,4 @@
-import { GROW_DAY_DIVISOR, PLANTS } from "~/constants/plantsConstants";
+import { GROW_DAY_DIVISOR, PLANTS } from "app/constants/plantsConstants";
 import {
   AVAILABLE_PAWN_HOURS,
   DEFAULT_LABOR_PRIO,

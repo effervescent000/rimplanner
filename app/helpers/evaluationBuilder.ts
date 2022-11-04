@@ -11,7 +11,16 @@ import {
 import { LABOR_CATEGORIES, MAJOR_PASSION } from "../constants/constants";
 import { TRAITS } from "../constants/traitConstants";
 import { buildLabors, getIncapableLabors, roundToTwoDecimals } from "./utils";
-import { HEALTH_CONDITIONS } from "~/constants/healthConstants";
+import { HEALTH_CONDITIONS } from "app/constants/healthConstants";
+import type {
+  ConfigParams,
+  StringIndexedValues,
+  LaborCategoryParams,
+  LaborParams,
+  PawnParams,
+  SkillParams,
+} from "app/types/interfaces";
+import { isArray } from "lodash";
 
 const BASE_VALUE = 1;
 
@@ -19,16 +28,60 @@ const BASE_VALUE = 1;
 const BLEEDING_OUT_THRESHOLD = 2.5;
 
 const INJURY = "Hediff_Injury";
-const INJURIES_MAP = {
+const INJURIES_MAP: StringIndexedValues = {
   Gunshot: 0.06,
   Cut: 0.06,
 };
 
-const makeIncapableSkills = (laborCategories) =>
-  laborCategories.reduce((total, cur) => [...total, ...(cur.skills || [])], []);
+const makeIncapableSkills = (laborCategories: Array<LaborCategoryParams>) => {
+  const reducedLabors = laborCategories.reduce(
+    (total, cur) => [...total, ...(cur.skills || [])],
+    [] as Array<string>
+  );
+  return reducedLabors;
+};
+
+interface ValueParams {
+  value: number;
+  reasons: Array<ValueReason>;
+}
+
+interface ValueReason {
+  reason: string;
+  value: number;
+}
+
+interface PawnValues {
+  [key: string]: {
+    bleedingOut: boolean;
+    colonist: ValueParams;
+    slave: ValueParams;
+  };
+}
 
 class EvaluationBuilder {
-  constructor({ targets, playerPawns, modList, config }) {
+  readonly targets: Array<PawnParams>;
+  targetsSkills: { [key: string]: { [key: string]: SkillParams } };
+  readonly playerPawns: Array<PawnParams>;
+  readonly config: ConfigParams;
+  readonly colonyStats: { [key: string]: { average: number; upperQuantile: number } };
+  values: PawnValues;
+  readonly labors: Array<LaborParams>;
+  readonly laborsLookup: { [key: string]: LaborParams };
+  slaveIncapableLabors: Array<LaborCategoryParams>;
+  readonly slaveIncapableSkills: Array<string>;
+
+  constructor({
+    targets,
+    playerPawns,
+    modList,
+    config,
+  }: {
+    targets: Array<PawnParams>;
+    playerPawns: Array<PawnParams>;
+    modList: Array<string>;
+    config: ConfigParams;
+  }) {
     this.targets = targets;
     this.targetsSkills = this.targets.reduce(
       (total, { id, skills }) => ({
@@ -74,7 +127,7 @@ class EvaluationBuilder {
 
   cleanValues() {
     this.values = Object.keys(this.values).reduce(
-      (total, cur) => ({
+      (total: PawnValues, cur: string): PawnValues => ({
         ...total,
         [cur]: {
           ...this.values[cur],
@@ -88,11 +141,19 @@ class EvaluationBuilder {
           },
         },
       }),
-      {}
+      {} as PawnValues
     );
   }
 
-  processValues({ id, values, reason }) {
+  processValues({
+    id,
+    values,
+    reason,
+  }: {
+    id: string;
+    values: { colonistValue?: number; slaveValue?: number };
+    reason: string | undefined;
+  }) {
     const colonistValue = values.colonistValue || 0;
     const slaveValue = values.slaveValue || 0;
 
@@ -115,9 +176,9 @@ class EvaluationBuilder {
         },
       } = pawn;
       if (hediffs) {
-        if (hediffs.length) {
-          let bloodLossSeverity;
-          const bleeding = [];
+        if (isArray(hediffs)) {
+          let bloodLossSeverity: number = 0;
+          const bleeding: Array<number> = [];
           hediffs.forEach(({ $, def: hediff, severity }) => {
             if ($ && $.Class === INJURY) {
               bleeding.push((+INJURIES_MAP[hediff] || 0) * +severity);
@@ -176,7 +237,7 @@ class EvaluationBuilder {
     ];
 
     this.targets.forEach((pawn) => {
-      const incapableLabors = getIncapableLabors(pawn, true);
+      const incapableLabors = getIncapableLabors(pawn, true) as Array<string>;
       laborsToCheck.forEach(({ labor, values }) => {
         if (incapableLabors.includes(labor)) {
           this.processValues({ id: pawn.id, values, reason: `Incapable of ${labor}` });
@@ -185,7 +246,7 @@ class EvaluationBuilder {
     });
   }
 
-  getSkillValues({ pawn, skill }) {
+  getSkillValues({ pawn, skill }: { pawn: PawnParams; skill: string }) {
     const targetSkill = this.targetsSkills[pawn.id][skill];
     if (targetSkill && targetSkill.level > 0) {
       if (targetSkill.passion) {
@@ -244,7 +305,9 @@ class EvaluationBuilder {
 
   compareStats() {
     this.targets.forEach((pawn) => {
-      const incapableSkills = makeIncapableSkills(getIncapableLabors(pawn));
+      const incapableSkills = makeIncapableSkills(
+        getIncapableLabors(pawn) as Array<LaborCategoryParams>
+      );
       SKILLS_ARRAY.forEach((skill) => {
         const skillValue = this.getSkillValues({ pawn, skill });
         const values = {

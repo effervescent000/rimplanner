@@ -1,6 +1,7 @@
 import { mods } from "./modConstants";
 import { SKILLS } from "./skillsConstants";
-import { makeValues } from "~/helpers/utils";
+import { getSkills, makeValues } from "app/helpers/utils";
+import type { PawnParams, SkillParams, TraitParams, ValueMapping } from "app/types/interfaces";
 
 const VALUES = {
   excellent: 3,
@@ -12,7 +13,7 @@ const VALUES = {
   terrible: -3,
 };
 
-const getTieredValueForSkill = (skill) => {
+const getTieredValueForSkill = (skill: SkillParams | undefined) => {
   if (skill) {
     if (skill.level > 4 && skill.passion) return VALUES.excellent;
     if (skill.passion || skill.level > 4) return VALUES.very_good;
@@ -21,7 +22,13 @@ const getTieredValueForSkill = (skill) => {
   return VALUES.neutral;
 };
 
-export const TRAITS = {
+const getTraitDegree = (trait: TraitParams | undefined) => (trait ? trait.degree : 0) as number;
+
+interface DegreeMapping {
+  [key: number]: number;
+}
+
+export const TRAITS: ValueMapping = {
   Abrasive: {
     name: "Abrasive",
     value: () => makeValues(VALUES.bad, { slaveValue: VALUES.neutral }),
@@ -29,22 +36,22 @@ export const TRAITS = {
   Beauty: {
     name: "Beauty",
     value: (pawn, trait) => {
-      const degrees = { 1: VALUES.good, [-1]: VALUES.very_bad };
-      return makeValues(degrees[trait.degree]);
+      const degrees: DegreeMapping = { 1: VALUES.good, [-1]: VALUES.very_bad };
+      return makeValues(degrees[getTraitDegree(trait)]);
     },
   },
   DrugDesire: {
     name: "Drug Desire",
     value: (pawn, trait) => {
-      const degrees = { 1: VALUES.bad, 2: VALUES.very_bad };
-      return makeValues(degrees[trait.degree]);
+      const degrees: DegreeMapping = { 1: VALUES.bad, 2: VALUES.very_bad };
+      return makeValues(degrees[getTraitDegree(trait)]);
     },
   },
   Industriousness: {
     name: "Industriousness",
     value: (pawn, trait) => {
-      const degrees = { 1: VALUES.very_good, [-1]: VALUES.bad };
-      return makeValues(degrees[trait.degree]);
+      const degrees: DegreeMapping = { 1: VALUES.very_good, [-1]: VALUES.bad };
+      return makeValues(degrees[getTraitDegree(trait)]);
     },
   },
   Jealous: { name: "Jealous", value: () => makeValues(VALUES.very_bad) },
@@ -52,8 +59,8 @@ export const TRAITS = {
   Neurotic: {
     name: "Neurotic",
     value: (pawn, trait) => {
-      const degrees = { 1: VALUES.good, 2: VALUES.good };
-      return makeValues(degrees[trait.degree]);
+      const degrees: DegreeMapping = { 1: VALUES.good, 2: VALUES.good };
+      return makeValues(degrees[getTraitDegree(trait)]);
     },
   },
   Psychopath: { name: "Psycopath", value: () => makeValues(VALUES.excellent) },
@@ -62,17 +69,17 @@ export const TRAITS = {
   ShootingAccuracy: {
     name: "Shooting Accuracy",
     value: (pawn, trait) => {
-      const degrees = { 2: VALUES.good };
-      return makeValues(degrees[trait.degree]);
+      const degrees: DegreeMapping = { 2: VALUES.good };
+      return makeValues(degrees[getTraitDegree(trait)]);
     },
   },
   SpeedOffset: {
     name: "Speed Offset",
     value: (pawn, trait) => {
-      const degrees = {
+      const degrees: DegreeMapping = {
         1: VALUES.very_good,
       };
-      return makeValues(degrees[trait.degree]);
+      return makeValues(degrees[getTraitDegree(trait)]);
     },
   },
   TorturedArtist: {
@@ -86,11 +93,8 @@ export const TRAITS = {
   // mod added traits below here
   SYR_Haggler: {
     name: "Silver tongue",
-    value: ({
-      skills: {
-        skills: { li: skills },
-      },
-    }) => {
+    value: (pawn) => {
+      const skills = getSkills(pawn as PawnParams);
       const social = skills.find(({ def }) => def === SKILLS.social.name);
       return makeValues(getTieredValueForSkill(social));
     },
@@ -108,11 +112,8 @@ export const TRAITS = {
   },
   SYR_Perfectionist: {
     name: "Idealist",
-    value: ({
-      skills: {
-        skills: { li: skills },
-      },
-    }) => {
+    value: (pawn) => {
+      const skills = getSkills(pawn as PawnParams);
       const crafting = skills.find(({ def }) => def === SKILLS.crafting.name);
       return makeValues(getTieredValueForSkill(crafting));
     },
@@ -120,11 +121,8 @@ export const TRAITS = {
   },
   SYR_SteadyHands: {
     name: "Steady hands",
-    value: ({
-      skills: {
-        skills: { li: skills },
-      },
-    }) => {
+    value: (pawn) => {
+      const skills = getSkills(pawn as PawnParams);
       const medicine = skills.find(({ def }) => def === SKILLS.medicine.name);
       return makeValues(getTieredValueForSkill(medicine));
     },
@@ -141,11 +139,8 @@ export const TRAITS = {
   },
   VTE_AnimalLover: {
     name: "Animal Lover",
-    value: ({
-      skills: {
-        skills: { li: skills },
-      },
-    }) => {
+    value: (pawn) => {
+      const skills = getSkills(pawn as PawnParams);
       const cooking = skills.find(({ def }) => def === SKILLS.cooking.name);
       if (cooking && cooking.passion) return makeValues(VALUES.bad);
       return makeValues(VALUES.neutral);
@@ -170,11 +165,8 @@ export const TRAITS = {
   },
   VTE_Eccentric: {
     name: "Eccentric",
-    value: ({
-      skills: {
-        skills: { li: skills },
-      },
-    }) => {
+    value: (pawn) => {
+      const skills = getSkills(pawn as PawnParams);
       const intellectual = skills.find(({ def }) => def === SKILLS.intellectual.name);
       return makeValues(getTieredValueForSkill(intellectual));
     },
@@ -182,11 +174,8 @@ export const TRAITS = {
   },
   VTE_Ecologist: {
     name: "Ecologist",
-    value: ({
-      skills: {
-        skills: { li: skills },
-      },
-    }) => {
+    value: (pawn) => {
+      const skills = getSkills(pawn as PawnParams);
       const plantsAndAnimals = skills.filter(
         ({ def }) => def === SKILLS.animals.name || def === SKILLS.plants.name
       );
@@ -197,11 +186,8 @@ export const TRAITS = {
   },
   VTE_Gastronomist: {
     name: "Gastronomist",
-    value: ({
-      skills: {
-        skills: { li: skills },
-      },
-    }) => {
+    value: (pawn) => {
+      const skills = getSkills(pawn as PawnParams);
       const cooking = skills.find(({ def }) => def === SKILLS.cooking.name);
       if (cooking && cooking.passion) return makeValues(VALUES.excellent);
       return makeValues(VALUES.good);
@@ -241,11 +227,8 @@ export const TRAITS = {
   },
   VTE_Tycoon: {
     name: "Tycoon",
-    value: ({
-      skills: {
-        skills: { li: skills },
-      },
-    }) => {
+    value: (pawn) => {
+      const skills = getSkills(pawn as PawnParams);
       const social = skills.find(({ def }) => def === SKILLS.social.name);
       if (social && social.passion) return makeValues(VALUES.excellent);
       return makeValues(VALUES.very_good);
