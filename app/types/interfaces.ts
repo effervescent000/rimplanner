@@ -3,7 +3,7 @@ export interface ConfigParams {}
 interface HediffParams {
   $?: { Class: string };
   def: string;
-  severity: number;
+  severity: string;
 }
 
 export interface SkillParams {

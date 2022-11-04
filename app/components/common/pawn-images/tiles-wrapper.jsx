@@ -18,6 +18,10 @@ const makeTiles = (evalValues, { slaveryMode }) => {
         label: value.value === true ? undefined : `${value.value}`,
         reasons: value.reasons,
       });
+    } else if (key === "bleedingOut") {
+      tiles.push({
+        imgSrc: IMAGE_MAP[key],
+      });
     }
   });
   return tiles;
