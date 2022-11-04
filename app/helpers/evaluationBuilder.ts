@@ -34,7 +34,10 @@ const INJURIES_MAP: StringIndexedValues = {
 };
 
 const makeIncapableSkills = (laborCategories: Array<LaborCategoryParams>) => {
-  const reducedLabors = laborCategories.reduce((total, cur) => [...total, ...cur.skills], []);
+  const reducedLabors = laborCategories.reduce(
+    (total, cur) => [...total, ...(cur.skills || [])],
+    [] as Array<string>
+  );
   return reducedLabors;
 };
 
@@ -234,7 +237,7 @@ class EvaluationBuilder {
     ];
 
     this.targets.forEach((pawn) => {
-      const incapableLabors = getIncapableLabors(pawn, true);
+      const incapableLabors = getIncapableLabors(pawn, true) as Array<string>;
       laborsToCheck.forEach(({ labor, values }) => {
         if (incapableLabors.includes(labor)) {
           this.processValues({ id: pawn.id, values, reason: `Incapable of ${labor}` });
@@ -302,7 +305,9 @@ class EvaluationBuilder {
 
   compareStats() {
     this.targets.forEach((pawn) => {
-      const incapableSkills = makeIncapableSkills(getIncapableLabors(pawn));
+      const incapableSkills = makeIncapableSkills(
+        getIncapableLabors(pawn) as Array<LaborCategoryParams>
+      );
       SKILLS_ARRAY.forEach((skill) => {
         const skillValue = this.getSkillValues({ pawn, skill });
         const values = {

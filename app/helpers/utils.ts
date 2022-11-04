@@ -1,6 +1,4 @@
 import type {
-  BackstoryLookupParams,
-  BackstoryParams,
   LaborCategoryParams,
   LaborLookupParams,
   LaborParams,
@@ -14,6 +12,11 @@ import { mods } from "../constants/modConstants";
 import { LIFE_STAGES } from "../constants/healthConstants";
 
 export const getFactionKey = (faction: { loadID: number }) => `Faction_${faction.loadID}`;
+
+const makeIncapableSkillsArray = (childhood: string, adulthood: string | undefined) => [
+  ...(childhood ? BACKSTORIES_LOOKUP[childhood] || [] : []),
+  ...(adulthood ? BACKSTORIES_LOOKUP[adulthood] || [] : []),
+];
 
 export const isPawnCapable = ({
   pawn,
@@ -31,10 +34,7 @@ export const isPawnCapable = ({
   } = pawn;
   const incapableSkills = isSlave(pawn)
     ? [...slaveIncapableSkills]
-    : [
-        ...(childhood ? BACKSTORIES_LOOKUP[childhood] || [] : []),
-        ...(adulthood ? BACKSTORIES_LOOKUP[adulthood] || [] : []),
-      ];
+    : makeIncapableSkillsArray(childhood, adulthood);
   const pawnCantDo = incapableSkills.filter((skill) =>
     (laborsLookup[laborName].categories || []).includes(skill)
   );
@@ -44,13 +44,10 @@ export const isPawnCapable = ({
 export const getIncapableLabors = (
   { story: { childhood, adulthood } }: PawnParams,
   laborsOnly: boolean = false
-): Array<string> | Array<BackstoryParams> => {
-  const labors: Array<BackstoryParams> = [
-    ...(childhood ? BACKSTORIES_LOOKUP[childhood] || [] : []),
-    ...(adulthood ? BACKSTORIES_LOOKUP[adulthood] || [] : []),
-  ];
+): Array<string> | Array<LaborCategoryParams> => {
+  const labors = makeIncapableSkillsArray(childhood, adulthood);
   if (!laborsOnly) return labors;
-  return labors.reduce((total, cur) => [...total, cur.value], []);
+  return labors.reduce((total, cur) => [...total, cur.value], [] as Array<string>);
 };
 
 export const buildLabors = (modList: Array<string>) => {
@@ -89,7 +86,13 @@ export const buildLabors = (modList: Array<string>) => {
         break;
     }
   });
-  return [labors, labors.reduce((total, cur) => ({ ...total, [cur.name]: cur }), {})];
+  return [
+    labors,
+    labors.reduce(
+      (total, cur) => ({ ...total, [cur.name]: cur }),
+      {} as { [key: string]: LaborParams }
+    ),
+  ] as [Array<LaborParams>, { [key: string]: LaborParams }];
 };
 
 export const makeValues = (baseValue: number, modifiers = {}) => ({
@@ -117,6 +120,8 @@ export const weightedChoice = (choiceArray: Array<any>, accumulatorKey: string) 
 };
 
 export const getName = ({ name }: PawnParams) => name.nick || `${name.first} ${name.last}`;
+
+export const getSkills = (pawn: PawnParams) => pawn.skills.skills.li;
 
 export const getNutritionRequired = (pawn: PawnParams) => {
   // TODO also look at traits (for Gourmand)

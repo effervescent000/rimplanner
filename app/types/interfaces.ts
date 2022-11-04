@@ -19,20 +19,18 @@ export interface StringIndexedValues {
 export interface ValueMapping {
   [key: string]: {
     name: string;
-    value:
-      | (() => { colonistValue: number; slaveValue: number })
-      | ((
-          arg1: PawnParams,
-          arg2: TraitParams
-        ) => {
-          colonistValue: number;
-          slaveValue: number;
-        });
+    value: (
+      arg1?: PawnParams,
+      arg2?: TraitParams
+    ) => {
+      colonistValue: number;
+      slaveValue: number;
+    };
     source?: string;
   };
 }
 
-interface TraitParams {
+export interface TraitParams {
   def: string;
   sourceGene?: string;
   suppressedBy?: string;
@@ -70,7 +68,7 @@ export interface LaborLookupParams {
 
 export interface LaborCategoryParams {
   value: string;
-  skills: Array<string>;
+  skills?: Array<string>;
 }
 
 export interface BackstoryParams {
@@ -79,7 +77,7 @@ export interface BackstoryParams {
 }
 
 export interface BackstoryLookupParams {
-  [key: string]: Array<BackstoryParams>;
+  [key: string]: Array<LaborCategoryParams>;
 }
 
 export interface LifeStageParams {
