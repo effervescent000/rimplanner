@@ -146,3 +146,19 @@ export const getNutritionRequired = (pawn: PawnParams) => {
   };
   return 1.6 * age.bodySize * (age.nutritionMod || 1) + breastfeedingNutrition();
 };
+
+export const getCurrentPriorities = (pawns: Array<PawnParams>, laborLabels: Array<LaborParams>) => {
+  const priorities = pawns.map((pawn) => {
+    const name = getName(pawn);
+    return {
+      name,
+      priorities: pawn.workSettings.priorities.vals.li.map((prio, idx) => {
+        return {
+          labor: laborLabels[idx].name,
+          currentPrio: prio,
+        };
+      }),
+    };
+  });
+  return priorities;
+};

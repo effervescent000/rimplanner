@@ -61,6 +61,13 @@ export interface PawnParams {
   ageTracker: { ageBiologicalTicks: number };
   healthTracker: { hediffSet: { hediffs: { li: Array<HediffParams> | HediffParams } } };
   skills: { skills: { li: Array<SkillParams> } };
+  workSettings: {
+    priorities: {
+      vals: {
+        li: Array<number>;
+      };
+    };
+  };
 }
 
 export interface LaborParams {
