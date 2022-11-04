@@ -1,5 +1,16 @@
 export interface ConfigParams {}
 
+export interface RimContextParams {
+  saveData: {
+    colonists?: Array<PawnParams>;
+    slaves?: Array<PawnParams>;
+    prisoners?: Array<PawnParams>;
+  };
+  setSaveData: () => void;
+  config: {};
+  setConfig: () => void;
+}
+
 interface HediffParams {
   $?: { Class: string };
   def: string;
