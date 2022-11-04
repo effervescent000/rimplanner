@@ -5,6 +5,7 @@ export interface RimContextParams {
     colonists?: Array<PawnParams>;
     slaves?: Array<PawnParams>;
     prisoners?: Array<PawnParams>;
+    modList?: Array<string>;
   };
   setSaveData: () => void;
   config: {};
@@ -68,6 +69,16 @@ export interface PawnParams {
       };
     };
   };
+}
+
+export interface WorkPriorityParams {
+  name: string;
+  priorities: Array<SinglePrioParams>;
+}
+
+interface SinglePrioParams {
+  labor: string;
+  currentPrio: number;
 }
 
 export interface LaborParams {
