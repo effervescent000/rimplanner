@@ -29,8 +29,12 @@ const BLEEDING_OUT_THRESHOLD = 2.5;
 
 const INJURY = "Hediff_Injury";
 const INJURIES_MAP: StringIndexedValues = {
-  Gunshot: 0.06,
+  Bite: 0.06,
+  Crush: 0.01,
   Cut: 0.06,
+  Gunshot: 0.06,
+  Shredded: 0.06,
+  Stab: 0.06,
 };
 
 const makeIncapableSkills = (laborCategories: Array<LaborCategoryParams>) => {
@@ -100,8 +104,8 @@ class EvaluationBuilder {
       (total, { id }) => ({
         ...total,
         [id]: {
-          bleedingOut: false,
           colonist: { value: 0, reasons: [] },
+          bleedingOut: false,
           slave: { value: 0, reasons: [] },
         },
       }),
@@ -181,7 +185,7 @@ class EvaluationBuilder {
           const bleeding: Array<number> = [];
           hediffs.forEach(({ $, def: hediff, severity }) => {
             if ($ && $.Class === INJURY) {
-              bleeding.push((+INJURIES_MAP[hediff] || 0) * +severity);
+              bleeding.push((INJURIES_MAP[hediff] || 0) * +severity);
             } else if (hediff === "BloodLoss") {
               bloodLossSeverity = +severity;
             } else {
