@@ -5,5 +5,6 @@ export const action = async ({ request }) => {
   const body = await request.formData();
   const { colonists, prisoners, slaves, config, modList } = JSON.parse(body.get("values"));
   const gb = new GroupsBuilder({ colonists, prisoners, slaves, config, modList });
-  return null;
+  gb.makeGroups();
+  return json({ groups: gb.groups });
 };
