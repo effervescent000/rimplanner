@@ -1,3 +1,5 @@
+import type { PawnName } from "./types";
+
 export interface ConfigParams {}
 
 export interface RimContextParams {
@@ -72,7 +74,7 @@ export interface PawnParams {
 }
 
 export interface WorkPriorityParams {
-  name: string;
+  name: PawnName;
   priorities: Array<SinglePrioParams>;
 }
 
