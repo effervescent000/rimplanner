@@ -57,6 +57,11 @@ export interface PawnParams {
     childhood: string;
     adulthood?: string;
     traits: { allTraits: { li: Array<TraitParams> | TraitParams } };
+    bodyType: string;
+    headGraphicPath: string;
+    hairDef: string;
+    hairColor: string;
+    melanin: string;
   };
   guest: { guestStatus: string };
   name: { first: string; last: string; nick?: string };
