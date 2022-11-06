@@ -1,3 +1,5 @@
+import type { PawnName } from "./types";
+
 export interface ConfigParams {}
 
 export interface RimContextParams {
@@ -5,6 +7,7 @@ export interface RimContextParams {
     colonists?: Array<PawnParams>;
     slaves?: Array<PawnParams>;
     prisoners?: Array<PawnParams>;
+    modList?: Array<string>;
   };
   setSaveData: () => void;
   config: {};
@@ -54,6 +57,11 @@ export interface PawnParams {
     childhood: string;
     adulthood?: string;
     traits: { allTraits: { li: Array<TraitParams> | TraitParams } };
+    bodyType: string;
+    headGraphicPath: string;
+    hairDef: string;
+    hairColor: string;
+    melanin: string;
   };
   guest: { guestStatus: string };
   name: { first: string; last: string; nick?: string };
@@ -61,6 +69,23 @@ export interface PawnParams {
   ageTracker: { ageBiologicalTicks: number };
   healthTracker: { hediffSet: { hediffs: { li: Array<HediffParams> | HediffParams } } };
   skills: { skills: { li: Array<SkillParams> } };
+  workSettings: {
+    priorities: {
+      vals: {
+        li: Array<number>;
+      };
+    };
+  };
+}
+
+export interface WorkPriorityParams {
+  name: PawnName;
+  priorities: Array<SinglePrioParams>;
+}
+
+interface SinglePrioParams {
+  labor: string;
+  currentPrio: number;
 }
 
 export interface LaborParams {

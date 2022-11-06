@@ -4,6 +4,7 @@ import type {
   LaborParams,
   LifeStageParams,
   PawnParams,
+  WorkPriorityParams,
 } from "app/types/interfaces";
 
 import { BACKSTORIES_LOOKUP } from "../constants/backstoryConstants";
@@ -145,4 +146,21 @@ export const getNutritionRequired = (pawn: PawnParams) => {
     }
   };
   return 1.6 * age.bodySize * (age.nutritionMod || 1) + breastfeedingNutrition();
+};
+
+export const getCurrentPriorities = (
+  pawns: Array<PawnParams>,
+  laborLabels: Array<LaborParams>
+): Array<WorkPriorityParams> => {
+  const priorities = pawns.map((pawn) => {
+    const name = getName(pawn);
+    return {
+      name,
+      priorities: pawn.workSettings.priorities.vals.li.map((prio, idx) => ({
+        labor: laborLabels[idx].name,
+        currentPrio: prio,
+      })),
+    };
+  });
+  return priorities;
 };

@@ -1,8 +1,9 @@
 import { useFetcher } from "@remix-run/react";
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
+import type { PawnParams } from "app/types/interfaces";
 
-const encodeSearchParams = (params) => {
+const encodeSearchParams = (params: {[key: string]: string | undefined}) => {
   const searchTerms = Object.entries(params)
     .filter(([key, value]) => value)
     .map(([key, value]) => `${key}=${value}`);
@@ -10,11 +11,12 @@ const encodeSearchParams = (params) => {
 };
 
 const PawnImage = ({
-  pawn: {
+  pawn
+}: {pawn: PawnParams}) => {
+  const {
     story: { bodyType, headGraphicPath, hairDef, hairColor, melanin },
     gender,
-  },
-}) => {
+  } = pawn
   const [imageURI, setImageURI] = useState("");
   const fetcher = useFetcher();
 
@@ -36,12 +38,12 @@ const PawnImage = ({
     setImageURI(fetcher.data);
   }, [fetcher]);
 
-  return (
-    imageURI && (
-      <div className="relative flex justify-center">
-        <img src={imageURI} alt="test" />
-      </div>
-    )
+  return imageURI ? (
+    <div className="relative flex justify-center">
+      <img src={imageURI} alt="test" />
+    </div>
+  ) : (
+    <></>
   );
 };
 

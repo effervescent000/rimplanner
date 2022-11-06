@@ -38,10 +38,14 @@ const TilesWrapper = ({ id, evalValues, config }) => {
   );
 };
 
+TilesWrapper.defaultProps = {
+  config: { slaveryMode: false },
+};
+
 TilesWrapper.propTypes = {
   id: PropTypes.string.isRequired,
   evalValues: PropTypes.shape({}).isRequired,
-  config: PropTypes.shape({}).isRequired,
+  config: PropTypes.shape({}),
 };
 
 export default TilesWrapper;

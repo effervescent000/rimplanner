@@ -5,6 +5,13 @@ export const FERTILITY = 1;
 export const PLANTS = {
   Plant_Corn: { key: "Plant_Corn", growDays: 11.3, harvestYield: 22 },
   Plant_Cotton: { key: "Plant_Cotton", growDays: 8, harvestYield: 10 },
+  Plant_Devilstrand: {
+    key: "Plant_Devilstrand",
+    growDays: 22.5,
+    harvestYield: 6,
+    sowWork: 400,
+    harvestWork: 200,
+  },
   Plant_Haygrass: { key: "Plant_Haygrass", growDays: 7, harvestYield: 18 },
   Plant_Healroot: {
     key: "Plant_Healroot",
