@@ -182,13 +182,10 @@ class PriorityBuilder {
             ) {
               if (counter === this.numPawns) break;
               const capables = this.getCapablePawns(labor, combo.priorities);
-              if (!capables) {
+              if (capables) {
                 break;
               }
-              const chosenPawn = weightedChoice(
-                this.getCapablePawns(labor, combo.priorities),
-                "score"
-              );
+              const chosenPawn = weightedChoice(capables, "score");
               addLaborPriorityToCombo({
                 pawnName: getName(chosenPawn.pawn),
                 laborName: labor.name,

@@ -117,7 +117,7 @@ export const weightedChoice = (choiceArray: Array<any>, accumulatorKey: string) 
       return choiceArray[i];
     }
   }
-  return choiceArray[-1];
+  return choiceArray.at(-1);
 };
 
 export const getName = ({ name }: PawnParams) => name.nick || `${name.first} ${name.last}`;
