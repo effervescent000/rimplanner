@@ -1,14 +1,14 @@
 import { remove } from "lodash";
 
-import { LABORS_OBJ } from "app/constants/constants";
+import { LABORS_OBJ } from "../constants/constants";
 import type {
   ConfigParams,
   LaborParams,
   PawnParams,
   StringIndexedValues,
   WorkPriorityParams,
-} from "app/types/interfaces";
-import type { PawnName } from "app/types/types";
+} from "../types/interfaces";
+import type { PawnName } from "../types/types";
 import { buildLabors, getCurrentPriorities, getName, isSlave } from "./utils";
 
 class GroupsBuilder {
