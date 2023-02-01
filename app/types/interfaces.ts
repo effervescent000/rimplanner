@@ -67,7 +67,7 @@ export interface PawnParams {
   name: { first: string; last: string; nick?: string };
   gender?: string;
   ageTracker: { ageBiologicalTicks: number };
-  healthTracker: { hediffSet: { hediffs: { li: Array<HediffParams> | HediffParams } } };
+  healthTracker: { hediffSet: { hediffs: { li?: Array<HediffParams> | HediffParams } } };
   skills: { skills: { li: Array<SkillParams> } };
   workSettings: {
     priorities: {
