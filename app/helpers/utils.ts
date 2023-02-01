@@ -137,7 +137,7 @@ export const getNutritionRequired = (pawn: PawnParams) => {
   } = pawn;
   const age = LIFE_STAGES.find(({ minAge }) => ageBiologicalTicks > minAge) as LifeStageParams;
   const breastfeedingNutrition = () => {
-    if (gender !== "Female") return 0;
+    if (gender !== "Female" || !hediffs) return 0;
     if (!Array.isArray(hediffs)) {
       return hediffs.def === "Lactating" ? 0.5 : 0;
     } else {
